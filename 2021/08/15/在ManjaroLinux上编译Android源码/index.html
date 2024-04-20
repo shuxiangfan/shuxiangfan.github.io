@@ -1,0 +1,578 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=&#34;auto&#34;>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" href="/img/favicon.png">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="description" content="摸鱼-躺平-划水">
+  <meta name="author" content="Reallyshow">
+  <meta name="keywords" content="摸鱼-躺平-划水">
+  
+  <title>在ManjaroLinux上编译Android源码 - Reallyshow‘s Blog</title>
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4.0.0/github-markdown.min.css" />
+  <link  rel="stylesheet" href="/lib/hint/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10.7.2/styles/github-gist.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" />
+  
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_kmeydafke9r.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"shuxiangfan.github.io","root":"/","version":"1.8.11","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"baidu":null,"google":"UA-205458257-1","gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null}},"search_path":"/local-search.xml"};
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+<meta name="generator" content="Hexo 7.2.0"></head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand"
+       href="/">&nbsp;<strong>Reallyshow的博客</strong>&nbsp;</a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" data-toggle="modal" data-target="#modalSearch">&nbsp;<i
+                class="iconfont icon-search"></i>&nbsp;</a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner" id="banner" parallax=true
+         style="background: url('/img/banner.png') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="在ManjaroLinux上编译Android源码">
+              
+            </span>
+
+            
+              <div class="mt-3">
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2021-08-15 13:43" pubdate>
+        2021年8月15日 下午
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      1.1k 字
+    </span>
+  
+
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      14
+       分钟
+    </span>
+  
+
+  
+  
+    
+      <!-- 不蒜子统计文章PV -->
+      <span id="busuanzi_container_page_pv" style="display: none">
+        <i class="iconfont icon-eye" aria-hidden="true"></i>
+        <span id="busuanzi_value_page_pv"></span> 次
+      </span>
+    
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">在ManjaroLinux上编译Android源码</h1>
+            
+            <div class="markdown-body">
+              <h1 id="在ManjaroLinux上编译Android源码"><a href="#在ManjaroLinux上编译Android源码" class="headerlink" title="在ManjaroLinux上编译Android源码"></a>在ManjaroLinux上编译Android源码</h1><p>第一次写教程，语文不好大佬手下留情哈哈哈哈</p>
+<p><strong>刷机有风险！请备份好重要数据！自行承担风险！</strong></p>
+<h2 id="系统要求"><a href="#系统要求" class="headerlink" title="系统要求"></a>系统要求</h2><ul>
+<li><p>Manjaro Linux 21.0.7及以上，运行在x86处理器上</p>
+</li>
+<li><p>至少4GB RAM和300GB磁盘空间</p>
+</li>
+<li><p>畅通的互联网连接</p>
+</li>
+<li><p>基本的linux知识</p>
+</li>
+<li><p>脑子和手</p>
+</li>
+</ul>
+<h2 id="配置软件源"><a href="#配置软件源" class="headerlink" title="配置软件源"></a>配置软件源</h2><h3 id="更换软件源"><a href="#更换软件源" class="headerlink" title="更换软件源"></a>更换软件源</h3><p>刚安装完的Manjaro需要更换镜像源 </p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs css">sudo pacman-mirrors -<span class="hljs-selector-tag">i</span> -c China -m rank<br></code></pre></td></tr></table></figure>
+
+<p>稍等片刻，选择自己需要的镜像源</p>
+<h4 id="进行全面系统更新"><a href="#进行全面系统更新" class="headerlink" title="进行全面系统更新"></a>进行全面系统更新</h4><figure class="highlight ebnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs ebnf"><span class="hljs-attribute">sudo pacman -Syu</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="安装依赖"><a href="#安装依赖" class="headerlink" title="安装依赖"></a>安装依赖</h3><h4 id="安装yay"><a href="#安装yay" class="headerlink" title="安装yay"></a>安装yay</h4><figure class="highlight ebnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs ebnf"><span class="hljs-attribute">sudo pacman -S yay</span><br></code></pre></td></tr></table></figure>
+
+<h4 id="安装构建依赖"><a href="#安装构建依赖" class="headerlink" title="安装构建依赖"></a>安装构建依赖</h4><figure class="highlight ebnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs ebnf"><span class="hljs-attribute">yay -S lineageos-devel</span><br></code></pre></td></tr></table></figure>
+<p>根据需要选择依赖（一路回车和输密码）</p>
+<p>至此，构建依赖安装完成</p>
+<h4 id="建立交换文件"><a href="#建立交换文件" class="headerlink" title="建立交换文件"></a>建立交换文件</h4><p>低内存（16G以下）用户请看</p>
+<p>使用dd去创建一个由你自己指定大小的交换文件。例如，创建一个 20 GiB 的交换文件:</p>
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs routeros">sudo dd <span class="hljs-attribute">if</span>=/dev/zero <span class="hljs-attribute">of</span>=/swapfile <span class="hljs-attribute">bs</span>=1G <span class="hljs-attribute">count</span>=20 <span class="hljs-attribute">status</span>=progress<br></code></pre></td></tr></table></figure>
+
+<p>为交换文件设置权限（交换文件全局可读是一个巨大的本地漏洞）：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">sudo <span class="hljs-built_in">chmod</span> 600 /swapfile<br></code></pre></td></tr></table></figure>
+
+<p>创建正确大小的文件后，将其格式化用来作为交换文件：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">sudo mkswap /swapfile<br></code></pre></td></tr></table></figure>
+
+<p>启用交换文件：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">sudo swapon /swapfile<br></code></pre></td></tr></table></figure>
+
+<p>最后，编辑 &#x2F;etc&#x2F;fstab，在为交换文件添加一个条目：</p>
+<figure class="highlight arcade"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs arcade">/swapfile <span class="hljs-built_in">none</span> swap defaults <span class="hljs-number">0</span> <span class="hljs-number">0</span><br></code></pre></td></tr></table></figure>
+
+<h2 id="下载系统源代码"><a href="#下载系统源代码" class="headerlink" title="下载系统源代码"></a>下载系统源代码</h2><h3 id="配置git"><a href="#配置git" class="headerlink" title="配置git"></a>配置git</h3><p>设置git的用户名</p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs stylus">git config <span class="hljs-attr">--global</span> user<span class="hljs-selector-class">.name</span> <span class="hljs-string">&quot;你的用户名&quot;</span><br></code></pre></td></tr></table></figure>
+<p>设置邮箱</p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs stylus">git config <span class="hljs-attr">--global</span> user<span class="hljs-selector-class">.email</span> <span class="hljs-string">&quot;你的邮箱&quot;</span><br></code></pre></td></tr></table></figure>
+<p>由于国内网络环境特殊，可以设置从镜像站下载</p>
+<figure class="highlight jboss-cli"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs jboss-cli">git config <span class="hljs-params">--global</span> url.https:<span class="hljs-string">//mirrors.bfsu.edu.cn/git/AOSP/.insteadof</span> https:<span class="hljs-string">//android.googlesource.com</span><br>git config <span class="hljs-params">--global</span> url.https:<span class="hljs-string">//github.com.cnpmjs.org/.insteadof</span> https:<span class="hljs-string">//github.com</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="指定repo更新地址"><a href="#指定repo更新地址" class="headerlink" title="指定repo更新地址"></a>指定repo更新地址</h3><p>repo的运行过程中会尝试访问官方的git源更新自己，如果想使用bfsu的镜像源进行更新，可以将如下内容复制到你的~&#x2F;.bashrc里</p>
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs routeros"><span class="hljs-built_in">export</span> <span class="hljs-attribute">REPO_URL</span>=<span class="hljs-string">&#x27;https://mirrors.bfsu.edu.cn/git/git-repo&#x27;</span><br></code></pre></td></tr></table></figure>
+<p>然后运行</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">source</span> ~/.bashrc<br></code></pre></td></tr></table></figure>
+
+<h2 id="建立工作区"><a href="#建立工作区" class="headerlink" title="建立工作区"></a>建立工作区</h2><p>在符合系统要求的磁盘上建立工作文件夹</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">mkdir</span> android<br><span class="hljs-built_in">cd</span> android<br></code></pre></td></tr></table></figure>
+
+<h3 id="初始化仓库"><a href="#初始化仓库" class="headerlink" title="初始化仓库"></a>初始化仓库</h3><p>Repo 可以在必要时整合多个 Git 代码库</p>
+<p>Repo是一种对 Git 构成补充的 Google 代码库管理工具</p>
+<p>到Github或其它社区找到您喜欢的ROM中名为platform_manfest或android的git仓库，并找到他们提供的命令。</p>
+<p>例如：</p>
+<p>#LineageOS_18.1</p>
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-attribute">repo</span> init -u git://github.com/LineageOS/android.git -b lineage-<span class="hljs-number">18</span>.<span class="hljs-number">1</span><br></code></pre></td></tr></table></figure>
+<p>#exTHmUI-11</p>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs awk">repo init -u https:<span class="hljs-regexp">//gi</span>thub.com<span class="hljs-regexp">/exthmui/</span>android.git -b exthm-<span class="hljs-number">11</span><br></code></pre></td></tr></table></figure>
+<p>Tip:如果你只想编译，加上–depth&#x3D;1参数可以节省磁盘空间</p>
+<h2 id="同步仓库"><a href="#同步仓库" class="headerlink" title="同步仓库"></a>同步仓库</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">repo <span class="hljs-built_in">sync</span><br></code></pre></td></tr></table></figure>
+<p>这将会从网络上下载源码，这个过程可能需要耗费一点时间，请耐心等待</p>
+<p>出现问题可以多同步几遍</p>
+<h2 id="编译"><a href="#编译" class="headerlink" title="编译"></a>编译</h2><p>这里使用第三方ROM官方支持的手机进行演示，checkin教学将在第二部进行（挖坑）</p>
+<h3 id="环境准备"><a href="#环境准备" class="headerlink" title="环境准备"></a>环境准备</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">source</span> build/envsetup.sh<br></code></pre></td></tr></table></figure>
+<figure class="highlight dust"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs dust"><span class="language-xml">lunch </span><span class="hljs-template-variable">&#123;ROM名称&#125;</span><span class="language-xml">_</span><span class="hljs-template-variable">&#123;手机开发代号&#125;</span><span class="language-xml">-</span><span class="hljs-template-variable">&#123;构建类型&#125;</span><br></code></pre></td></tr></table></figure>
+
+<p>例如：</p>
+<figure class="highlight ebnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs ebnf"><span class="hljs-attribute">lunchc aosp_maple-eng</span><br></code></pre></td></tr></table></figure>
+
+<p>将花括号去掉，在对应的位置上填上您需要的值</p>
+<p>这将会自动下载设备树、内核源码和供应商私有部分</p>
+<h3 id="低内存解决方案"><a href="#低内存解决方案" class="headerlink" title="低内存解决方案"></a>低内存解决方案</h3><p>Android11：在源码根目录执行</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">cd</span> build/soong &amp;&amp; git fetch https://github.com/masemoel/build_soong_legion-r 11 &amp;&amp; git cherry-pick b45c5ae22f74f1bdbb9bfbdd06ecf7a25033c78b &amp;&amp; git cherry-pick e020f2130224fbdbec1f83e3adfd06a9764cca87 &amp;&amp; <span class="hljs-built_in">cd</span> ../..<br></code></pre></td></tr></table></figure>
+<p>这将会从远程拉取修补补丁来限定java使用的内存</p>
+<h3 id="正式编译"><a href="#正式编译" class="headerlink" title="正式编译"></a>正式编译</h3><figure class="highlight ebnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs ebnf"><span class="hljs-attribute">mka bacon</span><br></code></pre></td></tr></table></figure>
+<p>#或者</p>
+<figure class="highlight ebnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs ebnf"><span class="hljs-attribute">mka otapackage</span><br></code></pre></td></tr></table></figure>
+<p>这会花费几个小时甚至数十个小时（取决于系统性能）</p>
+<h3 id="编译完成"><a href="#编译完成" class="headerlink" title="编译完成"></a>编译完成</h3><p>如果没有错误，会出现类似build completed successfully(绿色字体)的输出，这时可以到out&#x2F;target&#x2F;product&#x2F;{手机代号}&#x2F;目录下找到刷机包</p>
+<p>部分ROM还会在编译完成告知用户刷机包文件位置和文件名</p>
+<h2 id="刷入"><a href="#刷入" class="headerlink" title="刷入"></a>刷入</h2><p>现在您得到了刷机包，您可以在自定义Recovery中刷入您的刷机包了！</p>
+<p>如果不开机…….那我也没办法（逃）</p>
+<h2 id="引用"><a href="#引用" class="headerlink" title="引用"></a>引用</h2><p><a target="_blank" rel="noopener" href="https://mirrors.bfsu.edu.cn/help/archlinuxcn/">https://mirrors.bfsu.edu.cn/help/archlinuxcn/</a></p>
+<p><a target="_blank" rel="noopener" href="https://mirrors.bfsu.edu.cn/help/git-repo/">https://mirrors.bfsu.edu.cn/help/git-repo/</a></p>
+<p><a target="_blank" rel="noopener" href="https://github.com/LineageOS/android">https://github.com/LineageOS/android</a></p>
+<p><a target="_blank" rel="noopener" href="https://github.com/exthmui/android/tree/exthm-11">https://github.com/exthmui/android/tree/exthm-11</a></p>
+<p><a target="_blank" rel="noopener" href="https://source.android.google.cn/setup/build/building?hl=zh-cn">https://source.android.google.cn/setup/build/building?hl=zh-cn</a></p>
+<p><a target="_blank" rel="noopener" href="https://source.android.google.cn/setup/develop?hl=zh-cn">https://source.android.google.cn/setup/develop?hl=zh-cn</a></p>
+<p><a target="_blank" rel="noopener" href="https://wiki.archlinux.org/title/Swap_(%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87)">https://wiki.archlinux.org/title/Swap_(%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87)</a></p>
+
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/Linux/">Linux</a>
+                    
+                  </div>
+                
+              </div>
+              
+                <p class="note note-warning">
+                  
+                    本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！
+                  
+                </p>
+              
+              
+                <div class="post-prevnext">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2021/08/27/C-11-%E5%A4%9A%E7%BA%BF%E7%A8%8B-%E7%BA%BF%E7%A8%8B%E7%AE%A1%E7%90%86/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">C++ 11 多线程--线程管理</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+
+    
+      <a id="scroll-top-button" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+    
+  </main>
+
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+     <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> <div style="font-size: 0.85rem"> <span id="timeDate">载入天数...</span> <span id="times">载入时分秒...</span> <script src="/js/duration.js"></script> </div> 
+  </div>
+  
+  <div class="statistics">
+    
+    
+
+    
+      
+        <!-- 不蒜子统计PV -->
+        <span id="busuanzi_container_site_pv" style="display: none">
+            总访问量 
+            <span id="busuanzi_value_site_pv"></span>
+             次
+          </span>
+      
+      
+        <!-- 不蒜子统计UV -->
+        <span id="busuanzi_container_site_uv" style="display: none">
+            总访客数 
+            <span id="busuanzi_value_site_uv"></span>
+             人
+          </span>
+      
+    
+  </div>
+
+
+  
+
+  
+</footer>
+
+
+  <!-- SCRIPTS -->
+  
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+<!-- Plugins -->
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+  
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/tocbot@4.12.3/dist/tocbot.min.js" ></script>
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js" ></script>
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4.3.1/anchor.min.js" ></script>
+
+
+
+  <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2.0.8/dist/clipboard.min.js" ></script>
+
+
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2.0.12/lib/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var title = document.getElementById('subtitle').title;
+      
+      typing(title)
+      
+    })(window, document);
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+    <!-- Google Analytics -->
+    <script defer>
+      window.ga = window.ga || function () { (ga.q = ga.q || []).push(arguments) };
+      ga.l = +new Date;
+      ga('create', 'UA-205458257-1', 'auto');
+      ga('send', 'pageview');
+    </script>
+    <script async src='https://www.google-analytics.com/analytics.js'></script>
+  
+
+  
+
+  
+
+  
+
+  
+
+
+
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/js/boot.js" ></script>
+
+
+</body>
+</html>
