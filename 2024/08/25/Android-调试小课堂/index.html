@@ -1,0 +1,612 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=&#34;auto&#34;>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" href="/img/favicon.png">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="description" content="摸鱼-躺平-划水">
+  <meta name="author" content="libfsx">
+  <meta name="keywords" content="摸鱼-躺平-划水">
+  
+  <title>Android 调试小课堂 - libfsx&#39;s Blog</title>
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4.0.0/github-markdown.min.css" />
+  <link  rel="stylesheet" href="/lib/hint/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10.7.2/styles/github-gist.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" />
+  
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_kmeydafke9r.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"shuxiangfan.github.io","root":"/","version":"1.8.11","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"baidu":null,"google":"UA-205458257-1","gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null}},"search_path":"/local-search.xml"};
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand"
+       href="/">&nbsp;<strong>libfsx的博客</strong>&nbsp;</a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/links/">
+                <i class="iconfont icon-link-fill"></i>
+                友链
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" data-toggle="modal" data-target="#modalSearch">&nbsp;<i
+                class="iconfont icon-search"></i>&nbsp;</a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner" id="banner" parallax=true
+         style="background: url('/img/banner.png') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="Android 调试小课堂">
+              
+            </span>
+
+            
+              <div class="mt-3">
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2024-08-25 20:46" pubdate>
+        2024年8月25日 晚上
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      3.4k 字
+    </span>
+  
+
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      45
+       分钟
+    </span>
+  
+
+  
+  
+    
+      <!-- 不蒜子统计文章PV -->
+      <span id="busuanzi_container_page_pv" style="display: none">
+        <i class="iconfont icon-eye" aria-hidden="true"></i>
+        <span id="busuanzi_value_page_pv"></span> 次
+      </span>
+    
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">Android 调试小课堂</h1>
+            
+            <div class="markdown-body">
+              <p><em><strong>原文由 Nicholas Lim (niclimcy) 和 Nolen Johnson (npjohnson) 写于2023年10月10日，发表于<a target="_blank" rel="noopener" href="https://lineageos.org/engineering/HowTo-Debugging/">LineageOS博客</a></strong></em></p>
+<p><em>人工翻译，水平较差xD</em></p>
+<p><img src="https://lineageos.org/images/engineering/hero_debugging.jpg" srcset="/img/loading.gif" lazyload></p>
+<h2 id="术语表"><a href="#术语表" class="headerlink" title="术语表"></a>术语表</h2><ul>
+<li>ADB： Android 调试桥。</li>
+<li>缓冲区：内存中固定大小的存储区域。</li>
+<li>CLI： 命令行界面。</li>
+<li>Commits：对于代码库的原子更改，用于版本控制。</li>
+<li>调试：找到并修复错误、bug和非预期行为的过程。</li>
+<li>设备块文件：存在于&#x2F;dev目录下的特殊文件，可与内核驱动进行标准化交互。</li>
+<li>DTS： 设备树源码。</li>
+<li>EDL：高通紧急下载模式。</li>
+<li>gdb：GNU 调试器。</li>
+<li>HAL：硬件抽象层。</li>
+<li>内核空间：内核运行设备驱动并与之交互的地方。</li>
+<li>记录日志：记录并存储运行软件时发生的事件，比如错误信息、警告和调试信息。</li>
+<li>内存地址：内存中存储数据和指令的位置的独特的标识符。</li>
+<li>OEM：原始设备制造商（例如谷歌、Fairphone、三星等）。</li>
+<li>PID：进程ID。</li>
+<li>pstore：持久性存储。</li>
+<li>变基：将 commit 从一个分支移动到另一个分支的过程。</li>
+<li>堆栈跟踪：导致程序出现错误或非预期行为的时候的函数调用序列。</li>
+<li>TID：线程ID。</li>
+<li>UART：通用异步收发器。</li>
+<li>用户空间：正常进程（比如应用程序）运行的地方。</li>
+</ul>
+<h2 id="什么是调试？"><a href="#什么是调试？" class="headerlink" title="什么是调试？"></a>什么是调试？</h2><p>了解 Android 调试，更重要的是了解 Android 系统中的各个部分。总体看，Android 系统主要由三个部分组成：应用程序、平台和内核。</p>
+<p><img src="https://lineageos.org/images/engineering/content_android_stack.png" srcset="/img/loading.gif" lazyload></p>
+<h2 id="用户空间调试"><a href="#用户空间调试" class="headerlink" title="用户空间调试"></a>用户空间调试</h2><h3 id="ADB"><a href="#ADB" class="headerlink" title="ADB"></a>ADB</h3><p>Android 调试桥（ADB）允许我们访问设备的命令行界面（或者shell），让我们可以使用原生的调试工具比如 Logcat。欲知如何在你的设备上使用 ADB 和 fastboot，请访问我们的<a target="_blank" rel="noopener" href="https://wiki.lineageos.org/adb_fastboot_guide">wiki</a></p>
+<h3 id="logcat"><a href="#logcat" class="headerlink" title="logcat"></a>logcat</h3><p><code>logcat</code> 是一个输出多种系统日志的命令行工具，可以输出包括你使用 Log 类从应用程序写入的消息。</p>
+<p><code>logcat</code> 进程存储了各种循环缓冲区，可以使用<code> -b</code> 选项访问它们，有以下选项：</p>
+<ul>
+<li><p><code>radio</code>：查看包含了无线电&#x2F;电话相关信息的缓冲区。</p>
+</li>
+<li><p><code>events</code>：查看已解释的二进制系统事件缓冲区信息。</p>
+</li>
+<li><p><code>main</code>：查看主日志缓冲区（默认），不包含 system 和 crash 日志信息。</p>
+</li>
+<li><p><code>system</code>：查看系统日志缓冲区（默认）。</p>
+</li>
+<li><p><code>crash</code>：查看崩溃日志缓冲区（默认）。</p>
+</li>
+<li><p><code>all</code>：查看所有缓冲区</p>
+</li>
+<li><p><code>default</code>：汇报main、system 和 crash 缓冲区。</p>
+</li>
+</ul>
+<p>你可以在 <a target="_blank" rel="noopener" href="https://developer.android.com/tools/logcat">Android Developers</a> 上找到更多关于如何使用 <code>logcat</code> 的信息。</p>
+<p>这是用 <code>logcat</code> 获取 crash （崩溃）缓冲区的实例：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta prompt_">$ </span><span class="language-bash">adb logcat -b crash</span><br>+--------------------+-----+-----+-------+-----------------------------------------------------------------------+<br>| Date  Time         | PID | TID | Level | ProcessName   : Message                                               |<br>+--------------------+-----+-----+-------+-----------------------------------------------------------------------+<br>| 04-14 11:22:34.256 | 5199| 5199| E     | AndroidRuntime: FATAL EXCEPTION: main                                 |<br>| 04-14 11:22:34.256 | 5199| 5199| E     | AndroidRuntime: Process: com.android.settings, PID: 5199              |<br>| 04-14 11:22:34.256 | 5199| 5199| E     | AndroidRuntime: java.lang.RuntimeException: Unable to resume activity |<br>|                    |     |     |       |            &#123;com.android.settings/com.android.settings.SubSettings&#125;:   |<br>|                    |     |     |       |            java.lang.ArrayIndexOutOfBoundsException length=7; index=7 |<br>+--------------------+-----+-----+-------+-----------------------------------------------------------------------+<br></code></pre></td></tr></table></figure>
+
+<p>崩溃缓冲区对于调试应用崩溃（比如<em>设置</em>应用停止运行）和识别运行时错误很有用。</p>
+<h3 id="Tombstones"><a href="#Tombstones" class="headerlink" title="Tombstones"></a>Tombstones</h3><p>有时候 ADB 服务可能没有在运行（可能原因包括在 adb 启动之前一个系统进程出现问题导致重启）。在这种情况下，我们不能够访问 logcat 命令。不要担心，一个墓碑文件已被写入 <code>/data/tombstones</code> ，其中包括引起崩溃的堆栈跟踪。</p>
+<p>Tombstones 也更详细，如果 logcat 输出不足，则它会提供更长的堆栈跟踪。因此，也可以使用以下命令从正在运行的进程中导出 tombstone ：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta prompt_">$ </span><span class="language-bash">adb shell debuggerd &#123;PID&#125;</span><br></code></pre></td></tr></table></figure>
+
+<p>提示：将 {PID} 替换为实际的进程 ID。</p>
+<h3 id="Stack"><a href="#Stack" class="headerlink" title="Stack"></a>Stack</h3><p><code>stack</code> 是一个 Python 脚本，以人类可读的格式表示崩溃转储（符号化本机崩溃转储）。你可以在任何 LineageOS 存储库的本地同步的 ~&#x2F;android&#x2F;lineage&#x2F;development&#x2F;scripts&#x2F;stack 的路径中找到 <code>stack</code>。可以使用 <code>stack &lt; /path/to/tombstone_0</code> 在提取的 tombstone 上运行 stack。</p>
+<p>本机崩溃转储通常如下所示：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><code class="hljs shell">*** *** *** *** *** *** *** *** *** *** *** *** *** *** *** ***<br>Build fingerprint: &#x27;Android/aosp_angler/angler:7.1.1/NYC/enh12211018:eng/test-keys&#x27;<br>Revision: &#x27;0&#x27;<br>ABI: &#x27;arm&#x27;<br>pid: 17946, tid: 17949, name: crasher  &gt;&gt;&gt; crasher &lt;&lt;&lt;<br>signal 11 (SIGSEGV), code 1 (SEGV_MAPERR), fault addr 0xc<br>    r0 0000000c  r1 00000000  r2 00000000  r3 00000000<br>    r4 00000000  r5 0000000c  r6 eccdd920  r7 00000078<br>    r8 0000461a  r9 ffc78c19  sl ab209441  fp fffff924<br>    ip ed01b834  sp eccdd800  lr ecfa9a1f  pc ecfd693e  cpsr 600e0030<br><br>backtrace:<br>    #00 pc 0004793e  /system/lib/libc.so (pthread_mutex_lock+1)<br>    #01 pc 0001aa1b  /system/lib/libc.so (readdir+10)<br>    #02 pc 00001b91  /system/xbin/crasher (readdir_null+20)<br>    #03 pc 0000184b  /system/xbin/crasher (do_action+978)<br>    #04 pc 00001459  /system/xbin/crasher (thread_callback+24)<br>    #05 pc 00047317  /system/lib/libc.so (_ZL15__pthread_startPv+22)<br>    #06 pc 0001a7e5  /system/lib/libc.so (__start_thread+34)<br>Tombstone written to: /data/tombstones/tombstone_06<br></code></pre></td></tr></table></figure>
+
+<p>运行 <code>stack &lt; /data/tombstones/tombstone_06</code> ，输出如下所示：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><code class="hljs shell">Revision: &#x27;0&#x27;<br>pid: 17946, tid: 17949, name: crasher  &gt;&gt;&gt; crasher &lt;&lt;&lt;<br>signal 11 (SIGSEGV), code 1 (SEGV_MAPERR), fault addr 0xc<br>     r0 0000000c  r1 00000000  r2 00000000  r3 00000000<br>     r4 00000000  r5 0000000c  r6 eccdd920  r7 00000078<br>     r8 0000461a  r9 ffc78c19  sl ab209441  fp fffff924<br>     ip ed01b834  sp eccdd800  lr ecfa9a1f  pc ecfd693e  cpsr 600e0030<br>Using arm toolchain from: ~/android/lineage/prebuilts/gcc/linux-x86/arm/arm-linux-androideabi-4.9/bin/<br><br>Stack Trace:<br>  RELADDR   FUNCTION                   FILE:LINE<br>  0004793e  pthread_mutex_lock+2       bionic/libc/bionic/pthread_mutex.cpp:515<br><span class="hljs-meta prompt_">  v------&gt; </span><span class="language-bash"> ScopedPthreadMutexLocker   bionic/libc/private/ScopedPthreadMutexLocker.h:27</span><br>  0001aa1b  readdir+10                 bionic/libc/bionic/dirent.cpp:120<br>  00001b91  readdir_null+20            system/core/debuggerd/crasher.cpp:131<br>  0000184b  do_action+978              system/core/debuggerd/crasher.cpp:228<br>  00001459  thread_callback+24         system/core/debuggerd/crasher.cpp:90<br>  00047317  __pthread_start(void*)+22  bionic/libc/bionic/pthread_create.cpp:202 (discriminator 1)<br>  0001a7e5  __start_thread+34          bionic/libc/bionic/clone.cpp:46 (discriminator 1)<br></code></pre></td></tr></table></figure>
+
+<p><code>stack</code> 的工作原理与内核空间调试工具<code>decode_stacktrace.sh</code> 非常相似。它们都提供了堆栈跟踪所引用的原始代码的确切文件和行。继续阅读以了解有关如何使用<code>decode_stacktrace.sh</code> 的更多信息。</p>
+<h3 id="ramoops-pmsg"><a href="#ramoops-pmsg" class="headerlink" title="ramoops-pmsg"></a>ramoops-pmsg</h3><p>ramoops-pmsg 是 ramoops 的用户空间可访问版本。要从 pstore 访问上次重启之前的这些日志，可以运行：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs sh">$ adb logcat -b all -L<br></code></pre></td></tr></table></figure>
+
+<p>关于ramoops内核特性更详细的解释可以在下面找到。</p>
+<h2 id="内核空间调试"><a href="#内核空间调试" class="headerlink" title="内核空间调试"></a>内核空间调试</h2><p>内核空间调试帮助我们识别在内核内部的问题。设备制造商除了提供设备的内核驱动以外，还可能在发布内核源码时客制内核的其他部分。因此，当设备制造商将他们的驱动变基到新版本内核上的时候（为了跟上安全补丁），可能会出现回归。</p>
+<h3 id="dmesg"><a href="#dmesg" class="headerlink" title="dmesg"></a>dmesg</h3><p><code>dmesg</code> 是一个显示内核缓冲区消息的命令行工具。它提供了内核级活动的详细视图，使设备维护者能够诊断系统崩溃、驱动问题并监视系统事件。请注意，所有 LineageOS 构建都默认 SELinux Enforcing，这要求你在使用 dmesg 之前 <code>adb root</code> 模式。</p>
+<p>下面是 dmesg 的关于空指针引用的截断输出</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta prompt_"># </span><span class="language-bash">adb shell dmesg</span><br>| Unable to handle kernel NULL pointer dereference at virtual address 0000000000000010<br>| Internal error: Oops: 96000006 [#1] SMP<br>| Call trace:<br>| update_insn_emulation_mode+0xc0/0x148<br>| emulation_proc_handler+0x64/0xb8<br>| proc_sys_call_handler+0x9c/0xf8<br>| proc_sys_write+0x18/0x20<br>| __vfs_write+0x20/0x48<br>| vfs_write+0xe4/0x1d0<br>| ksys_write+0x70/0xf8<br>| __arm64_sys_write+0x20/0x28<br>| el0_svc_common.constprop.0+0x7c/0x1c0<br>| el0_svc_handler+0x2c/0xa0<br>| el0_svc+0x8/0x200<br></code></pre></td></tr></table></figure>
+
+<h3 id="ramoops"><a href="#ramoops" class="headerlink" title="ramoops"></a>ramoops</h3><p>ramoops 是 <a target="_blank" rel="noopener" href="https://www.kernel.org/doc/html/next/admin-guide/ramoops.html">Linux 内核的一项功能</a>，可在系统崩溃前写入内存。ramoops 可在设备的内核设备树源码 (DTS) 中配置，方法是为 ramoops-pmsg 保留一个内存缓冲区。它与内核 pstore 驱动程序配合使用，在重新启动前将 ramoops 保存到 <code>/sys/fs/pstore</code> 的持久文件中。</p>
+<p>分配了 pmsg 缓冲区的 ramoops 配置示例：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs c">/&#123;<br>    reserved-memory &#123;<br>        ramoops: ramoops@b0000000 &#123;<br>            compatible = <span class="hljs-string">&quot;ramoops&quot;</span>;<br>            reg = &lt;<span class="hljs-number">0</span> <span class="hljs-number">0xb0000000</span> <span class="hljs-number">0</span> <span class="hljs-number">0x00400000</span>&gt;;<br>            record-size = &lt;<span class="hljs-number">0x40000</span>&gt;; <span class="hljs-comment">/*256x1024*/</span><br>            console-size = &lt;<span class="hljs-number">0x40000</span>&gt;;<br>            ftrace-size = &lt;<span class="hljs-number">0x40000</span>&gt;;<br>            pmsg-size = &lt;<span class="hljs-number">0x200000</span>&gt;;<br>            ecc-size = &lt;<span class="hljs-number">0x0</span>&gt;;<br>        &#125;;<br>    &#125;;<br>&#125;;<br></code></pre></td></tr></table></figure>
+
+<p>在较新的内核上， ramoops 可以通过如下配置选项启用：</p>
+<figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs ini"><span class="hljs-attr">CONFIG_PSTORE</span>=y<br><span class="hljs-attr">CONFIG_PSTORE_CONSOLE</span>=y<br><span class="hljs-attr">CONFIG_PSTORE_RAM</span>=y<br></code></pre></td></tr></table></figure>
+
+<p>pstore 通常默认压缩，这使得它难以在调试中使用。你可能想通过如下设置来禁用压缩：</p>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs dart"># CONFIG_PSTORE_COMPRESS <span class="hljs-keyword">is</span> not <span class="hljs-keyword">set</span><br></code></pre></td></tr></table></figure>
+
+<p>尽管 ramoops 和 pstore 都是强大的工具，但使用它们时仍有一些注意事项。由于 pstore 默认将数据写入缓冲区，并且我们通常只在系统即将崩溃时使用它，因此事后检索 pstore 时，我们往往会看到大量损坏。</p>
+<h3 id="addr2line"><a href="#addr2line" class="headerlink" title="addr2line"></a>addr2line</h3><p>dmesg 和 ramoops 经常在堆栈跟踪中产生加密的内存地址，例如<code>ffffff9405cebf10</code>来自：</p>
+<figure class="highlight llvm"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs llvm">CFI failure (<span class="hljs-keyword">target</span>: [\&lt;\ffffff<span class="hljs-number">9405</span>cebf<span class="hljs-number">10</span>\&gt;] __typeid__ZTSFvP<span class="hljs-number">10</span>net_deviceE_global_addr<span class="hljs-number">+0</span><span class="hljs-keyword">x</span><span class="hljs-number">170</span>/<span class="hljs-number">0x17c</span>):<br></code></pre></td></tr></table></figure>
+
+<p>在这种情况下，我们可以使用 Address To Line (addr2line) 来找到出现问题的文件和行数，使用：</p>
+<figure class="highlight crystal"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs crystal"><span class="hljs-variable">$ </span>addr2line -e /path/to/kernel-<span class="hljs-keyword">module</span>.o ffffff9405cebf10<br></code></pre></td></tr></table></figure>
+
+<h3 id="decode-stacktrace-sh"><a href="#decode-stacktrace-sh" class="headerlink" title="decode_stacktrace.sh"></a>decode_stacktrace.sh</h3><p><code>decode_stacktrace.sh</code> 是每个 Linux 内核附带脚本，使用<code>addr2line</code>，源码位于 <a target="_blank" rel="noopener" href="https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/scripts/decode_stacktrace.sh">linux&#x2F;blob&#x2F;master&#x2F;scripts&#x2F;decode_stacktrace.sh</a> 。要使用它，首先你需要在内核配置文件中启用 <code>CONFIG_DEBUG_INFO=y</code> 并构建内核。</p>
+<p>接下来，你需要从 dmesg 中提取要调试的内核恐慌的调用跟踪，并将其保存在文本文件中，例如此处的 dmesg.txt：</p>
+<figure class="highlight 1c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs 1c"><span class="hljs-string">| update_insn_emulation_mode+0xc0/0x148</span><br><span class="hljs-string">| emulation_proc_handler+0x64/0xb8</span><br><span class="hljs-string">| proc_sys_call_handler+0x9c/0xf8</span><br><span class="hljs-string">| proc_sys_write+0x18/0x20</span><br><span class="hljs-string">| __vfs_write+0x20/0x48</span><br><span class="hljs-string">| vfs_write+0xe4/0x1d0</span><br><span class="hljs-string">| ksys_write+0x70/0xf8</span><br><span class="hljs-string">| __arm64_sys_write+0x20/0x28</span><br><span class="hljs-string">| el0_svc_common.constprop.0+0x7c/0x1c0</span><br><span class="hljs-string">| el0_svc_handler+0x2c/0xa0</span><br><span class="hljs-string">| el0_svc+0x8/0x200</span><br></code></pre></td></tr></table></figure>
+
+<p>最后，将 dmesg.txt 和构建好的内核提供给 <code>decode_stacktrace.sh</code> ：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs sh">$ ./scripts/decode_stacktrace.sh /path/to/vmlinux /path/to/kernel-source-dir &lt; dmesg.txt<br></code></pre></td></tr></table></figure>
+
+<p>正如你在以下示例（不同的堆栈跟踪）中看到的，堆栈跟踪中每个调用的内存地址已被替换为特定文件和代码行，然后您可以在内核源码中找到它。</p>
+<figure class="highlight 1c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs 1c"><span class="hljs-string">| dump_stack (lib/dump_stack.c:52)</span><br><span class="hljs-string">| warn_slowpath_common (kernel/panic.c:418)</span><br><span class="hljs-string">| warn_slowpath_null (kernel/panic.c:453)</span><br><span class="hljs-string">| _oalloc_pages_slowpath+0x6a/0x7d0</span><br><span class="hljs-string">| ? zone_watermark_ok (mm/page_alloc.c:1728)</span><br><span class="hljs-string">| ? get_page_from_freelist (mm/page_alloc.c:1939)</span><br><span class="hljs-string">| __alloc_pages_nodemask (mm/page_alloc.c:2766)</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="串口-gdb"><a href="#串口-gdb" class="headerlink" title="串口 &#x2F; gdb"></a>串口 &#x2F; gdb</h3><p>带有 UART 端口的设备（参见带有 3.5 毫米耳机端口的旧款 Nexus&#x2F;Google Pixel 和带有 USB-C 调试器的新款 Google Pixel）可以使用 UART 线连接来查看内核控制台消息 (kgdb)。使用串口，你甚至可以调试内核启动前发生的问题。</p>
+<p>当你的设备卡在 logo 上时，可以考虑使用串口。</p>
+<h3 id="绝望的调试"><a href="#绝望的调试" class="headerlink" title="绝望的调试"></a>绝望的调试</h3><p>如果其他方法都失败了，你可以在要调试的内核部分使用 <code>panic()</code>。<a target="_blank" rel="noopener" href="https://github.com/xiaomi-sm8150-devs/android_kernel_xiaomi_sm8150-legacy/commit/9d8822a6967ee623790270539a929942b71f191b">SebaUbuntu 的补丁</a>在此处演示了如何使用 <code>panic()</code> 来捕获早期初始化问题。</p>
+<h2 id="芯片制造商-OEM-特定的调试方法"><a href="#芯片制造商-OEM-特定的调试方法" class="headerlink" title="芯片制造商 &#x2F; OEM 特定的调试方法"></a>芯片制造商 &#x2F; OEM 特定的调试方法</h2><p>这是我们这几年发现的非常有用的调试工具，它们由OEM开发。</p>
+<h3 id="EDL-memorydump-（高通）"><a href="#EDL-memorydump-（高通）" class="headerlink" title="EDL memorydump （高通）"></a>EDL memorydump （高通）</h3><p><img src="https://lineageos.org/images/engineering/content_qualcomm_crashdump.png" srcset="/img/loading.gif" lazyload></p>
+<p>一些高通设备启用了 CrashDump，允许你使用高通的 firehouse 工具来获取内存转储。由于 firehouse 是闭源的，我们建议使用由 Bjoern Kerler 重写的开源版，可以在 <a target="_blank" rel="noopener" href="https://github.com/bkerler/edl">bkerler&#x2F;edl</a> 找到。你可以使用 <code>edl memorydump</code> 获取内存转储。</p>
+<h3 id="dev-block-by-name-debug-（三星）"><a href="#dev-block-by-name-debug-（三星）" class="headerlink" title="&#x2F;dev&#x2F;block&#x2F;by-name&#x2F;debug （三星）"></a>&#x2F;dev&#x2F;block&#x2F;by-name&#x2F;debug （三星）</h3><p><code>/dev/block/by-name/debug</code> 是三星设备上一个特殊的设备块文件，它包含了XBL日志、内核日志以及更多东西。你可以执行 <code>adb pull /dev/block/by-name/debug debug.bin</code> 来转储日志流。</p>
+<p>下面是一个截断的 debug.bin 文件的示例：</p>
+<figure class="highlight mathematica"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><code class="hljs mathematica"><span class="hljs-punctuation">&#123;</span><span class="hljs-number">340532</span><span class="hljs-punctuation">&#125;</span> <span class="hljs-operator">**</span> <span class="hljs-variable">XBL</span><span class="hljs-punctuation">(</span><span class="hljs-number">1</span><span class="hljs-punctuation">)</span> <span class="hljs-operator">**</span><br><span class="hljs-punctuation">&#123;</span><span class="hljs-number">340532</span><span class="hljs-punctuation">&#125;</span><br><span class="hljs-built_in">Format</span><span class="hljs-operator">:</span> <span class="hljs-built_in">Log</span> <span class="hljs-variable">Type</span> <span class="hljs-operator">-</span> <span class="hljs-variable">Time</span><span class="hljs-punctuation">(</span><span class="hljs-variable">microsec</span><span class="hljs-punctuation">)</span> <span class="hljs-operator">-</span> <span class="hljs-built_in">Message</span> <span class="hljs-operator">-</span> <span class="hljs-built_in">Optional</span> <span class="hljs-variable">Info</span><br><span class="hljs-built_in">Log</span> <span class="hljs-variable">Type</span><span class="hljs-operator">:</span> <span class="hljs-variable">B</span> <span class="hljs-operator">-</span> <span class="hljs-variable">Since</span> <span class="hljs-variable">Boot</span><span class="hljs-punctuation">(</span><span class="hljs-built_in">Power</span> <span class="hljs-built_in">On</span> <span class="hljs-variable">Reset</span><span class="hljs-punctuation">)</span><span class="hljs-operator">,</span>  <span class="hljs-built_in">D</span> <span class="hljs-operator">-</span> <span class="hljs-variable">Delta</span><span class="hljs-operator">,</span>  <span class="hljs-variable">S</span> <span class="hljs-operator">-</span> <span class="hljs-variable">Statistic</span><br><span class="hljs-variable">S</span> <span class="hljs-operator">-</span> <span class="hljs-type">QC_IMAGE</span><span class="hljs-type">_VERSION</span><span class="hljs-type">_STRING</span><span class="hljs-operator">=</span><span class="hljs-variable">BOOT</span><span class="hljs-operator">.</span><span class="hljs-variable">XF</span><span class="hljs-number">.2</span><span class="hljs-number">.1</span><span class="hljs-operator">-</span><span class="hljs-number">00133</span><span class="hljs-operator">-</span><span class="hljs-variable">SDM710LZB</span><span class="hljs-operator">-</span><span class="hljs-number">3</span><br><span class="hljs-variable">S</span> <span class="hljs-operator">-</span> <span class="hljs-type">IMAGE_VARIANT</span><span class="hljs-type">_STRING</span><span class="hljs-operator">=</span><span class="hljs-variable">SDM670LA</span><br><span class="hljs-variable">S</span> <span class="hljs-operator">-</span> <span class="hljs-type">OEM_IMAGE</span><span class="hljs-type">_VERSION</span><span class="hljs-type">_STRING</span><span class="hljs-operator">=</span><span class="hljs-number">21</span><span class="hljs-variable">DJFC21</span><br><span class="hljs-variable">S</span> <span class="hljs-operator">-</span> <span class="hljs-variable">Boot</span> <span class="hljs-variable">Interface</span><span class="hljs-operator">:</span> <span class="hljs-variable">eMMC</span><br><span class="hljs-variable">S</span> <span class="hljs-operator">-</span> <span class="hljs-variable">Secure</span> <span class="hljs-variable">Boot</span><span class="hljs-operator">:</span> <span class="hljs-built_in">On</span><br><span class="hljs-variable">S</span> <span class="hljs-operator">-</span> <span class="hljs-variable">Boot</span> <span class="hljs-variable">Config</span> <span class="hljs-operator">@</span> <span class="hljs-number">0</span><span class="hljs-variable">x00786070</span> <span class="hljs-operator">=</span> <span class="hljs-number">0</span><span class="hljs-variable">x000000c9</span><br><span class="hljs-variable">S</span> <span class="hljs-operator">-</span> <span class="hljs-variable">JTAG</span> <span class="hljs-variable">ID</span> <span class="hljs-operator">@</span> <span class="hljs-number">0</span><span class="hljs-variable">x00786130</span> <span class="hljs-operator">=</span> <span class="hljs-number">0</span><span class="hljs-variable">x100910e1</span><br><span class="hljs-variable">S</span> <span class="hljs-operator">-</span> <span class="hljs-variable">OEM</span> <span class="hljs-variable">ID</span> <span class="hljs-operator">@</span> <span class="hljs-number">0</span><span class="hljs-variable">x00786138</span> <span class="hljs-operator">=</span> <span class="hljs-number">0</span><span class="hljs-variable">x00200000</span><br><span class="hljs-variable">S</span> <span class="hljs-operator">-</span> <span class="hljs-variable">Feature</span> <span class="hljs-variable">Config</span> <span class="hljs-built_in">Row</span> <span class="hljs-number">0</span> <span class="hljs-operator">@</span> <span class="hljs-number">0</span><span class="hljs-variable">x007841a0</span> <span class="hljs-operator">=</span> <span class="hljs-number">0</span><span class="hljs-variable">x08d020000b588420</span><br><span class="hljs-variable">S</span> <span class="hljs-operator">-</span> <span class="hljs-variable">Feature</span> <span class="hljs-variable">Config</span> <span class="hljs-built_in">Row</span> <span class="hljs-number">1</span> <span class="hljs-operator">@</span> <span class="hljs-number">0</span><span class="hljs-variable">x007841a8</span> <span class="hljs-operator">=</span> <span class="hljs-number">0</span><span class="hljs-variable">xe0140000000311a0</span><br><span class="hljs-variable">S</span> <span class="hljs-operator">-</span> <span class="hljs-variable">Core</span> <span class="hljs-number">0</span> <span class="hljs-variable">Frequency</span><span class="hljs-operator">,</span> <span class="hljs-number">1516</span> <span class="hljs-variable">MHz</span><br><span class="hljs-variable">S</span> <span class="hljs-operator">-</span> <span class="hljs-variable">PBL</span> <span class="hljs-variable">Patch</span> <span class="hljs-variable">Ver</span><span class="hljs-operator">:</span> <span class="hljs-number">0</span><br><span class="hljs-variable">S</span> <span class="hljs-operator">-</span> <span class="hljs-variable">PBL</span> <span class="hljs-variable">freq</span><span class="hljs-operator">:</span> <span class="hljs-number">600</span> <span class="hljs-variable">MHZ</span><br><span class="hljs-variable">S</span> <span class="hljs-operator">-</span> <span class="hljs-built_in">I</span><span class="hljs-operator">-</span><span class="hljs-variable">cache</span><span class="hljs-operator">:</span> <span class="hljs-built_in">On</span><br><span class="hljs-variable">S</span> <span class="hljs-operator">-</span> <span class="hljs-built_in">D</span><span class="hljs-operator">-</span><span class="hljs-variable">cache</span><span class="hljs-operator">:</span> <span class="hljs-built_in">On</span><br></code></pre></td></tr></table></figure>
+
+<p>我们之前讲解<a target="_blank" rel="noopener" href="https://lineageos.org/engineering/Qualcomm-Firmware">高通的信任链</a>的博客有关于 eXtensible Bootloader (XBL) 的更多细节。</p>
+<h2 id="常见错误-以及如何解决"><a href="#常见错误-以及如何解决" class="headerlink" title="常见错误 (以及如何解决)"></a>常见错误 (以及如何解决)</h2><p>现在我们对 Android 开发过程中使用的某些调试工具有了基本的了解，现在让我们学习如何识别和修复调试过程中遇到的常见错误。</p>
+<h3 id="dlopen-failed"><a href="#dlopen-failed" class="headerlink" title="dlopen failed"></a>dlopen failed</h3><p>许多设备都具有预构建库，这些库是使用旧版本的库编译的，这些旧版本的库缺失某些符号。可能发生如下所示的错误：</p>
+<figure class="highlight lasso"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs lasso">* java.lang.UnsatisfiedLinkError: dlopen failed: cannot locate symbol <span class="hljs-string">&quot;_ZN7android21SurfaceComposerClient11Transaction5applyEb&quot;</span> referenced <span class="hljs-keyword">by</span> <span class="hljs-string">&quot;/product/lib64/libsecureuisvc_jni.so&quot;</span><span class="hljs-params">...</span><br></code></pre></td></tr></table></figure>
+
+<p>为了解决此错误，我们需要插入我们俗称“垫片”的库。通过拦截对缺失函数的调用并提供替代的实现，我们可以从本质上模拟正在使用的预构建库构建的原始库的行为。</p>
+<p>另外，一些现代设备会选择将更新库的旧 VNDK 版本复制到  <code>$libname-v$vndkVersion.so</code> ，然后对有问题的库打补丁，以加载该版本的库。</p>
+<p>你可以<a target="_blank" rel="noopener" href="https://github.com/LineageOS/android_hardware_lineage_compat">在此处</a>查看我们通用的预先存在的垫片，这些垫片在 LineageOS 20 之前由各个设备维护者管理。对于上述示例，你可以参考<a target="_blank" rel="noopener" href="https://review.lineageos.org/c/LineageOS/android_device_google_bonito/+/343466">此补丁</a>，了解如何将垫片包用于需要它们的预构建库。</p>
+<h3 id="Hidden-dlopen-failed"><a href="#Hidden-dlopen-failed" class="headerlink" title="Hidden dlopen failed"></a>Hidden dlopen failed</h3><p>由于 dlopen 错误仅在运行时发生，因此某些故障不会立即显示，甚至不会记录在日志中。因此，我们想出了一个库钩子 ，<code> dlopen.so</code> ，你可以将其放置在 LD_PRELOAD 中，显示所有链接器操作，帮助我们查看哪些库当前缺少符号甚至缺少依赖项。</p>
+<p>这是某个设备使用<a target="_blank" rel="noopener" href="https://review.lineageos.org/c/LineageOS/android_hardware_lineage_compat/+/346648">此库</a>的日志：</p>
+<figure class="highlight livescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs livescript">instantnoodlep / <span class="hljs-comment"># LD_PRELOAD=dlopen.so /vendor/bin/hw/android.hardware.gnss\@2.1-service-qti</span><br>dlopen<span class="hljs-function"><span class="hljs-params">(libnetd_client.so)</span> -&gt;</span> <span class="hljs-number">0x0</span>, errno: dlopen failed: library <span class="hljs-string">&quot;libnetd_client.so&quot;</span> <span class="hljs-keyword">not</span> found<br>dlopen<span class="hljs-function"><span class="hljs-params">(libgnss.so)</span> -&gt;</span> <span class="hljs-number">0xdc9f08e905187e63</span>, errno: (<span class="hljs-literal">null</span>)<br>dlopen<span class="hljs-function"><span class="hljs-params">(liblbs_core.so)</span> -&gt;</span> <span class="hljs-number">0x618992fa4f6a1e6d</span>, errno: (<span class="hljs-literal">null</span>)<br>dlopen<span class="hljs-function"><span class="hljs-params">(liblocdiagiface.so)</span> -&gt;</span> <span class="hljs-number">0x0</span>, errno: dlopen failed: library <span class="hljs-string">&quot;liblocdiagiface.so&quot;</span> <span class="hljs-keyword">not</span> found<br>dlopen<span class="hljs-function"><span class="hljs-params">(libloc_net_iface.so)</span> -&gt;</span> <span class="hljs-number">0x0</span>, errno: dlopen failed: library <span class="hljs-string">&quot;libloc_net_iface.so&quot;</span> <span class="hljs-keyword">not</span> found<br>dlopen<span class="hljs-function"><span class="hljs-params">(vendor.qti.gnss@<span class="hljs-number">4.0</span>-service.so)</span> -&gt;</span> <span class="hljs-number">0xe8b09305c7a1c55f</span>, errno: (<span class="hljs-literal">null</span>)<br>dlopen<span class="hljs-function"><span class="hljs-params">(libdataitems.so)</span> -&gt;</span> <span class="hljs-number">0xc4ba0f7c15946aef</span>, errno: (<span class="hljs-literal">null</span>)<br>dlopen<span class="hljs-function"><span class="hljs-params">(android.hardware.gnss@<span class="hljs-number">2.1</span>-impl-qti.so)</span> -&gt;</span> <span class="hljs-number">0xd950565f49bbcc01</span>, errno: (<span class="hljs-literal">null</span>)<br>dlopen<span class="hljs-function"><span class="hljs-params">(libgnss.so)</span> -&gt;</span> <span class="hljs-number">0xdc9f08e905187e63</span>, errno: (<span class="hljs-literal">null</span>)<br>dlopen<span class="hljs-function"><span class="hljs-params">(libxtadapter.so)</span> -&gt;</span> <span class="hljs-number">0x39eb3dbc835592b5</span>, errno: (<span class="hljs-literal">null</span>)<br>dlopen<span class="hljs-function"><span class="hljs-params">(libcdfw.so)</span> -&gt;</span> <span class="hljs-number">0x59b12f3c0b5e3e1b</span>, errno: (<span class="hljs-literal">null</span>)<br>dlopen<span class="hljs-function"><span class="hljs-params">(libloc_socket.so)</span> -&gt;</span> <span class="hljs-number">0x2229c8abec54dac9</span>, errno: (<span class="hljs-literal">null</span>)<br></code></pre></td></tr></table></figure>
+
+<h2 id="One-more-thing"><a href="#One-more-thing" class="headerlink" title="One more thing"></a>One more thing</h2><p>当调试非私有系统应用的时候，比如 Aperture ，你可以使用 <a target="_blank" rel="noopener" href="https://developer.android.com/studio">Android Studio</a> 来更轻松简单地进行调试！</p>
+
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                
+              </div>
+              
+                <p class="note note-warning">
+                  
+                    本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！
+                  
+                </p>
+              
+              
+                <div class="post-prevnext">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2024/08/12/UART-Ports-For-Google-Pixel-Phones/">
+                        <span class="hidden-mobile">UART Ports For Google Pixel Phones</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+
+    
+      <a id="scroll-top-button" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+    
+  </main>
+
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+     <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> <div style="font-size: 0.85rem"> <span id="timeDate">载入天数...</span> <span id="times">载入时分秒...</span> <script src="/js/duration.js"></script> </div> 
+  </div>
+  
+  <div class="statistics">
+    
+    
+
+    
+      
+        <!-- 不蒜子统计PV -->
+        <span id="busuanzi_container_site_pv" style="display: none">
+            总访问量 
+            <span id="busuanzi_value_site_pv"></span>
+             次
+          </span>
+      
+      
+        <!-- 不蒜子统计UV -->
+        <span id="busuanzi_container_site_uv" style="display: none">
+            总访客数 
+            <span id="busuanzi_value_site_uv"></span>
+             人
+          </span>
+      
+    
+  </div>
+
+
+  
+
+  
+</footer>
+
+
+  <!-- SCRIPTS -->
+  
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+<!-- Plugins -->
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+  
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/tocbot@4.12.3/dist/tocbot.min.js" ></script>
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js" ></script>
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4.3.1/anchor.min.js" ></script>
+
+
+
+  <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2.0.8/dist/clipboard.min.js" ></script>
+
+
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2.0.12/lib/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var title = document.getElementById('subtitle').title;
+      
+      typing(title)
+      
+    })(window, document);
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+    <!-- Google Analytics -->
+    <script defer>
+      window.ga = window.ga || function () { (ga.q = ga.q || []).push(arguments) };
+      ga.l = +new Date;
+      ga('create', 'UA-205458257-1', 'auto');
+      ga('send', 'pageview');
+    </script>
+    <script async src='https://www.google-analytics.com/analytics.js'></script>
+  
+
+  
+
+  
+
+  
+
+  
+
+
+
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/js/boot.js" ></script>
+
+
+</body>
+</html>
