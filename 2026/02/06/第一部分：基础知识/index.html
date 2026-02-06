@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-96x96.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon.ico">
+  <link rel="mask-icon" href="/images/favicon-96x96.png" color="#222">
+  <link rel="manifest" href="/images/site.webmanifest">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css" integrity="sha256-VHqXKFhhMxcpubYf9xiWdCiojEbY9NexQ4jh8AxbvcM=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"shuxiangfan.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.27.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":true,"style":"flat"},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="这是《算法导论》的第一部分">
+<meta property="og:type" content="article">
+<meta property="og:title" content="算法导论 第一部分：基础知识">
+<meta property="og:url" content="https://shuxiangfan.github.io/2026/02/06/%E7%AC%AC%E4%B8%80%E9%83%A8%E5%88%86%EF%BC%9A%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/index.html">
+<meta property="og:site_name" content="libfsx&#39;s Blog">
+<meta property="og:description" content="这是《算法导论》的第一部分">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://math.now.sh/?inline=k">
+<meta property="og:image" content="https://math.now.sh/?inline=k">
+<meta property="og:image" content="https://math.now.sh/?inline=j">
+<meta property="og:image" content="https://math.now.sh/?inline=len-1">
+<meta property="og:image" content="https://math.now.sh/?inline=L">
+<meta property="og:image" content="https://math.now.sh/?inline=R">
+<meta property="og:image" content="https://math.now.sh/?inline=a">
+<meta property="og:image" content="https://math.now.sh/?inline=%5Cfrac%7Bn%7D%7Bb%7D">
+<meta property="og:image" content="https://math.now.sh/?inline=T%28%5Cfrac%7Bn%7D%7Bb%7D%29">
+<meta property="og:image" content="https://math.now.sh/?inline=a%20T%28%5Cfrac%7Bn%7D%7Bb%7D%29">
+<meta property="og:image" content="https://math.now.sh/?inline=D%28n%29">
+<meta property="og:image" content="https://math.now.sh/?inline=C%28n%29">
+<meta property="og:image" content="https://math.now.sh/?from=T%28n%29%20%3D%20%5Cbegin%7Bcases%7D%0A%5CTheta(1)%20%26%20%5Ctext%7B%E8%8B%A5%24n%3D1%24%7D%20%5C%5C%0AaT(%5Cfrac%7Bn%7D%7Bb%7D)%2BD(n)%2BC(n)%20%26%20%5Ctext%7B%E5%85%B6%E4%BB%96%7D%0A%5Cend%7Bcases%7D%0A">
+<meta property="og:image" content="https://math.now.sh/?from=T%28n%29%20%3D%20%5Cbegin%7Bcases%7D%0Ac%20%26%20n%3D1%20%5C%5C%0A2T(%5Cfrac%7Bn%7D%7B2%7D)%2Bcn%20%26%20n%3E1%0A%5Cend%7Bcases%7D%0A">
+<meta property="og:image" content="https://math.now.sh/?from=T%28n%29%3D%5CTheta(n%5Clg%20n)%0A">
+<meta property="og:image" content="https://math.now.sh/?inline=%5CTheta">
+<meta property="og:image" content="https://math.now.sh/?inline=O">
+<meta property="og:image" content="https://math.now.sh/?inline=%5COmega">
+<meta property="og:image" content="https://math.now.sh/?inline=o">
+<meta property="og:image" content="https://math.now.sh/?inline=%5Comega">
+<meta property="og:image" content="https://math.now.sh/?inline=%5CTheta%28n%5Clg%20n%29">
+<meta property="og:image" content="https://math.now.sh/?inline=n%5Ctimes%20n">
+<meta property="og:image" content="https://math.now.sh/?from=c_%7Bij%7D%3D%5Csum_%7Bk%3D1%7D%5E%7Bn%7D%20a_%7Bik%7Db_%7Bkj%7D%0A">
+<meta property="og:image" content="https://math.now.sh/?inline=%5CTheta%28n%5E3%29">
+<meta property="og:image" content="https://math.now.sh/?inline=%5CTheta%28n%5E%7B3%7D%29">
+<meta property="og:image" content="https://math.now.sh/?inline=n">
+<meta property="og:image" content="https://math.now.sh/?inline=A">
+<meta property="og:image" content="https://math.now.sh/?inline=B">
+<meta property="og:image" content="https://math.now.sh/?inline=C">
+<meta property="og:image" content="https://math.now.sh/?from=A%3D%5Cbegin%7Bbmatrix%7D%0AA_%7B11%7D%20%26%20A_%7B12%7D%20%5C%5C%0AA_%7B21%7D%20%26%20A_%7B22%7D%0A%5Cend%7Bbmatrix%7D%0A%5Cquad%20B%3D%5Cbegin%7Bbmatrix%7D%0AB_%7B11%7D%26B_%7B12%7D%20%5C%5C%0AB_%7B21%7D%26B_%7B22%7D%0A%5Cend%7Bbmatrix%7D%0A%5Cquad%20C%3D%5Cbegin%7Bbmatrix%7D%0AC_%7B11%7D%26C_%7B12%7D%20%5C%5C%0AC_%7B21%7D%26C_%7B22%7D%0A%5Cend%7Bbmatrix%7D%0A">
+<meta property="og:image" content="https://math.now.sh/?inline=C%20%3D%20A%5Ccdot%20B">
+<meta property="og:image" content="https://math.now.sh/?from=%5Cbegin%7Bbmatrix%7D%0AC_%7B11%7D%26C_%7B12%7D%20%5C%5C%0AC_%7B21%7D%26C_%7B22%7D%0A%5Cend%7Bbmatrix%7D%3D%5Cbegin%7Bbmatrix%7D%0AA_%7B11%7D%26A_%7B12%7D%20%5C%5C%0AA_%7B21%7D%26A_%7B22%7D%0A%5Cend%7Bbmatrix%7D%5Ccdot%5Cbegin%7Bbmatrix%7D%0AB_%7B11%7D%26B_%7B12%7D%20%5C%5C%0AB_%7B21%7D%26B_%7B22%7D%0A%5Cend%7Bbmatrix%7D%0A">
+<meta property="og:image" content="https://math.now.sh/?inline=n%3D1">
+<meta property="og:image" content="https://math.now.sh/?inline=%5Cfrac%7Bn%7D%7B2%7D%5Ctimes%5Cfrac%7Bn%7D%7B2%7D">
+<meta property="og:image" content="https://math.now.sh/?inline=10">
+<meta property="og:image" content="https://math.now.sh/?from=%5Cdisplaylines%7BS_1%3DB_%7B12%7D-B_%7B22%7D%5C%5C%0AS_2%3DA_%7B11%7D%2BA_%7B12%7D%20%5C%5C%0AS_3%3DA_%7B21%7D%2BA_%7B22%7D%20%5C%5C%0AS_%7B4%7D%3DB_%7B21%7D-B_%7B11%7D%20%5C%5C%0AS_%7B5%7D%3DA_%7B11%7D%2BA_%7B22%7D%20%5C%5C%0AS_6%3DB_%7B11%7D%2BB_%7B22%7D%20%5C%5C%0AS_7%3DA_%7B12%7D-A_%7B22%7D%20%5C%5C%0AS_8%3DB_%7B21%7D%2BB_%7B22%7D%20%5C%5C%0AS_9%3DA_%7B11%7D-A_%7B21%7D%20%5C%5C%0AS_%7B10%7D%3DB_%7B11%7D%2BB_%7B12%7D%0A%7D">
+<meta property="og:image" content="https://math.now.sh/?inline=7">
+<meta property="og:image" content="https://math.now.sh/?inline=%5Cfrac%7Bn%7D%7B2%7D%5Ctimes%5Cfrac%7Bn%7D%7B2%7D">
+<meta property="og:image" content="https://math.now.sh/?from=%5Cdisplaylines%7B%0AP_1%3DA_%7B11%7D%5Ccdot%20S_1%20%5C%5C%0AP_2%3DS_2%5Ccdot%20B_%7B22%7D%20%5C%5C%0AP_3%3DS_3%20%5Ccdot%20B_%7B11%7D%20%5C%5C%0AP_4%3DA_%7B22%7D%5Ccdot%20S_4%20%5C%5C%0AP_5%3DS_5%5Ccdot%20S_6%20%5C%5C%0AP_6%3DS_7%5Ccdot%20S_8%20%5C%5C%0AP_7%3DS_9%5Ccdot%20S_%7B10%7D%0A%7D">
+<meta property="og:image" content="https://math.now.sh/?inline=P_i">
+<meta property="og:image" content="https://math.now.sh/?inline=C_i">
+<meta property="og:image" content="https://math.now.sh/?from=%5Cdisplaylines%7B%0AC_%7B11%7D%3DP_5%2BP_4-P_2%2BP_6%20%5C%5C%0AC_%7B12%7D%3DP_1%2BP_2%20%5C%5C%0AC_%7B21%7D%3DP_3%2BP_4%20%5C%5C%0AC_%7B22%7D%3DP_5%2BP_1-P_3-P_7%0A%7D">
+<meta property="og:image" content="https://math.now.sh/?inline=C_i">
+<meta property="og:image" content="https://math.now.sh/?inline=T%28n%29%3D%5CTheta(n%5E%7B%5Clog_%7B2%7D7%7D)">
+<meta property="og:image" content="https://math.now.sh/?inline=a%5Cge%201">
+<meta property="og:image" content="https://math.now.sh/?inline=b%20%3E%201">
+<meta property="og:image" content="https://math.now.sh/?inline=f%28n%29">
+<meta property="og:image" content="https://math.now.sh/?inline=T%28n%29">
+<meta property="og:image" content="https://math.now.sh/?from=T%28n%29%3DaT(%5Cfrac%7Bn%7D%7Bb%7D)%2Bf(n)%0A">
+<meta property="og:image" content="https://math.now.sh/?inline=%5Cfrac%7Bn%7D%7Bb%7D">
+<meta property="og:image" content="https://math.now.sh/?inline=%5Cleft%5Clfloor%5Cfrac%7Bn%7D%7Bb%7D%5Cright%5Crfloor">
+<meta property="og:image" content="https://math.now.sh/?inline=%5Cleft%5Clceil%5Cfrac%7Bn%7D%7Bb%7D%5Cright%5Crceil">
+<meta property="og:image" content="https://math.now.sh/?inline=T%28n%29">
+<meta property="og:image" content="https://math.now.sh/?inline=%5Cepsilon%20%3E0">
+<meta property="og:image" content="https://math.now.sh/?inline=f%28n%29%3DO(n%5E%7B%5Clog_%7Bb%7D(a-%5Cepsilon)%7D)">
+<meta property="og:image" content="https://math.now.sh/?inline=T%28n%29%3D%5CTheta(n%5E%7B%5Clog_%7Bb%7Da%7D)">
+<meta property="og:image" content="https://math.now.sh/?inline=f%28n%29%3D%5CTheta(n%5E%7B%5Clog_%7Bb%7Da%7D)">
+<meta property="og:image" content="https://math.now.sh/?inline=T%28n%29%3D%5CTheta(n%5E%7B%5Clog_%7Bb%7Da%7D%20%5Clg%20n)">
+<meta property="og:image" content="https://math.now.sh/?inline=%5Cepsilon%20%3E0">
+<meta property="og:image" content="https://math.now.sh/?inline=f%28n%29%3D%5COmega(n%5E%7B%5Clog_%7Bb%7D(a%2B%5Cepsilon)%7D)">
+<meta property="og:image" content="https://math.now.sh/?inline=c%3C1">
+<meta property="og:image" content="https://math.now.sh/?inline=n">
+<meta property="og:image" content="https://math.now.sh/?inline=af%28%5Cfrac%7Bn%7D%7Bb%7D%29%5Cle%20cf(n)">
+<meta property="og:image" content="https://math.now.sh/?inline=T%28n%29%3D%5CTheta(f(n))">
+<meta property="og:image" content="https://math.now.sh/?from=T%28n%29%3D7%5C%20T(%5Cfrac%7Bn%7D%7B2%7D)%2B%5CTheta(n%5E2)%0A">
+<meta property="og:image" content="https://math.now.sh/?inline=a%3D7%2Cb%3D2%2Cf%28n%29%3D%5CTheta(n%5E2)">
+<meta property="og:image" content="https://math.now.sh/?inline=n%5E%7B%5Clog_%7Bb%7Da%7D%3Dn%5E%7B%5Clog_%7B2%7D7%7D">
+<meta property="og:image" content="https://math.now.sh/?inline=%5Cepsilon%20%3D%200.8">
+<meta property="og:image" content="https://math.now.sh/?inline=f%28n%29%3DO(n%5E%7B%5Clog_%7B2%7D(7-%5Cepsilon)%7D)">
+<meta property="og:image" content="https://math.now.sh/?inline=1">
+<meta property="og:image" content="https://math.now.sh/?inline=T%28n%29%3D%5CTheta(n%5E%7B%5Clog_%7B2%7D7%7D)">
+<meta property="og:image" content="https://math.now.sh/?inline=i">
+<meta property="og:image" content="https://math.now.sh/?inline=%5Cfrac%7B1%7D%7Bi%7D">
+<meta property="og:image" content="https://math.now.sh/?inline=i">
+<meta property="og:image" content="https://math.now.sh/?inline=E%28X_i%29%3D%5Cfrac%7B1%7D%7Bi%7D">
+<meta property="og:image" content="https://math.now.sh/?from=E%28X%29%3DE(%5Csum_%7Bi%3D1%7D%5E%7Bn%7DX_i)%3D%5Csum_%7Bi%3D1%7D%5E%7Bn%7DE(X_i)%3D%5Csum_%7Bi%3D1%7D%5E%7Bn%7D%5Cfrac%7B1%7D%7Bi%7D%3D%5Cln%20n%20%2BO(1)%0A">
+<meta property="og:image" content="https://math.now.sh/?inline=P%5Bn%5D">
+<meta property="og:image" content="https://math.now.sh/?inline=A%5Bi%5D">
+<meta property="og:image" content="https://math.now.sh/?inline=A%5BRand%28i%2Cn%29%5D">
+<meta property="og:image" content="https://math.now.sh/?inline=O%28n%29">
+<meta property="og:image" content="https://math.now.sh/?inline=n">
+<meta property="og:image" content="https://math.now.sh/?inline=n">
+<meta property="og:image" content="https://math.now.sh/?inline=k">
+<meta property="og:image" content="https://math.now.sh/?inline=%5Cfrac%7Bn!%7D%7B%28n-k%29!%7D">
+<meta property="og:image" content="https://math.now.sh/?inline=k">
+<meta property="article:published_time" content="2026-02-06T15:01:30.356Z">
+<meta property="article:modified_time" content="2026-02-06T15:01:30.356Z">
+<meta property="article:author" content="libfsx">
+<meta property="article:tag" content="算法导论">
+<meta property="article:tag" content="C++">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://math.now.sh/?inline=k">
+
+
+<link rel="canonical" href="https://shuxiangfan.github.io/2026/02/06/%E7%AC%AC%E4%B8%80%E9%83%A8%E5%88%86%EF%BC%9A%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://shuxiangfan.github.io/2026/02/06/%E7%AC%AC%E4%B8%80%E9%83%A8%E5%88%86%EF%BC%9A%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/","path":"2026/02/06/第一部分：基础知识/","title":"算法导论 第一部分：基础知识"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>算法导论 第一部分：基础知识 | libfsx's Blog</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script>
+
+  
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"default","dark":"dark"},"js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mermaid/11.10.1/mermaid.min.js","integrity":"sha256-BmQmdWDS8X2OTbrwELWK366LV6escyWhHHe0XCTU/Hk="}}</script>
+  <script src="/js/third-party/tags/mermaid.js" defer></script>
+
+
+
+
+
+  
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">libfsx's Blog</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BE%AA%E7%8E%AF%E4%B8%8D%E5%8F%98%E5%BC%8F"><span class="nav-number">1.</span> <span class="nav-text">循环不变式</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8F%92%E5%85%A5%E6%8E%92%E5%BA%8F"><span class="nav-number">1.1.</span> <span class="nav-text">插入排序</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BE%AA%E7%8E%AF%E4%B8%8D%E5%8F%98%E5%BC%8F-2"><span class="nav-number">1.2.</span> <span class="nav-text">循环不变式</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%86%E6%B2%BB%E6%B3%95"><span class="nav-number">2.</span> <span class="nav-text">分治法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BD%92%E5%B9%B6%E6%8E%92%E5%BA%8F"><span class="nav-number">2.1.</span> <span class="nav-text">归并排序</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%86%E6%9E%90%E5%88%86%E6%B2%BB%E7%AE%97%E6%B3%95"><span class="nav-number">2.2.</span> <span class="nav-text">分析分治算法</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%80%92%E5%BD%92%E5%BC%8F"><span class="nav-number">2.2.1.</span> <span class="nav-text">递归式</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%87%BD%E6%95%B0%E7%9A%84%E5%A2%9E%E9%95%BF"><span class="nav-number">3.</span> <span class="nav-text">函数的增长</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B8%90%E8%BF%9B%E8%AE%B0%E5%8F%B7"><span class="nav-number">3.1.</span> <span class="nav-text">渐进记号</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%86%E6%B2%BB%E7%AD%96%E7%95%A5"><span class="nav-number">4.</span> <span class="nav-text">分治策略</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9C%80%E5%A4%A7%E5%AD%90%E6%95%B0%E7%BB%84%E9%97%AE%E9%A2%98"><span class="nav-number">4.1.</span> <span class="nav-text">最大子数组问题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%9F%A9%E9%98%B5%E4%B9%98%E6%B3%95%E7%9A%84-Strassen-%E7%AE%97%E6%B3%95"><span class="nav-number">4.2.</span> <span class="nav-text">矩阵乘法的 Strassen 算法</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%99%AE%E9%80%9A%E4%B9%98%E6%B3%95"><span class="nav-number">4.2.1.</span> <span class="nav-text">普通乘法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%80%92%E5%BD%92%E7%AE%97%E6%B3%95"><span class="nav-number">4.2.2.</span> <span class="nav-text">递归算法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Strassen-%E6%96%B9%E6%B3%95"><span class="nav-number">4.2.3.</span> <span class="nav-text">Strassen 方法</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%BB%E5%AE%9A%E7%90%86"><span class="nav-number">4.3.</span> <span class="nav-text">主定理</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A6%82%E7%8E%87%E5%88%86%E6%9E%90%E5%92%8C%E9%9A%8F%E6%9C%BA%E7%AE%97%E6%B3%95"><span class="nav-number">5.</span> <span class="nav-text">概率分析和随机算法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%9A%8F%E6%9C%BA%E7%AE%97%E6%B3%95"><span class="nav-number">5.1.</span> <span class="nav-text">随机算法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%9B%87%E4%BD%A3%E9%97%AE%E9%A2%98"><span class="nav-number">5.2.</span> <span class="nav-text">雇佣问题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8C%87%E7%A4%BA%E5%99%A8%E9%9A%8F%E6%9C%BA%E5%8F%98%E9%87%8F%E5%88%86%E6%9E%90%E9%9B%87%E4%BD%A3%E9%97%AE%E9%A2%98"><span class="nav-number">5.3.</span> <span class="nav-text">指示器随机变量分析雇佣问题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%9A%8F%E6%9C%BA%E7%AE%97%E6%B3%95-2"><span class="nav-number">5.4.</span> <span class="nav-text">随机算法</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%9A%8F%E6%9C%BA%E6%8E%92%E5%88%97%E6%95%B0%E7%BB%84"><span class="nav-number">5.4.1.</span> <span class="nav-text">随机排列数组</span></a></li></ol></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">libfsx</p>
+  <div class="site-description" itemprop="description">诶～泥是怎么找到窝的qwq</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">9</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">标签</span>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/shuxiangfan" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;shuxiangfan" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:mail@libfsx.org" title="E-Mail → mailto:mail@libfsx.org" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i></a>
+      </span>
+  </div>
+  <div class="cc-license animated" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="https://cdnjs.cloudflare.com/ajax/libs/creativecommons-vocabulary/2020.11.3/assets/license_badges/small/by_sa.svg" alt="Creative Commons"></a>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://shuxiangfan.github.io/2026/02/06/%E7%AC%AC%E4%B8%80%E9%83%A8%E5%88%86%EF%BC%9A%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="libfsx">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="libfsx's Blog">
+      <meta itemprop="description" content="诶～泥是怎么找到窝的qwq">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="算法导论 第一部分：基础知识 | libfsx's Blog">
+      <meta itemprop="description" content="这是《算法导论》的第一部分">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          算法导论 第一部分：基础知识
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2026-02-06 23:01:30" itemprop="dateCreated datePublished" datetime="2026-02-06T23:01:30+08:00">2026-02-06</time>
+    </span>
+
+  
+</div>
+
+            <div class="post-description">这是《算法导论》的第一部分</div>
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h2 id="循环不变式">循环不变式</h2>
+<h3 id="插入排序">插入排序</h3>
+<p>按照升序排序。将 <code>arr[j]</code> 视作待比较量，设左边的数组都已经排好序了，若 <code>arr[j-1]</code> 比 <code>arr[j]</code> 还大，那么加上 <code>arr[j]</code> 的数组也是排好序的，若 <code>arr[j-1]</code>比 <code>arr[j]</code> 还要小，那么我们先拿 <code>key</code>储存原来的 <code>arr[j]</code> 再将原来的 <code>arr[j-1]</code>向右移动一位，继续去比较 <code>key</code> 与 <code>arr[j-2]</code> 的大小，直到 <code>key</code> 比某个元素大，那么我们就将原来的元素放到了合适的位置。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt;<span class="function"><span class="type">void</span> <span class="title">InsertionSort</span><span class="params">(std::vector&lt;T&gt;&amp;arr)</span> </span>&#123;</span><br><span class="line">    <span class="type">size_t</span> len = arr.<span class="built_in">size</span>();</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">size_t</span> j = <span class="number">1</span>; j&lt; len; j++) &#123;</span><br><span class="line">        T key = arr[j];</span><br><span class="line">        <span class="type">__int128_t</span> i = j - <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">while</span>(i &gt;= <span class="number">0</span> &amp;&amp; arr[i] &gt; key ) &#123;</span><br><span class="line">                arr[i<span class="number">+1</span>] = arr[i];</span><br><span class="line">                i--;</span><br><span class="line">        &#125;</span><br><span class="line">        arr[i<span class="number">+1</span>] = key;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="循环不变式-2">循环不变式</h3>
+<p><strong>初始化</strong>：循环第一次开始之前，算法为真。<br>
+<strong>保持</strong>：如果循环的某次迭代之前它为真，那么下次迭代之前它仍为真。<br>
+<strong>终止</strong>：在循环终止时，不变式能够帮助我们证明算法是正确的。</p>
+<p>下面我们来证明插入排序是正确的：<br>
+初始化：第一次迭代之前，<code>arr[j]</code>左侧只有一个元素，是排好序的。<br>
+保持：第 <img src="https://math.now.sh?inline=k" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 次迭代之前，左侧是排好序的，我们第 <img src="https://math.now.sh?inline=k" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 次迭代，使得 <code>arr[j]</code> 在适当的位置，使得插入后得到更大的左侧数组也是排好序的。<br>
+终止：导致算法终止的条件是 <img src="https://math.now.sh?inline=j" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 取到了 <img src="https://math.now.sh?inline=len-1" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> ，此时最后一轮迭代之后，保证了整个数组都是左侧数组，即排好序的数组。</p>
+<h2 id="分治法">分治法</h2>
+<h3 id="归并排序">归并排序</h3>
+<p>我们先想有两个已排序的数组，我们想要将两个数组合并到一起，使得合并后的数组也是排好序的，那么我们给出代码</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">Merge</span><span class="params">(<span class="type">int</span> a[], <span class="type">int</span> left, <span class="type">int</span> right, <span class="type">int</span> mid)</span> </span>&#123;</span><br><span class="line">    <span class="type">int</span> L_len = mid - left + <span class="number">1</span>;</span><br><span class="line">    <span class="type">int</span> R_len = right - mid;</span><br><span class="line">    <span class="type">int</span>* L = <span class="keyword">new</span> <span class="type">int</span>[L_len];</span><br><span class="line">    <span class="type">int</span>* R = <span class="keyword">new</span> <span class="type">int</span>[R_len];</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">0</span>; i &lt; L_len; i++) &#123;</span><br><span class="line">        L[i] = a[left + i];</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">0</span>; i &lt; R_len; i++) &#123;</span><br><span class="line">        R[i] = a[right - R_len + i + <span class="number">1</span>];</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="type">int</span> j=<span class="number">0</span>,k=<span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i = left; i &lt;= right; i++) &#123;</span><br><span class="line">        <span class="keyword">if</span>(j &gt;= L_len) &#123;</span><br><span class="line">            a[i] = R[k];</span><br><span class="line">            k++;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span>(k &gt;= R_len) &#123;</span><br><span class="line">            a[i] = L[j];</span><br><span class="line">            j++;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span> (L[j] &lt;= R[k]) &#123;</span><br><span class="line">            a[i] = L[j];</span><br><span class="line">            j++;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span> &#123;</span><br><span class="line">            a[i] = R[k];</span><br><span class="line">            k++;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">delete</span>[] L;</span><br><span class="line">    <span class="keyword">delete</span>[] R;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>将左右两个数组分别写入 <img src="https://math.now.sh?inline=L" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 和 <img src="https://math.now.sh?inline=R" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 数组中，挨个比较从而合并。注意其中一个数组用完的情况。<br>
+我们可以看出，如果把数组分为一个，而合并的时候是两个元素相互比较，可以得出归并排序的代码</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">MergeSort</span><span class="params">(<span class="type">int</span> a[], <span class="type">int</span> left, <span class="type">int</span> right)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (left &lt; right) &#123;</span><br><span class="line">        <span class="type">int</span> mid = (left + right) / <span class="number">2</span>;</span><br><span class="line">        <span class="built_in">MergeSort</span>(a, left, mid);</span><br><span class="line">        <span class="built_in">MergeSort</span>(a, mid<span class="number">+1</span>, right);</span><br><span class="line">        <span class="built_in">Merge</span>(a, left, right, mid);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<hr>
+<h3 id="分析分治算法">分析分治算法</h3>
+<h4 id="递归式">递归式</h4>
+<p>将一个问题分解为 <img src="https://math.now.sh?inline=a" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 个规模为 <img src="https://math.now.sh?inline=%5Cfrac%7Bn%7D%7Bb%7D" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 的子问题，则每个子问题需要 <img src="https://math.now.sh?inline=T%28%5Cfrac%7Bn%7D%7Bb%7D%29" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 的时间来求解，总共需要 <img src="https://math.now.sh?inline=a%20T%28%5Cfrac%7Bn%7D%7Bb%7D%29" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 的时间来求解所有的子问题，若分解问题的时间为 <img src="https://math.now.sh?inline=D%28n%29" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> ，合并问题的时间为 <img src="https://math.now.sh?inline=C%28n%29" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> ，则我们可以得到递归式</p>
+<p style="filter: opacity(90%);transform:scale(1.00);text-align:center;"><img src="https://math.now.sh?from=T%28n%29%20%3D%20%5Cbegin%7Bcases%7D%0A%5CTheta(1)%20%26%20%5Ctext%7B%E8%8B%A5%24n%3D1%24%7D%20%5C%5C%0AaT(%5Cfrac%7Bn%7D%7Bb%7D)%2BD(n)%2BC(n)%20%26%20%5Ctext%7B%E5%85%B6%E4%BB%96%7D%0A%5Cend%7Bcases%7D%0A" /></p><p>下面我们使用递归式来分析归并排序，递归式为：</p>
+<p style="filter: opacity(90%);transform:scale(1.00);text-align:center;"><img src="https://math.now.sh?from=T%28n%29%20%3D%20%5Cbegin%7Bcases%7D%0Ac%20%26%20n%3D1%20%5C%5C%0A2T(%5Cfrac%7Bn%7D%7B2%7D)%2Bcn%20%26%20n%3E1%0A%5Cend%7Bcases%7D%0A" /></p><p>它的解是</p>
+<p style="filter: opacity(90%);transform:scale(1.00);text-align:center;"><img src="https://math.now.sh?from=T%28n%29%3D%5CTheta(n%5Clg%20n)%0A" /></p><h2 id="函数的增长">函数的增长</h2>
+<h3 id="渐进记号">渐进记号</h3>
+<ul>
+<li><img src="https://math.now.sh?inline=%5CTheta" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 记号：渐进紧确界</li>
+<li><img src="https://math.now.sh?inline=O" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 记号：渐进上界</li>
+<li><img src="https://math.now.sh?inline=%5COmega" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 记号：渐进下界</li>
+<li><img src="https://math.now.sh?inline=o" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 记号：非渐进紧确的上界</li>
+<li><img src="https://math.now.sh?inline=%5Comega" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 记号：非渐进紧确的下界</li>
+</ul>
+<h2 id="分治策略">分治策略</h2>
+<p>在分治策略中，我们将一个大的问题先<strong>分解</strong>成小规模的子问题，再<strong>解决</strong>这些子问题，最后将子问题的解<strong>合并</strong>成原问题的解。子问题足够大时需要递归求解，我们称之为<strong>递归情况（recursive case）</strong>。当子问题足够小，已经不需要递归求解，说明递归已经触底，称为<strong>基本情况（base case）</strong>。<br>
+求解递归式可以有：代入法（猜测一个界然后代入验证）、递归树、主方法。</p>
+<h3 id="最大子数组问题">最大子数组问题</h3>
+<p>给定一个数组，找出它的和最大的连续的非空子数组。<br>
+考虑用分治策略：最大子数组要么在原数组中点两边，要么跨越了中点。<br>
+对于跨越中点的子数组，我们只需从中点开始分别向两边加和直到和达到最大。对于两边的子数组，只需不断分割直到只有一个元素。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">struct</span> <span class="title class_">SubArray</span>&#123;</span><br><span class="line">    <span class="type">int</span> left;</span><br><span class="line">    <span class="type">int</span> right;</span><br><span class="line">    <span class="type">int</span> sum;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="function">SubArray <span class="title">FindCrossingMaxArray</span><span class="params">(<span class="type">int</span> a[], <span class="type">int</span> low, <span class="type">int</span> mid, <span class="type">int</span> high)</span> </span>&#123;</span><br><span class="line">    <span class="type">int</span> left_sum = INT_MIN, right_sum = INT_MIN;</span><br><span class="line">    <span class="type">int</span> sum = <span class="number">0</span>;</span><br><span class="line">    <span class="type">int</span> max_left,max_right;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = mid; i &gt;= low; i--) &#123;</span><br><span class="line">        sum = sum + a[i];</span><br><span class="line">        <span class="keyword">if</span> (sum &gt; left_sum) &#123;</span><br><span class="line">            left_sum = sum;</span><br><span class="line">            max_left = i;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    sum = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = mid + <span class="number">1</span>; i &lt;= high; i++) &#123;</span><br><span class="line">        sum = sum + a[i];</span><br><span class="line">        <span class="keyword">if</span> (sum &gt; right_sum) &#123;</span><br><span class="line">            right_sum = sum;</span><br><span class="line">            max_right = i;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    SubArray res &#123;max_left, max_right, left_sum+right_sum&#125;;</span><br><span class="line">    <span class="keyword">return</span> res;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function">SubArray <span class="title">FindMaxSubArray</span><span class="params">(<span class="type">int</span> a[], <span class="type">int</span> low, <span class="type">int</span> high)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (high == low) &#123;</span><br><span class="line">        SubArray res &#123;low,high,a[low]&#125;;</span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="type">int</span> mid = (high + low) / <span class="number">2</span>;</span><br><span class="line">        SubArray left_arr = <span class="built_in">FindMaxSubArray</span>(a, low, mid);</span><br><span class="line">        SubArray right_arr = <span class="built_in">FindMaxSubArray</span>(a, mid + <span class="number">1</span>, high);</span><br><span class="line">        SubArray mid_arr = <span class="built_in">FindCrossingMaxArray</span>(a, low, mid, high);</span><br><span class="line">        <span class="keyword">if</span> (left_arr.sum &gt; right_arr.sum &amp;&amp; left_arr.sum &gt; mid_arr.sum) <span class="keyword">return</span> left_arr;</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span> (right_arr.sum &gt; left_arr.sum &amp;&amp; right_arr.sum &gt; mid_arr.sum) <span class="keyword">return</span> right_arr;</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">return</span> mid_arr;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>它的时间复杂度也是 <img src="https://math.now.sh?inline=%5CTheta%28n%5Clg%20n%29" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/><br>
+值得注意的是，最大子数组问题还有一个更快的算法。有时分治并不是最快的方法。</p>
+<h3 id="矩阵乘法的-Strassen-算法">矩阵乘法的 Strassen 算法</h3>
+<h4 id="普通乘法">普通乘法</h4>
+<p>普通的 <img src="https://math.now.sh?inline=n%5Ctimes%20n" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 矩阵乘法定义是</p>
+<p style="filter: opacity(90%);transform:scale(1.00);text-align:center;"><img src="https://math.now.sh?from=c_%7Bij%7D%3D%5Csum_%7Bk%3D1%7D%5E%7Bn%7D%20a_%7Bik%7Db_%7Bkj%7D%0A" /></p><p>代码实现为</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">template</span>&lt;<span class="type">int</span> N&gt;</span></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">multiply</span><span class="params">(<span class="type">const</span> <span class="type">int</span> (&amp;A)[N][N], <span class="type">const</span> <span class="type">int</span> (&amp;B)[N][N], <span class="type">int</span> (&amp;C)[N][N])</span> </span>&#123;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; N; i++) &#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> j = <span class="number">0</span>; j &lt; N; j++) &#123;</span><br><span class="line">            C[i][j] = <span class="number">0</span>;</span><br><span class="line">            <span class="keyword">for</span> (<span class="type">int</span> k = <span class="number">0</span>; k &lt; N; k++) &#123;</span><br><span class="line">                C[i][j] += A[i][k] * B[k][j];</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>它的时间复杂度为 <img src="https://math.now.sh?inline=%5CTheta%28n%5E3%29" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/></p>
+<h4 id="递归算法">递归算法</h4>
+<p>下面介绍一个运行时间在 <img src="https://math.now.sh?inline=%5CTheta%28n%5E%7B3%7D%29" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 的递归算法<br>
+我们先假设 <img src="https://math.now.sh?inline=n" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 是2的次幂。设 <img src="https://math.now.sh?inline=A" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 、<img src="https://math.now.sh?inline=B" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 和 <img src="https://math.now.sh?inline=C" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 是三个矩阵，将它们分块，有</p>
+<p style="filter: opacity(90%);transform:scale(1.00);text-align:center;"><img src="https://math.now.sh?from=A%3D%5Cbegin%7Bbmatrix%7D%0AA_%7B11%7D%20%26%20A_%7B12%7D%20%5C%5C%0AA_%7B21%7D%20%26%20A_%7B22%7D%0A%5Cend%7Bbmatrix%7D%0A%5Cquad%20B%3D%5Cbegin%7Bbmatrix%7D%0AB_%7B11%7D%26B_%7B12%7D%20%5C%5C%0AB_%7B21%7D%26B_%7B22%7D%0A%5Cend%7Bbmatrix%7D%0A%5Cquad%20C%3D%5Cbegin%7Bbmatrix%7D%0AC_%7B11%7D%26C_%7B12%7D%20%5C%5C%0AC_%7B21%7D%26C_%7B22%7D%0A%5Cend%7Bbmatrix%7D%0A" /></p><p><img src="https://math.now.sh?inline=C%20%3D%20A%5Ccdot%20B" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 可以写为</p>
+<p style="filter: opacity(90%);transform:scale(1.00);text-align:center;"><img src="https://math.now.sh?from=%5Cbegin%7Bbmatrix%7D%0AC_%7B11%7D%26C_%7B12%7D%20%5C%5C%0AC_%7B21%7D%26C_%7B22%7D%0A%5Cend%7Bbmatrix%7D%3D%5Cbegin%7Bbmatrix%7D%0AA_%7B11%7D%26A_%7B12%7D%20%5C%5C%0AA_%7B21%7D%26A_%7B22%7D%0A%5Cend%7Bbmatrix%7D%5Ccdot%5Cbegin%7Bbmatrix%7D%0AB_%7B11%7D%26B_%7B12%7D%20%5C%5C%0AB_%7B21%7D%26B_%7B22%7D%0A%5Cend%7Bbmatrix%7D%0A" /></p><p>基本情况是 <img src="https://math.now.sh?inline=n%3D1" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 时，乘积就是元素本身</p>
+<h4 id="Strassen-方法">Strassen 方法</h4>
+<p>具体步骤为：</p>
+<ol>
+<li>将矩阵分为 <img src="https://math.now.sh?inline=%5Cfrac%7Bn%7D%7B2%7D%5Ctimes%5Cfrac%7Bn%7D%7B2%7D" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 的子矩阵</li>
+<li>创建如下 <img src="https://math.now.sh?inline=10" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 个矩阵：</li>
+</ol>
+<p style="filter: opacity(90%);transform:scale(1.00);text-align:center;"><img src="https://math.now.sh?from=%5Cdisplaylines%7BS_1%3DB_%7B12%7D-B_%7B22%7D%5C%5C%0AS_2%3DA_%7B11%7D%2BA_%7B12%7D%20%5C%5C%0AS_3%3DA_%7B21%7D%2BA_%7B22%7D%20%5C%5C%0AS_%7B4%7D%3DB_%7B21%7D-B_%7B11%7D%20%5C%5C%0AS_%7B5%7D%3DA_%7B11%7D%2BA_%7B22%7D%20%5C%5C%0AS_6%3DB_%7B11%7D%2BB_%7B22%7D%20%5C%5C%0AS_7%3DA_%7B12%7D-A_%7B22%7D%20%5C%5C%0AS_8%3DB_%7B21%7D%2BB_%7B22%7D%20%5C%5C%0AS_9%3DA_%7B11%7D-A_%7B21%7D%20%5C%5C%0AS_%7B10%7D%3DB_%7B11%7D%2BB_%7B12%7D%0A%7D" /></p><ol start="3">
+<li>递归地计算 <img src="https://math.now.sh?inline=7" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 次 <img src="https://math.now.sh?inline=%5Cfrac%7Bn%7D%7B2%7D%5Ctimes%5Cfrac%7Bn%7D%7B2%7D" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 矩阵乘法如下：</li>
+</ol>
+<p style="filter: opacity(90%);transform:scale(1.00);text-align:center;"><img src="https://math.now.sh?from=%5Cdisplaylines%7B%0AP_1%3DA_%7B11%7D%5Ccdot%20S_1%20%5C%5C%0AP_2%3DS_2%5Ccdot%20B_%7B22%7D%20%5C%5C%0AP_3%3DS_3%20%5Ccdot%20B_%7B11%7D%20%5C%5C%0AP_4%3DA_%7B22%7D%5Ccdot%20S_4%20%5C%5C%0AP_5%3DS_5%5Ccdot%20S_6%20%5C%5C%0AP_6%3DS_7%5Ccdot%20S_8%20%5C%5C%0AP_7%3DS_9%5Ccdot%20S_%7B10%7D%0A%7D" /></p><ol start="4">
+<li>对上一步的 <img src="https://math.now.sh?inline=P_i" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 矩阵进行加减计算，得出 <img src="https://math.now.sh?inline=C_i" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/></li>
+</ol>
+<p style="filter: opacity(90%);transform:scale(1.00);text-align:center;"><img src="https://math.now.sh?from=%5Cdisplaylines%7B%0AC_%7B11%7D%3DP_5%2BP_4-P_2%2BP_6%20%5C%5C%0AC_%7B12%7D%3DP_1%2BP_2%20%5C%5C%0AC_%7B21%7D%3DP_3%2BP_4%20%5C%5C%0AC_%7B22%7D%3DP_5%2BP_1-P_3-P_7%0A%7D" /></p><ol start="5">
+<li>合并 <img src="https://math.now.sh?inline=C_i" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 子矩阵就得到乘积结果<br>
+给出代码</li>
+</ol>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">using</span> ll = <span class="type">long</span> <span class="type">long</span>;</span><br><span class="line"><span class="keyword">using</span> Matrix = vector&lt;vector&lt;ll&gt;&gt;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 普通 O(n^3) 乘法：用于小规模/递归终止</span></span><br><span class="line"><span class="function"><span class="type">static</span> Matrix <span class="title">multiply_plain</span><span class="params">(<span class="type">const</span> Matrix&amp; A, <span class="type">const</span> Matrix&amp; B)</span> </span>&#123;</span><br><span class="line">    ll n = (<span class="type">int</span>)A.<span class="built_in">size</span>();</span><br><span class="line">    <span class="function">Matrix <span class="title">C</span><span class="params">(n, vector&lt;ll&gt;(n, <span class="number">0</span>))</span></span>;</span><br><span class="line">    <span class="keyword">for</span> (ll i = <span class="number">0</span>; i &lt; n; ++i) &#123;</span><br><span class="line">        <span class="keyword">for</span> (ll k = <span class="number">0</span>; k &lt; n; ++k) &#123;</span><br><span class="line">            ll aik = A[i][k];</span><br><span class="line">            <span class="keyword">for</span> (ll j = <span class="number">0</span>; j &lt; n; ++j) &#123;</span><br><span class="line">                C[i][j] += aik * B[k][j];</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> C;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">static</span> Matrix <span class="title">add</span><span class="params">(<span class="type">const</span> Matrix&amp; A, <span class="type">const</span> Matrix&amp; B)</span> </span>&#123;</span><br><span class="line">    <span class="type">int</span> n = (<span class="type">int</span>)A.<span class="built_in">size</span>();</span><br><span class="line">    <span class="function">Matrix <span class="title">C</span><span class="params">(n, vector&lt;ll&gt;(n, <span class="number">0</span>))</span></span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; n; ++i)</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> j = <span class="number">0</span>; j &lt; n; ++j)</span><br><span class="line">            C[i][j] = A[i][j] + B[i][j];</span><br><span class="line">    <span class="keyword">return</span> C;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">static</span> Matrix <span class="title">sub</span><span class="params">(<span class="type">const</span> Matrix&amp; A, <span class="type">const</span> Matrix&amp; B)</span> </span>&#123;</span><br><span class="line">    <span class="type">int</span> n = (<span class="type">int</span>)A.<span class="built_in">size</span>();</span><br><span class="line">    <span class="function">Matrix <span class="title">C</span><span class="params">(n, vector&lt;ll&gt;(n, <span class="number">0</span>))</span></span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; n; ++i)</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> j = <span class="number">0</span>; j &lt; n; ++j)</span><br><span class="line">            C[i][j] = A[i][j] - B[i][j];</span><br><span class="line">    <span class="keyword">return</span> C;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 拆分成四块：A11, A12, A21, A22</span></span><br><span class="line"><span class="function"><span class="type">static</span> <span class="type">void</span> <span class="title">split</span><span class="params">(<span class="type">const</span> Matrix&amp; A, Matrix&amp; A11, Matrix&amp; A12, Matrix&amp; A21, Matrix&amp; A22)</span> </span>&#123;</span><br><span class="line">    <span class="type">int</span> n = (<span class="type">int</span>)A.<span class="built_in">size</span>();</span><br><span class="line">    <span class="type">int</span> m = n / <span class="number">2</span>;</span><br><span class="line">    A<span class="number">11.</span><span class="built_in">assign</span>(m, <span class="built_in">vector</span>&lt;ll&gt;(m));</span><br><span class="line">    A<span class="number">12.</span><span class="built_in">assign</span>(m, <span class="built_in">vector</span>&lt;ll&gt;(m));</span><br><span class="line">    A<span class="number">21.</span><span class="built_in">assign</span>(m, <span class="built_in">vector</span>&lt;ll&gt;(m));</span><br><span class="line">    A<span class="number">22.</span><span class="built_in">assign</span>(m, <span class="built_in">vector</span>&lt;ll&gt;(m));</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; m; ++i) &#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> j = <span class="number">0</span>; j &lt; m; ++j) &#123;</span><br><span class="line">            A11[i][j] = A[i][j];</span><br><span class="line">            A12[i][j] = A[i][j + m];</span><br><span class="line">            A21[i][j] = A[i + m][j];</span><br><span class="line">            A22[i][j] = A[i + m][j + m];</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 合并四块回一个矩阵</span></span><br><span class="line"><span class="function"><span class="type">static</span> Matrix <span class="title">join</span><span class="params">(<span class="type">const</span> Matrix&amp; C11, <span class="type">const</span> Matrix&amp; C12, <span class="type">const</span> Matrix&amp; C21, <span class="type">const</span> Matrix&amp; C22)</span> </span>&#123;</span><br><span class="line">    <span class="type">int</span> m = (<span class="type">int</span>)C<span class="number">11.</span><span class="built_in">size</span>();</span><br><span class="line">    <span class="type">int</span> n = m * <span class="number">2</span>;</span><br><span class="line">    <span class="function">Matrix <span class="title">C</span><span class="params">(n, vector&lt;ll&gt;(n, <span class="number">0</span>))</span></span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; m; ++i) &#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> j = <span class="number">0</span>; j &lt; m; ++j) &#123;</span><br><span class="line">            C[i][j] = C11[i][j];</span><br><span class="line">            C[i][j + m] = C12[i][j];</span><br><span class="line">            C[i + m][j] = C21[i][j];</span><br><span class="line">            C[i + m][j + m] = C22[i][j];</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> C;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 计算 &gt;=n 的最小 2 的幂</span></span><br><span class="line"><span class="function"><span class="type">static</span> <span class="type">int</span> <span class="title">next_pow2</span><span class="params">(<span class="type">int</span> n)</span> </span>&#123;</span><br><span class="line">    <span class="type">int</span> p = <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">while</span> (p &lt; n) p &lt;&lt;= <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">return</span> p;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 将矩阵 padding 到 size x size</span></span><br><span class="line"><span class="function"><span class="type">static</span> Matrix <span class="title">pad</span><span class="params">(<span class="type">const</span> Matrix&amp; A, <span class="type">int</span> size)</span> </span>&#123;</span><br><span class="line">    <span class="type">int</span> n = (<span class="type">int</span>)A.<span class="built_in">size</span>();</span><br><span class="line">    <span class="function">Matrix <span class="title">P</span><span class="params">(size, vector&lt;ll&gt;(size, <span class="number">0</span>))</span></span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; n; ++i)</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> j = <span class="number">0</span>; j &lt; n; ++j)</span><br><span class="line">            P[i][j] = A[i][j];</span><br><span class="line">    <span class="keyword">return</span> P;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 裁剪回 n x n</span></span><br><span class="line"><span class="function"><span class="type">static</span> Matrix <span class="title">unpad</span><span class="params">(<span class="type">const</span> Matrix&amp; A, <span class="type">int</span> n)</span> </span>&#123;</span><br><span class="line">    <span class="function">Matrix <span class="title">R</span><span class="params">(n, vector&lt;ll&gt;(n, <span class="number">0</span>))</span></span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; n; ++i)</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> j = <span class="number">0</span>; j &lt; n; ++j)</span><br><span class="line">            R[i][j] = A[i][j];</span><br><span class="line">    <span class="keyword">return</span> R;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// Strassen 递归</span></span><br><span class="line"><span class="function"><span class="type">static</span> Matrix <span class="title">strassen_rec</span><span class="params">(<span class="type">const</span> Matrix&amp; A, <span class="type">const</span> Matrix&amp; B, <span class="type">int</span> threshold)</span> </span>&#123;</span><br><span class="line">    <span class="type">int</span> n = (<span class="type">int</span>)A.<span class="built_in">size</span>();</span><br><span class="line">    <span class="keyword">if</span> (n &lt;= threshold) <span class="keyword">return</span> <span class="built_in">multiply_plain</span>(A, B);</span><br><span class="line">    <span class="keyword">if</span> (n == <span class="number">1</span>) &#123;</span><br><span class="line">        <span class="function">Matrix <span class="title">C</span><span class="params">(<span class="number">1</span>, vector&lt;ll&gt;(<span class="number">1</span>, A[<span class="number">0</span>][<span class="number">0</span>] * B[<span class="number">0</span>][<span class="number">0</span>]))</span></span>;</span><br><span class="line">        <span class="keyword">return</span> C;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    Matrix A11, A12, A21, A22;</span><br><span class="line">    Matrix B11, B12, B21, B22;</span><br><span class="line">    <span class="built_in">split</span>(A, A11, A12, A21, A22);</span><br><span class="line">    <span class="built_in">split</span>(B, B11, B12, B21, B22);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Strassen 7 个乘法</span></span><br><span class="line">    <span class="comment">// M1 = (A11 + A22) * (B11 + B22)</span></span><br><span class="line">    Matrix M1 = <span class="built_in">strassen_rec</span>(<span class="built_in">add</span>(A11, A22), <span class="built_in">add</span>(B11, B22), threshold);</span><br><span class="line">    <span class="comment">// M2 = (A21 + A22) * B11</span></span><br><span class="line">    Matrix M2 = <span class="built_in">strassen_rec</span>(<span class="built_in">add</span>(A21, A22), B11, threshold);</span><br><span class="line">    <span class="comment">// M3 = A11 * (B12 - B22)</span></span><br><span class="line">    Matrix M3 = <span class="built_in">strassen_rec</span>(A11, <span class="built_in">sub</span>(B12, B22), threshold);</span><br><span class="line">    <span class="comment">// M4 = A22 * (B21 - B11)</span></span><br><span class="line">    Matrix M4 = <span class="built_in">strassen_rec</span>(A22, <span class="built_in">sub</span>(B21, B11), threshold);</span><br><span class="line">    <span class="comment">// M5 = (A11 + A12) * B22</span></span><br><span class="line">    Matrix M5 = <span class="built_in">strassen_rec</span>(<span class="built_in">add</span>(A11, A12), B22, threshold);</span><br><span class="line">    <span class="comment">// M6 = (A21 - A11) * (B11 + B12)</span></span><br><span class="line">    Matrix M6 = <span class="built_in">strassen_rec</span>(<span class="built_in">sub</span>(A21, A11), <span class="built_in">add</span>(B11, B12), threshold);</span><br><span class="line">    <span class="comment">// M7 = (A12 - A22) * (B21 + B22)</span></span><br><span class="line">    Matrix M7 = <span class="built_in">strassen_rec</span>(<span class="built_in">sub</span>(A12, A22), <span class="built_in">add</span>(B21, B22), threshold);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 组合结果块</span></span><br><span class="line">    <span class="comment">// C11 = M1 + M4 - M5 + M7</span></span><br><span class="line">    Matrix C11 = <span class="built_in">add</span>(<span class="built_in">sub</span>(<span class="built_in">add</span>(M1, M4), M5), M7);</span><br><span class="line">    <span class="comment">// C12 = M3 + M5</span></span><br><span class="line">    Matrix C12 = <span class="built_in">add</span>(M3, M5);</span><br><span class="line">    <span class="comment">// C21 = M2 + M4</span></span><br><span class="line">    Matrix C21 = <span class="built_in">add</span>(M2, M4);</span><br><span class="line">    <span class="comment">// C22 = M1 - M2 + M3 + M6</span></span><br><span class="line">    Matrix C22 = <span class="built_in">add</span>(<span class="built_in">add</span>(<span class="built_in">sub</span>(M1, M2), M3), M6);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">join</span>(C11, C12, C21, C22);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 外部接口：支持任意 n，自动 padding</span></span><br><span class="line"><span class="function">Matrix <span class="title">strassen_multiply</span><span class="params">(<span class="type">const</span> Matrix&amp; A, <span class="type">const</span> Matrix&amp; B, <span class="type">int</span> threshold = <span class="number">64</span>)</span> </span>&#123;</span><br><span class="line">    <span class="type">int</span> n = (<span class="type">int</span>)A.<span class="built_in">size</span>();</span><br><span class="line">    <span class="keyword">if</span> (n == <span class="number">0</span> || (<span class="type">int</span>)B.<span class="built_in">size</span>() != n) <span class="keyword">throw</span> <span class="built_in">runtime_error</span>(<span class="string">&quot;Size mismatch&quot;</span>);</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; n; ++i) &#123;</span><br><span class="line">        <span class="keyword">if</span> ((<span class="type">int</span>)A[i].<span class="built_in">size</span>() != n || (<span class="type">int</span>)B[i].<span class="built_in">size</span>() != n) <span class="keyword">throw</span> <span class="built_in">runtime_error</span>(<span class="string">&quot;Not square&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="type">int</span> m = <span class="built_in">next_pow2</span>(n);</span><br><span class="line">    Matrix Ap = (m == n) ? A : <span class="built_in">pad</span>(A, m);</span><br><span class="line">    Matrix Bp = (m == n) ? B : <span class="built_in">pad</span>(B, m);</span><br><span class="line"></span><br><span class="line">    Matrix Cp = <span class="built_in">strassen_rec</span>(Ap, Bp, threshold);</span><br><span class="line">    <span class="keyword">return</span> (m == n) ? Cp : <span class="built_in">unpad</span>(Cp, n);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>该算法的运行时间是 <img src="https://math.now.sh?inline=T%28n%29%3D%5CTheta(n%5E%7B%5Clog_%7B2%7D7%7D)" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/></p>
+<h3 id="主定理">主定理</h3>
+<p>令 <img src="https://math.now.sh?inline=a%5Cge%201" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 和 <img src="https://math.now.sh?inline=b%20%3E%201" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 是常数，<img src="https://math.now.sh?inline=f%28n%29" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 是一个函数，<img src="https://math.now.sh?inline=T%28n%29" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 是定义在非负整数上的递归式：</p>
+<p style="filter: opacity(90%);transform:scale(1.00);text-align:center;"><img src="https://math.now.sh?from=T%28n%29%3DaT(%5Cfrac%7Bn%7D%7Bb%7D)%2Bf(n)%0A" /></p><p>将 <img src="https://math.now.sh?inline=%5Cfrac%7Bn%7D%7Bb%7D" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 看作 <img src="https://math.now.sh?inline=%5Cleft%5Clfloor%5Cfrac%7Bn%7D%7Bb%7D%5Cright%5Crfloor" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 或 <img src="https://math.now.sh?inline=%5Cleft%5Clceil%5Cfrac%7Bn%7D%7Bb%7D%5Cright%5Crceil" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> ，那么 <img src="https://math.now.sh?inline=T%28n%29" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 有如下渐进界：</p>
+<ol>
+<li>若对某个常数 <img src="https://math.now.sh?inline=%5Cepsilon%20%3E0" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 有 <img src="https://math.now.sh?inline=f%28n%29%3DO(n%5E%7B%5Clog_%7Bb%7D(a-%5Cepsilon)%7D)" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> ，则 <img src="https://math.now.sh?inline=T%28n%29%3D%5CTheta(n%5E%7B%5Clog_%7Bb%7Da%7D)" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/></li>
+<li>若 <img src="https://math.now.sh?inline=f%28n%29%3D%5CTheta(n%5E%7B%5Clog_%7Bb%7Da%7D)" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/>，则 <img src="https://math.now.sh?inline=T%28n%29%3D%5CTheta(n%5E%7B%5Clog_%7Bb%7Da%7D%20%5Clg%20n)" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/></li>
+<li>若对某个常数 <img src="https://math.now.sh?inline=%5Cepsilon%20%3E0" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 有 <img src="https://math.now.sh?inline=f%28n%29%3D%5COmega(n%5E%7B%5Clog_%7Bb%7D(a%2B%5Cepsilon)%7D)" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> ，且对于某个常数 <img src="https://math.now.sh?inline=c%3C1" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 和所有足够大的 <img src="https://math.now.sh?inline=n" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 有 <img src="https://math.now.sh?inline=af%28%5Cfrac%7Bn%7D%7Bb%7D%29%5Cle%20cf(n)" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> ，则 <img src="https://math.now.sh?inline=T%28n%29%3D%5CTheta(f(n))" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/><br>
+<strong>例</strong> Strassen 方法的递归式为</li>
+</ol>
+<p style="filter: opacity(90%);transform:scale(1.00);text-align:center;"><img src="https://math.now.sh?from=T%28n%29%3D7%5C%20T(%5Cfrac%7Bn%7D%7B2%7D)%2B%5CTheta(n%5E2)%0A" /></p><p>在这里 <img src="https://math.now.sh?inline=a%3D7%2Cb%3D2%2Cf%28n%29%3D%5CTheta(n%5E2)" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> ，<img src="https://math.now.sh?inline=n%5E%7B%5Clog_%7Bb%7Da%7D%3Dn%5E%7B%5Clog_%7B2%7D7%7D" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/>，注意到当令 <img src="https://math.now.sh?inline=%5Cepsilon%20%3D%200.8" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 时有 <img src="https://math.now.sh?inline=f%28n%29%3DO(n%5E%7B%5Clog_%7B2%7D(7-%5Cepsilon)%7D)" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/>，符合情况<img src="https://math.now.sh?inline=1" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/>，解为 <img src="https://math.now.sh?inline=T%28n%29%3D%5CTheta(n%5E%7B%5Clog_%7B2%7D7%7D)" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/></p>
+<h2 id="概率分析和随机算法">概率分析和随机算法</h2>
+<h3 id="随机算法">随机算法</h3>
+<p>如果一个算法的行为不仅由输入决定，而且也由<strong>随机数生成器</strong>产生的数值决定，则称这个算法是<strong>随机的（randomized）</strong>。我们将一个随机算法的运行时间成为<strong>期望运行时间</strong>。一般而言，当概率分布是在算法输入上时，我们讨论的是平均情况运行时间，当算法本身做出随机选择时，我们讨论其期望运行时间。</p>
+<h3 id="雇佣问题">雇佣问题</h3>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">hire_assistant</span><span class="params">(<span class="type">int</span> candidcate_quality[], <span class="type">int</span> size)</span></span>&#123;</span><br><span class="line">    <span class="type">int</span> best = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; size; i++) &#123;</span><br><span class="line">	    <span class="built_in">interview</span>(i);</span><br><span class="line">        <span class="keyword">if</span> (candidcate_quality[i] &gt; candidcate_quality[best]) &#123;</span><br><span class="line">            best = i;</span><br><span class="line">            <span class="built_in">hire</span>(best);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="指示器随机变量分析雇佣问题">指示器随机变量分析雇佣问题</h3>
+<p>我们假设应聘者以随机的顺序出现，每次应聘，第 <img src="https://math.now.sh?inline=i" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 个应聘者被雇佣的概率是 <img src="https://math.now.sh?inline=%5Cfrac%7B1%7D%7Bi%7D" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> ，所以第 <img src="https://math.now.sh?inline=i" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 个应聘者被雇佣的期望是 <img src="https://math.now.sh?inline=E%28X_i%29%3D%5Cfrac%7B1%7D%7Bi%7D" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> ，总期望为</p>
+<p style="filter: opacity(90%);transform:scale(1.00);text-align:center;"><img src="https://math.now.sh?from=E%28X%29%3DE(%5Csum_%7Bi%3D1%7D%5E%7Bn%7DX_i)%3D%5Csum_%7Bi%3D1%7D%5E%7Bn%7DE(X_i)%3D%5Csum_%7Bi%3D1%7D%5E%7Bn%7D%5Cfrac%7B1%7D%7Bi%7D%3D%5Cln%20n%20%2BO(1)%0A" /></p><h3 id="随机算法-2">随机算法</h3>
+<p>在上个问题，我们可以先对输入的数据进行随机排列，注意随机化的过程是发生在算法里面的，此时这个算法是一个随机算法，其表现与输入的顺序无关了。</p>
+<h4 id="随机排列数组">随机排列数组</h4>
+<p>我们讨论两种随机化方法，一种是按照随机生成的优先级数组 <img src="https://math.now.sh?inline=P%5Bn%5D" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 来排序，随机化原数组，另外一种是将 <img src="https://math.now.sh?inline=A%5Bi%5D" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 与 <img src="https://math.now.sh?inline=A%5BRand%28i%2Cn%29%5D" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 交换，时间是 <img src="https://math.now.sh?inline=O%28n%29" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 的。<br>
+一个具有 <img src="https://math.now.sh?inline=n" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 个元素的<strong>k排列</strong>是包含这 <img src="https://math.now.sh?inline=n" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 个元素中的 <img src="https://math.now.sh?inline=k" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 个元素的序列，并且不重复，一共有 <img src="https://math.now.sh?inline=%5Cfrac%7Bn!%7D%7B%28n-k%29!%7D" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 种可能的 <img src="https://math.now.sh?inline=k" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 排列。<br>
+可以用循环不定式证明可以得到一个均匀随机排列。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>libfsx
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="https://shuxiangfan.github.io/2026/02/06/%E7%AC%AC%E4%B8%80%E9%83%A8%E5%88%86%EF%BC%9A%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/" title="算法导论 第一部分：基础知识">https://shuxiangfan.github.io/2026/02/06/第一部分：基础知识/</a>
+  </li>
+  <li class="post-copyright-license">
+      <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA/" rel="tag"># 算法导论</a>
+              <a href="/tags/C/" rel="tag"># C++</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2026/02/06/%E7%AC%AC%E4%BA%8C%E9%83%A8%E5%88%86%EF%BC%9A%E6%8E%92%E5%BA%8F%E5%92%8C%E9%A1%BA%E5%BA%8F%E7%BB%9F%E8%AE%A1%E9%87%8F/" rel="prev" title="算法导论 第二部分：排序和顺序统计量">
+                  <i class="fa fa-angle-left"></i> 算法导论 第二部分：排序和顺序统计量
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 2021 – 
+    <span itemprop="copyrightYear">2026</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">除转载外，网站内容均为 CC-BY-SA 4.0 协议</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+</body>
+</html>

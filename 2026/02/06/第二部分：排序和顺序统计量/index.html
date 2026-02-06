@@ -1,0 +1,929 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-96x96.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon.ico">
+  <link rel="mask-icon" href="/images/favicon-96x96.png" color="#222">
+  <link rel="manifest" href="/images/site.webmanifest">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css" integrity="sha256-VHqXKFhhMxcpubYf9xiWdCiojEbY9NexQ4jh8AxbvcM=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"shuxiangfan.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.27.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":true,"style":"flat"},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="这是《算法导论》的第二部分">
+<meta property="og:type" content="article">
+<meta property="og:title" content="算法导论 第二部分：排序和顺序统计量">
+<meta property="og:url" content="https://shuxiangfan.github.io/2026/02/06/%E7%AC%AC%E4%BA%8C%E9%83%A8%E5%88%86%EF%BC%9A%E6%8E%92%E5%BA%8F%E5%92%8C%E9%A1%BA%E5%BA%8F%E7%BB%9F%E8%AE%A1%E9%87%8F/index.html">
+<meta property="og:site_name" content="libfsx&#39;s Blog">
+<meta property="og:description" content="这是《算法导论》的第二部分">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://math.now.sh/?inline=A">
+<meta property="og:image" content="https://math.now.sh/?inline=A.length">
+<meta property="og:image" content="https://math.now.sh/?inline=A%5B0...heap%5Ctext%7B-%7Dsize%5D">
+<meta property="og:image" content="https://math.now.sh/?inline=0%5Cle%20A.heap%5Ctext%7B-%7Dsize%20%5Cle%20A.length">
+<meta property="og:image" content="https://math.now.sh/?inline=i">
+<meta property="og:image" content="https://math.now.sh/?inline=0">
+<meta property="og:image" content="https://math.now.sh/?inline=i">
+<meta property="og:image" content="https://math.now.sh/?from=A%5BPARENT%28i%29%5D%5Cge%20A%5Bi%5D%0A">
+<meta property="og:image" content="https://math.now.sh/?inline=i">
+<meta property="og:image" content="https://math.now.sh/?from=A%5BPARENT%28i%29%5D%5Cle%20A%5Bi%5D%0A">
+<meta property="og:image" content="https://math.now.sh/?inline=i">
+<meta property="og:image" content="https://math.now.sh/?inline=A%5Bi%5D">
+<meta property="og:image" content="https://math.now.sh/?inline=A%5BLEFT%28i%29%5D">
+<meta property="og:image" content="https://math.now.sh/?inline=A%5BRIGHT%28i%29%5D">
+<meta property="og:image" content="https://math.now.sh/?from=T%28n%29%5Cle%20T(%5Cfrac%7B2n%7D%7B3%7D)%2BO(1)%0A">
+<meta property="og:image" content="https://math.now.sh/?from=T%28n%29%3DO(%5Clg%20n)%0A">
+<meta property="og:image" content="https://math.now.sh/?inline=h">
+<meta property="og:image" content="https://math.now.sh/?inline=O%28h%29">
+<meta property="og:image" content="https://math.now.sh/?inline=A%5B0%5D">
+<meta property="og:image" content="https://math.now.sh/?inline=A%5BA.length%5D">
+<meta property="og:image" content="https://math.now.sh/?inline=S">
+<meta property="og:image" content="https://math.now.sh/?inline=INSERT%28S%2Cx%29">
+<meta property="og:image" content="https://math.now.sh/?inline=x">
+<meta property="og:image" content="https://math.now.sh/?inline=S">
+<meta property="og:image" content="https://math.now.sh/?inline=MAXIMUM%28S%29">
+<meta property="og:image" content="https://math.now.sh/?inline=S">
+<meta property="og:image" content="https://math.now.sh/?inline=EXTRACT%5Ctext%7B-%7DMAX%28S%29">
+<meta property="og:image" content="https://math.now.sh/?inline=S">
+<meta property="og:image" content="https://math.now.sh/?inline=INCREASE%5Ctext%7B-%7DKEY%28S%2Cx%2Ck%29">
+<meta property="og:image" content="https://math.now.sh/?inline=x">
+<meta property="og:image" content="https://math.now.sh/?inline=k">
+<meta property="og:image" content="https://math.now.sh/?inline=k">
+<meta property="og:image" content="https://math.now.sh/?inline=x">
+<meta property="og:image" content="https://math.now.sh/?inline=INSERT">
+<meta property="og:image" content="https://math.now.sh/?inline=MINIMUM">
+<meta property="og:image" content="https://math.now.sh/?inline=EXTRACT%5Ctext%7B-%7DMIN">
+<meta property="og:image" content="https://math.now.sh/?inline=DECREASE%5Ctext%7B-%7DKEY">
+<meta property="og:image" content="https://math.now.sh/?inline=%5CTheta%281%29">
+<meta property="og:image" content="https://math.now.sh/?inline=MAXIMUM">
+<meta property="og:image" content="https://math.now.sh/?inline=O%28%5Clg%20n%29">
+<meta property="og:image" content="https://math.now.sh/?inline=EXTRACT%5Ctext%7B-%7DMAX">
+<meta property="og:image" content="https://math.now.sh/?inline=O%28%5Clg%20n%29">
+<meta property="og:image" content="https://math.now.sh/?inline=INCREASE%5Ctext%7B-%7DKEY">
+<meta property="og:image" content="https://math.now.sh/?inline=A%5Bi%5D">
+<meta property="og:image" content="https://math.now.sh/?inline=A%5BPARENT%28i%29%5D">
+<meta property="og:image" content="https://math.now.sh/?inline=O%28%5Clg%20n%29">
+<meta property="og:image" content="https://math.now.sh/?inline=INSERT">
+<meta property="og:image" content="https://math.now.sh/?inline=n">
+<meta property="og:image" content="https://math.now.sh/?inline=O%28%5Clg%20n%29">
+<meta property="og:image" content="https://math.now.sh/?inline=A%5Bp...q-1%5D">
+<meta property="og:image" content="https://math.now.sh/?inline=A%5Bq%2B1...r%5D">
+<meta property="og:image" content="https://math.now.sh/?inline=A%5Bq%5D">
+<meta property="og:image" content="https://math.now.sh/?inline=A%5Bq%5D">
+<meta property="og:image" content="https://math.now.sh/?inline=A%5Bq%2B1...r%5D">
+<meta property="og:image" content="https://math.now.sh/?inline=q">
+<meta property="og:image" content="https://math.now.sh/?inline=A%5Bp...q-1%5D">
+<meta property="og:image" content="https://math.now.sh/?inline=A%5Bq%2B1...r%5D">
+<meta property="og:image" content="https://math.now.sh/?inline=PARTITION">
+<meta property="og:image" content="https://math.now.sh/?inline=x%3DA%5Br%5D">
+<meta property="og:image" content="https://math.now.sh/?inline=A%5Bp...r%5D">
+<meta property="og:image" content="https://math.now.sh/?inline=A%5Bj%5D%5Cle%20x">
+<meta property="og:image" content="https://math.now.sh/?inline=i">
+<meta property="og:image" content="https://math.now.sh/?inline=1">
+<meta property="og:image" content="https://math.now.sh/?inline=A%5Bi%5D">
+<meta property="og:image" content="https://math.now.sh/?inline=A%5Bj%5D">
+<meta property="og:image" content="https://math.now.sh/?inline=A%5Bp...i%5D">
+<meta property="og:image" content="https://math.now.sh/?inline=x">
+<meta property="og:image" content="https://math.now.sh/?inline=A%5Bp...i%5D">
+<meta property="og:image" content="https://math.now.sh/?inline=A%5Bi%2B1...j-1%5D">
+<meta property="og:image" content="https://math.now.sh/?inline=x">
+<meta property="og:image" content="https://math.now.sh/?inline=A%5Bj%5D">
+<meta property="og:image" content="https://math.now.sh/?inline=p">
+<meta property="og:image" content="https://math.now.sh/?inline=r-1">
+<meta property="og:image" content="https://math.now.sh/?inline=A%5Bp...i%5D">
+<meta property="og:image" content="https://math.now.sh/?inline=A%5Bi%2B1...j-1%5D">
+<meta property="og:image" content="https://math.now.sh/?inline=A%5Bi%2B1%5D">
+<meta property="og:image" content="https://math.now.sh/?inline=A%5Br%5D">
+<meta property="og:image" content="https://math.now.sh/?inline=x">
+<meta property="og:image" content="https://math.now.sh/?inline=%5Cle%20x">
+<meta property="og:image" content="https://math.now.sh/?inline=%3Ex">
+<meta property="og:image" content="https://math.now.sh/?inline=k">
+<meta property="og:image" content="https://math.now.sh/?inline=p%5Cle%20k%5Cle%20i">
+<meta property="og:image" content="https://math.now.sh/?inline=A%5Bk%5D%5Cle%20x">
+<meta property="og:image" content="https://math.now.sh/?inline=i%2B1%5Cle%20k%20%5Cle%20j-1">
+<meta property="og:image" content="https://math.now.sh/?inline=A%5Bk%5D%5Cge%20x">
+<meta property="og:image" content="https://math.now.sh/?inline=k%3Dr">
+<meta property="og:image" content="https://math.now.sh/?inline=A%5Bk%5D%3Dx">
+<meta property="og:image" content="https://math.now.sh/?inline=i%3Dp-1%5Ctext%7B%20%E5%92%8C%20%7D%20j%3Dp">
+<meta property="og:image" content="https://math.now.sh/?inline=p%5Ctext%7B%20%E5%92%8C%20%7Di%5Ctext%7B%20%E4%B9%8B%E9%97%B4%E3%80%81%7Di%2B1%5Ctext%7B%20%E5%92%8C%20%7Dj-1">
+<meta property="og:image" content="https://math.now.sh/?inline=A%5Bj%5D%20%3E%20x">
+<meta property="og:image" content="https://math.now.sh/?inline=j%2B1">
+<meta property="og:image" content="https://math.now.sh/?inline=A%5Bj%5D%5Cle%20x">
+<meta property="og:image" content="https://math.now.sh/?inline=i%2B1">
+<meta property="og:image" content="https://math.now.sh/?inline=A%5Bj%5D">
+<meta property="og:image" content="https://math.now.sh/?inline=A%5Bi%5D">
+<meta property="og:image" content="https://math.now.sh/?inline=j%2B1">
+<meta property="og:image" content="https://math.now.sh/?inline=j%3Dr">
+<meta property="og:image" content="https://math.now.sh/?inline=A%5Bi%2B1%5D%5Ctext%7B%20%E5%92%8C%20%7DA%5Br%5D">
+<meta property="og:image" content="https://math.now.sh/?inline=A%5Bq%5D">
+<meta property="og:image" content="https://math.now.sh/?inline=A%5Bq%2B1...r%5D">
+<meta property="og:image" content="https://math.now.sh/?inline=PARTITION">
+<meta property="og:image" content="https://math.now.sh/?inline=n-1">
+<meta property="og:image" content="https://math.now.sh/?inline=0">
+<meta property="og:image" content="https://math.now.sh/?inline=%5CTheta%28n%29">
+<meta property="og:image" content="https://math.now.sh/?inline=T%28n%29%3DT(n-1)%2B%5CTheta(n)">
+<meta property="og:image" content="https://math.now.sh/?inline=T%28n%29%3D%5CTheta(n%5E2)">
+<meta property="og:image" content="https://math.now.sh/?inline=k%3A1">
+<meta property="og:image" content="https://math.now.sh/?from=T%28n%29%3DT(%5Cfrac%7Bk%7D%7Bk%2B1%7Dn)%2BT(%5Cfrac%7B1%7D%7Bk%2B1%7Dn)%2Bcn%0A">
+<meta property="og:image" content="https://math.now.sh/?inline=%5Clog_%7B%5Cfrac%7Bk%2B1%7D%7Bk%7D%7Dn%3D%5CTheta%28%5Clg%20n%29">
+<meta property="og:image" content="https://math.now.sh/?inline=cn%20%3D%20%5CTheta%28n%29">
+<meta property="og:image" content="https://math.now.sh/?inline=O%28n%5Clg%20n%29">
+<meta property="og:image" content="https://math.now.sh/?inline=O%28n%5Clg%20n%29">
+<meta property="og:image" content="https://math.now.sh/?inline=0%E3%80%81n-1">
+<meta property="og:image" content="https://math.now.sh/?inline=%5Cfrac%7Bn-1%7D%7B2%7D%E3%80%81%5Cfrac%7Bn-1%7D%7B2%7D">
+<meta property="og:image" content="https://math.now.sh/?inline=%5CTheta%28n%29%2B%5CTheta(n-1)%3D%5CTheta(n)">
+<meta property="og:image" content="https://math.now.sh/?inline=O%28n%29">
+<meta property="og:image" content="https://math.now.sh/?inline=O%28n%5Clg%20n%29">
+<meta property="og:image" content="https://math.now.sh/?inline=A%5Br%5D">
+<meta property="og:image" content="https://math.now.sh/?inline=T%28n%29">
+<meta property="og:image" content="https://math.now.sh/?from=T%28n%29%3D%5Cmax_%7B0%5Cle%20q%20%5Cle%20n-1%7D%5Cleft(T(q)%2BT(n-q-1)%5Cright)%2B%5CTheta(n)%20%0A">
+<meta property="og:image" content="https://math.now.sh/?inline=n-1">
+<meta property="og:image" content="https://math.now.sh/?inline=q">
+<meta property="og:image" content="https://math.now.sh/?inline=0">
+<meta property="og:image" content="https://math.now.sh/?inline=n-1">
+<meta property="og:image" content="https://math.now.sh/?inline=T%28n%29%5Cle%20cn%5E2">
+<meta property="og:image" content="https://math.now.sh/?from=T%28n%29%5Cle%20%5Cmax_%7B0%5Cle%20q%20%5Cle%20n-1%7D%5Cleft(cq%5E2%2Bc(n-q-1)%5E2%20%5Cright)%2B%5CTheta(n)%3Dc%5Cmax_%7B0%5Cle%20q%20%5Cle%20n-1%7D%5Cleft(q%5E2%2B(n-q-1)%5E2%20%5Cright)%2B%5CTheta(n)%0A">
+<meta property="og:image" content="https://math.now.sh/?inline=q%5E2%2B%28n-q-1%29%5E2">
+<meta property="og:image" content="https://math.now.sh/?inline=%28n-1%29%5E2">
+<meta property="og:image" content="https://math.now.sh/?inline=T%28n%29">
+<meta property="og:image" content="https://math.now.sh/?from=T%28n%29%5Cle%20cn%5E2-c(2n-1)%2B%5CTheta(n)%5Cle%20cn%5E2%0A">
+<meta property="og:image" content="https://math.now.sh/?inline=T%28n%29%3DO(n%5E2)">
+<meta property="og:image" content="https://math.now.sh/?inline=T%28n%29%3D%5COmega(n%5E2)">
+<meta property="og:image" content="https://math.now.sh/?inline=%5CTheta%28n%5E2%29">
+<meta property="og:image" content="https://math.now.sh/?inline=n">
+<meta property="og:image" content="https://math.now.sh/?inline=PARTITION">
+<meta property="og:image" content="https://math.now.sh/?inline=n">
+<meta property="og:image" content="https://math.now.sh/?inline=PARTITION">
+<meta property="og:image" content="https://math.now.sh/?inline=X">
+<meta property="og:image" content="https://math.now.sh/?inline=O%28n%20%2B%20X%29">
+<meta property="og:image" content="https://math.now.sh/?inline=A">
+<meta property="og:image" content="https://math.now.sh/?inline=i">
+<meta property="og:image" content="https://math.now.sh/?inline=z_i">
+<meta property="og:image" content="https://math.now.sh/?inline=Z_%7Bij%7D">
+<meta property="og:image" content="https://math.now.sh/?inline=z_i%E3%80%81z_j">
+<meta property="og:image" content="https://math.now.sh/?from=X_%7Bij%7D%3D%5Cbegin%7Bcases%7D%0A1%20%26%20%5Ctext%7B%24z_i%24%20%E4%B8%8E%20%24z_j%24%20%E5%8F%91%E7%94%9F%E6%AF%94%E8%BE%83%7D%20%5C%5C%0A0%20%26%20%5Ctext%7B%24z_i%24%20%E4%B8%8E%20%24z_j%24%20%E6%B2%A1%E6%9C%89%E5%8F%91%E7%94%9F%E6%AF%94%E8%BE%83%7D%0A%5Cend%7Bcases%7D">
+<meta property="og:image" content="https://math.now.sh/?inline=z_i">
+<meta property="og:image" content="https://math.now.sh/?from=X%3D%5Csum_%7Bi%3D1%7D%5E%7Bn-1%7D%5Csum_%7Bj%3Di%2B1%7D%5E%7Bn%7DX_%7Bij%7D%0A">
+<meta property="og:image" content="https://math.now.sh/?from=E%28X%29%3DE%5Cleft%5B%5Csum_%7Bi%3D1%7D%5E%7Bn-1%7D%5Csum_%7Bj%3Di%2B1%7D%5E%7Bn%7DX_%7Bij%7D%5Cright%5D%3D%5Csum_%7Bi%3D1%7D%5E%7Bn-1%7D%5Csum_%7Bj%3Di%2B1%7D%5E%7Bn%7DE(X_%7Bij%7D)%3D%5Csum_%7Bi%3D1%7D%5E%7Bn-1%7D%5Csum_%7Bj%3Di%2B1%7D%5E%7Bn%7DPr(%5Ctext%7B%24z_i%24%20%E4%B8%8E%20%24z_j%24%20%E8%BF%9B%E8%A1%8C%E6%AF%94%E8%BE%83%7D)%0A">
+<meta property="og:image" content="https://math.now.sh/?inline=z_i%3Cx%3Cz_j">
+<meta property="og:image" content="https://math.now.sh/?inline=z_i">
+<meta property="og:image" content="https://math.now.sh/?inline=z_j">
+<meta property="og:image" content="https://math.now.sh/?inline=z_i">
+<meta property="og:image" content="https://math.now.sh/?inline=z_j">
+<meta property="og:image" content="https://math.now.sh/?inline=Z_%7Bij%7D">
+<meta property="og:image" content="https://math.now.sh/?inline=z_i">
+<meta property="og:image" content="https://math.now.sh/?inline=z_j">
+<meta property="og:image" content="https://math.now.sh/?inline=z_i">
+<meta property="og:image" content="https://math.now.sh/?inline=z_j">
+<meta property="og:image" content="https://math.now.sh/?inline=Z_%7Bij%7D">
+<meta property="og:image" content="https://math.now.sh/?inline=%5Cfrac%7B1%7D%7Bj-i%2B1%7D">
+<meta property="og:image" content="https://math.now.sh/?from=%5Cbegin%7Beqnarray%7D%0APr%28%5Ctext%7B%24z_i%24%20%E4%B8%8E%20%24z_j%24%20%E8%BF%9B%E8%A1%8C%E6%AF%94%E8%BE%83%7D%29%20%26%3D%26%20Pr(z_i%5Ctext%7B%20%E6%88%96%20%7Dz_j%20%5Ctext%7B%20%E6%98%AF%E9%9B%86%E5%90%88%20%7DZ_%7Bij%7D%5Ctext%7B%20%E4%B8%AD%E9%80%89%E5%87%BA%E7%9A%84%E7%AC%AC%E4%B8%80%E4%B8%AA%E4%B8%BB%E5%85%83%7D)%20%5Cnonumber%20%5C%5C%0A~%26%3D%26%20Pr(z_i%5Ctext%7B%20%E6%98%AF%E9%9B%86%E5%90%88%20%7DZ_%7Bij%7D%5Ctext%7B%20%E4%B8%AD%E9%80%89%E5%87%BA%E7%9A%84%E7%AC%AC%E4%B8%80%E4%B8%AA%E4%B8%BB%E5%85%83%7D)%20%5Cnonumber%20%5C%5C%0A%20%20%20%20%20%26%5C%3B%26%20%2BPr(z_j%20%5Ctext%7B%20%E6%98%AF%E9%9B%86%E5%90%88%20%7DZ_%7Bij%7D%5Ctext%7B%20%E4%B8%AD%E9%80%89%E5%87%BA%E7%9A%84%E7%AC%AC%E4%B8%80%E4%B8%AA%E4%B8%BB%E5%85%83%7D)%20%5Cnonumber%20%5C%5C%0A~%26%3D%26%20%5Cfrac%7B1%7D%7Bj-i%2B1%7D%2B%5Cfrac%7B1%7D%7Bj-i%2B1%7D%20%5Cnonumber%20%5C%5C%0A~%26%3D%26%20%5Cfrac%7B2%7D%7Bj-i%2B1%7D%20%5Cnonumber%20%0A%5Cend%7Beqnarray%7D">
+<meta property="og:image" content="https://math.now.sh/?from=E%28X%29%3D%5Csum_%7Bi%3D1%7D%5E%7Bn-1%7D%5Csum_%7Bj%3Di%2B1%7D%5E%7Bn%7D%5Cfrac%7B2%7D%7Bj-i%2B1%7D%0A">
+<meta property="og:image" content="https://math.now.sh/?inline=k%3Dj-i">
+<meta property="og:image" content="https://math.now.sh/?from=E%28X%29%3D%5Csum_%7Bi%3D1%7D%5E%7Bn-1%7D%5Csum_%7Bj%3Di%2B1%7D%5E%7Bn%7D%5Cfrac%7B2%7D%7Bj-i%2B1%7D%3D%5Csum_%7Bi%3D1%7D%5E%7Bn-1%7D%5Csum_%7Bk%3D1%7D%5E%7Bn-i%7D%5Cfrac%7B2%7D%7Bk%2B1%7D%3C%5Csum_%7Bi%3D1%7D%5E%7Bn-1%7D%5Csum_%7Bk%3D1%7D%5E%7Bn%7D%5Cfrac%7B2%7D%7Bk%7D%3D%5Csum_%7Bi%3D1%7D%5E%7Bn-1%7DO(%5Clg%20n)%3DO(n%5Clg%20n)%0A">
+<meta property="og:image" content="https://math.now.sh/?inline=O%28n%5Clg%20n%29">
+<meta property="og:image" content="https://math.now.sh/?inline=a_i%5Cle%20a_j">
+<meta property="og:image" content="https://math.now.sh/?inline=i%3Aj">
+<meta property="og:image" content="https://math.now.sh/?inline=1%5Cle%20i%2Cj%5Cle%20n">
+<meta property="og:image" content="https://math.now.sh/?inline=n">
+<meta property="og:image" content="https://math.now.sh/?inline=a_i">
+<meta property="og:image" content="https://math.now.sh/?inline=a_j">
+<meta property="og:image" content="https://math.now.sh/?inline=a_i%5Cle%20a_j">
+<meta property="og:image" content="https://math.now.sh/?inline=a_i%5Cle%20a_j">
+<meta property="og:image" content="https://math.now.sh/?inline=a_i%20%3E%20a_j">
+<meta property="og:image" content="https://math.now.sh/?inline=a_%7B%5Cpi%281%29%7D%5Cle%20a_%7B%5Cpi(2)%7D%5Cle%5Ccdots%5Cle%20a_%7B%5Cpi(n)%7D">
+<meta property="og:image" content="https://math.now.sh/?inline=n">
+<meta property="og:image" content="https://math.now.sh/?inline=n!">
+<meta property="og:image" content="https://math.now.sh/?inline=%5COmega%28n%5Clg%20n%29">
+<meta property="og:image" content="https://math.now.sh/?inline=h">
+<meta property="og:image" content="https://math.now.sh/?inline=l">
+<meta property="og:image" content="https://math.now.sh/?inline=n">
+<meta property="og:image" content="https://math.now.sh/?inline=n!">
+<meta property="og:image" content="https://math.now.sh/?from=n!%5Cle%20l%20%5Cle%202%5Eh%0A">
+<meta property="og:image" content="https://math.now.sh/?from=h%5Cge%20%5Clg%28n!%29%3D%5COmega(n%5Clg%20n)%0A">
+<meta property="og:image" content="https://math.now.sh/?inline=0">
+<meta property="og:image" content="https://math.now.sh/?inline=max%5Ctext%7B-%7Delement%28A%29">
+<meta property="og:image" content="https://math.now.sh/?inline=i">
+<meta property="og:image" content="https://math.now.sh/?inline=res%5BTemp%5Ba%5Bi%5D%5D%20-%201%5D">
+<meta property="og:image" content="https://math.now.sh/?inline=0%5Ctext%7B-%7Dbased">
+<meta property="og:image" content="https://math.now.sh/?inline=%5CTheta%28k%2Bn%29">
+<meta property="og:image" content="https://math.now.sh/?inline=k%3Dmax%28A%29">
+<meta property="og:image" content="https://math.now.sh/?inline=k%3DO%28n%29">
+<meta property="og:image" content="https://math.now.sh/?inline=%5CTheta%28n%29">
+<meta property="og:image" content="https://math.now.sh/?inline=n">
+<meta property="og:image" content="https://math.now.sh/?inline=d">
+<meta property="og:image" content="https://math.now.sh/?inline=k">
+<meta property="og:image" content="https://math.now.sh/?inline=%5CTheta%28n%2Bk%29">
+<meta property="og:image" content="https://math.now.sh/?inline=%5CTheta%28d(n%2Bk%29)">
+<meta property="og:image" content="https://math.now.sh/?inline=n">
+<meta property="og:image" content="https://math.now.sh/?inline=b">
+<meta property="og:image" content="https://math.now.sh/?inline=r%5Cle%20b">
+<meta property="og:image" content="https://math.now.sh/?inline=%5CTheta%28n%2Bk%29">
+<meta property="og:image" content="https://math.now.sh/?inline=%5CTheta%5Cleft%28%5Cfrac%7Bb%7D%7Br%7D(n%2B2%5Er%29%5Cright)">
+<meta property="og:image" content="https://math.now.sh/?inline=b">
+<meta property="og:image" content="https://math.now.sh/?inline=d%3D%5Cleft%5Clceil%5Cfrac%7Bb%7D%7Br%7D%5Cright%5Crceil">
+<meta property="og:image" content="https://math.now.sh/?inline=k%3D2%5Er-1">
+<meta property="og:image" content="https://math.now.sh/?inline=%5B0%2C1%29">
+<meta property="og:image" content="https://math.now.sh/?inline=A%5Bi%5D">
+<meta property="og:image" content="https://math.now.sh/?inline=B%5Cleft%5B%5Clfloor%20na%5Bi%5D%5Crfloor%5Cright%5D">
+<meta property="og:image" content="https://math.now.sh/?inline=B%5Bi%5D">
+<meta property="og:image" content="https://math.now.sh/?from=T%28n%29%3D%5CTheta(n)%2B%5Csum_%7Bi%3D0%7D%5E%7Bn-1%7DO(n_%7Bi%7D%5E%7B2%7D)%0A">
+<meta property="og:image" content="https://math.now.sh/?from=%5Cbegin%7Beqnarray%7D%0AE%5BT%28n%29%5D%26%3D%26E%5Cleft%5B%5CTheta(n)%2B%5Csum_%7Bi%3D0%7D%5E%7Bn-1%7DO(n_%7Bi%7D%5E%7B2%7D)%5Cright%5D%20%5C%5C%0A~%26%3D%26%5CTheta(n)%2B%5Csum_%7Bi%3D0%7D%5E%7Bn-1%7DE%5Cleft%5BO(n_%7Bi%7D%5E2)%5Cright%5D%20%5C%5C%0A~%26%3D%26%5CTheta(n)%2B%5Csum_%7Bi%3D0%7D%5E%7Bn-1%7DO%5Cleft(E%5Bn_%7Bi%7D%5E2%5D%5Cright)%0A%5Cend%7Beqnarray%7D">
+<meta property="og:image" content="https://math.now.sh/?from=E%5Bn_%7Bi%7D%5E2%5D%3D2-%5Cfrac%7B1%7D%7Bn%7D%0A">
+<meta property="og:image" content="https://math.now.sh/?inline=i%3D0%2C1%2C%5Ccdots%2Cn-1%5Ctext%7B%20%E5%92%8C%7D%5C%3B%20j%3D1%2C2%2C%5Ccdots%2Cn">
+<meta property="og:image" content="https://math.now.sh/?from=X_%7Bij%7D%3D%5Cbegin%7Bcases%7D%0A1%20%26%20A%5Bj%5D%20%5Ctext%7B%20%E8%90%BD%E5%85%A5%E6%A1%B6%20%7Di%20%5C%5C%0A0%20%26%20A%5Bj%5D%20%5Ctext%7B%20%E6%B2%A1%E8%90%BD%E5%85%A5%E6%A1%B6%20%7Di%0A%5Cend%7Bcases%7D%0A">
+<meta property="og:image" content="https://math.now.sh/?from=n_i%3D%5Csum_%7Bj%3D1%7D%5E%7Bn%7DX_%7Bij%7D%0A">
+<meta property="og:image" content="https://math.now.sh/?from=%5Cbegin%7Beqnarray%7D%0AE%5Bn_%7Bi%7D%5E2%5D%26%3D%26E%5Cleft%5B%5Cleft%28%5Csum_%7Bj%3D1%7D%5E%7Bn%7DX_%7Bij%7D%5Cright%29%5E2%5Cright%5D%3DE%5Cleft%5B%5Csum_%7Bj%3D1%7D%5E%7Bn%7D%5Csum_%7Bk%3D1%7D%5E%7Bn%7DX_%7Bij%7DX_%7Bik%7D%5Cright%5D%3DE%5Cleft%5B%5Csum_%7Bj%3D1%7D%5E%7Bn%7DX_%7Bij%7D%5E%7B2%7D%2B%5Csum_%7B1%5Cle%20j%5Cle%20n%7D%5Csum_%7B%5Csubstack%7B1%5Cle%20k%5Cle%20n%20%5C%5C%20k%5Cne%20j%7D%7DX_%7Bij%7DX_%7Bik%7D%5Cright%5D%20%5C%5C%0A~%26%3D%26%5Csum_%7Bj%3D1%7D%5E%7Bn%7DE%5Cleft%5BX_%7Bij%7D%5E2%5Cright%5D%2B%5Csum_%7B1%5Cle%20j%5Cle%20n%7D%5Csum_%7B%5Csubstack%7B1%5Cle%20k%5Cle%20n%20%5C%5C%20k%5Cne%20j%7D%7DE%5Cleft%5BX_%7Bij%7DX_%7Bik%7D%5Cright%5D%0A%5Cend%7Beqnarray%7D">
+<meta property="og:image" content="https://math.now.sh/?from=Pr%28X_%7Bij%7D%3D1%29%3D%5Cfrac%7B1%7D%7Bn%7D%0A">
+<meta property="og:image" content="https://math.now.sh/?from=E%5Cleft%5BX_%7Bij%7D%5E2%5Cright%5D%3D%5Cfrac%7B1%7D%7Bn%7D%0A">
+<meta property="og:image" content="https://math.now.sh/?inline=k%5Cne%20j">
+<meta property="og:image" content="https://math.now.sh/?inline=X_%7Bij%7D%5Ctext%7B%20%E5%92%8C%20%7DX_%7Bik%7D">
+<meta property="og:image" content="https://math.now.sh/?from=E%5Cleft%5BX_%7Bij%7DX_%7Bik%7D%5Cright%5D%3D%5Cfrac%7B1%7D%7Bn%5E2%7D%0A">
+<meta property="og:image" content="https://math.now.sh/?from=E%5Cleft%5Bn_%7Bi%7D%5E2%5Cright%5D%3D%5Csum_%7Bj%3D1%7D%5E%7Bn%7D%5Cfrac%7B1%7D%7Bn%7D%2B%5Csum_%7B1%5Cle%20j%20%5Cle%20n%7D%5Csum_%7B%5Csubstack%7B1%5Cle%20k%5Cle%20n%20%5C%5C%20k%5Cne%20j%7D%7D%5Cfrac%7B1%7D%7Bn%5E2%7D%3Dn%5Ccdot%5Cfrac%7B1%7D%7Bn%7D%2Bn%28n-1%29%5Cfrac%7B1%7D%7Bn%5E2%7D%3D2-%5Cfrac%7B1%7D%7Bn%7D%0A">
+<meta property="og:image" content="https://math.now.sh/?from=%5CTheta%28n%29%2B%5Csum_%7Bi%3D0%7D%5E%7Bn-1%7DO(2-%5Cfrac%7B1%7D%7Bn%7D)%3D%5CTheta(n)%2BnO(2-%5Cfrac%7B1%7D%7Bn%7D)%3D%5CTheta(n)%0A">
+<meta property="og:image" content="https://math.now.sh/?inline=n">
+<meta property="og:image" content="https://math.now.sh/?inline=i">
+<meta property="og:image" content="https://math.now.sh/?inline=i">
+<meta property="og:image" content="https://math.now.sh/?inline=n">
+<meta property="og:image" content="https://math.now.sh/?inline=i%3D%5Cfrac%7Bn%2B1%7D%7B2%7D">
+<meta property="og:image" content="https://math.now.sh/?inline=n">
+<meta property="og:image" content="https://math.now.sh/?inline=i%3D%5Cfrac%7Bn%7D%7B2%7D">
+<meta property="og:image" content="https://math.now.sh/?inline=i%3D%5Cfrac%7Bn%7D%7B2%7D%2B1">
+<meta property="og:image" content="https://math.now.sh/?inline=n">
+<meta property="og:image" content="https://math.now.sh/?inline=i%3D%5Clfloor%5Cfrac%7Bn%2B1%7D%7B2%7D%5Crfloor">
+<meta property="og:image" content="https://math.now.sh/?inline=i%3D%5Clceil%5Cfrac%7Bn%2B2%7D%7B2%7D%5Crceil">
+<meta property="og:image" content="https://math.now.sh/?inline=n">
+<meta property="og:image" content="https://math.now.sh/?inline=A">
+<meta property="og:image" content="https://math.now.sh/?inline=i%2C%5C%3B1%5Cle%20i%5Cle%20n">
+<meta property="og:image" content="https://math.now.sh/?inline=x%5Cin%20A">
+<meta property="og:image" content="https://math.now.sh/?inline=A">
+<meta property="og:image" content="https://math.now.sh/?inline=i-1">
+<meta property="og:image" content="https://math.now.sh/?inline=n-1">
+<meta property="og:image" content="https://math.now.sh/?inline=3%5Cleft%5Clfloor%5Cfrac%7Bn%7D%7B2%7D%5Cright%5Crfloor">
+<meta property="og:image" content="https://math.now.sh/?inline=RAND%5Ctext%7B-%7DPARTITION">
+<meta property="og:image" content="https://math.now.sh/?inline=O%28n%29">
+<meta property="og:image" content="https://math.now.sh/?inline=k">
+<meta property="og:image" content="https://math.now.sh/?inline=A%5Bp...q%5D">
+<meta property="og:image" content="https://math.now.sh/?inline=k">
+<meta property="og:image" content="https://math.now.sh/?inline=%5Cfrac%7B1%7D%7Bn%7D">
+<meta property="og:image" content="https://math.now.sh/?from=X_k%3D%5Cbegin%7Bcases%7D%0A1%20%26%20%5Ctext%7B%E5%AD%90%E6%95%B0%E7%BB%84%20%7DA%5Bp...q%5D%5Ctext%7B%20%E6%AD%A3%E5%A5%BD%E5%8C%85%E5%90%AB%20%7Dk%5Ctext%7B%20%E4%B8%AA%E5%85%83%E7%B4%A0%7D%5C%5C%0A0%20%26%20%5Ctext%7B%E5%AD%90%E6%95%B0%E7%BB%84%20%7DA%5Bp...q%5D%5Ctext%7B%20%E4%B8%8D%E6%AD%A3%E5%A5%BD%E5%8C%85%E5%90%AB%20%7Dk%5Ctext%7B%20%E4%B8%AA%E5%85%83%E7%B4%A0%7D%0A%5Cend%7Bcases%7D">
+<meta property="og:image" content="https://math.now.sh/?from=E%5BX_i%5D%3D%5Cfrac%7B1%7D%7Bn%7D%0A">
+<meta property="og:image" content="https://math.now.sh/?inline=A%5Bq%5D">
+<meta property="og:image" content="https://math.now.sh/?inline=A%5Bp...q-1%5D">
+<meta property="og:image" content="https://math.now.sh/?inline=A%5Bq%2B1...r%5D">
+<meta property="og:image" content="https://math.now.sh/?inline=i">
+<meta property="og:image" content="https://math.now.sh/?inline=A%5Bq%5D">
+<meta property="og:image" content="https://math.now.sh/?inline=A%5Bq%5D">
+<meta property="og:image" content="https://math.now.sh/?inline=X_k%3D1">
+<meta property="og:image" content="https://math.now.sh/?inline=k-1">
+<meta property="og:image" content="https://math.now.sh/?inline=n-k">
+<meta property="og:image" content="https://math.now.sh/?from=%5Cbegin%7Beqnarray%7D%0AT%28n%29%20%26%5Cle%20%26%20%5Csum_%7Bk%3D1%7D%5E%7Bn%7DX_k%5Ccdot%20%5Cleft(T(%5Cmax(k-1%2Cn-k))%2BO(n)%5Cright)%20%5C%5C%0A~%20%26%20%3D%20%26%20%5Csum_%7Bk%3D1%7D%5E%7Bn%7DX_%7Bk%7D%5Ccdot%20T(%5Cmax(k-1%2Cn-k))%2BO(n)%0A%5Cend%7Beqnarray%7D">
+<meta property="og:image" content="https://math.now.sh/?from=%5Cbegin%7Beqnarray%7D%0AE%5BT%28n%29%5D%20%26%5Cle%26%20E%5Cleft%5B%5Csum_%7Bk%3D1%7D%5E%7Bn%7DX_%7Bk%7D%5Ccdot%20T(%5Cmax(k-1%2Cn-k))%2BO(n)%5Cright%5D%20%5C%5C%0A~%20%26%20%3D%20%26%20%5Csum_%7Bk%3D1%7D%5E%7Bn%7DE%5Cleft%5BX_%7Bk%7D%5Ccdot%20T(%5Cmax(k-1%2Cn-k))%5Cright%5D%2BO(n)%20%5C%5C%0A~%20%26%20%3D%20%26%20%5Csum_%7Bk%3D1%7D%5E%7Bn%7DE%5Cleft%5BX_%7Bk%7D%5Cright%5D%5Ccdot%20E%5Cleft%5BT(%5Cmax(k-1%2Cn-k))%5Cright%5D%2BO(n)%20%20%5Cquad%20%5Ctext%7B%E5%85%AC%E5%BC%8F%20%24C.24%24%7D%5C%5C%0A~%20%26%20%3D%20%26%20%5Csum_%7Bk%3D1%7D%5E%7Bn%7D%5Cfrac%7B1%7D%7Bn%7D%5Ccdot%20E%5Cleft%5BT(%5Cmax(k-1%2Cn-k))%5Cright%5D%2BO(n)%0A%5Cend%7Beqnarray%7D">
+<meta property="og:image" content="https://math.now.sh/?inline=%5Cmax%28k-1%2Cn-k%29">
+<meta property="og:image" content="https://math.now.sh/?from=%5Cmax%28k-1%2Cn-k%29%3D%5Cbegin%7Bcases%7D%0Ak-1%20%26%20k%3E%5Clceil%5Cfrac%7Bn%7D%7B2%7D%5Crceil%20%5C%5C%0An-k%20%26%20k%5Cle%20%5Clceil%5Cfrac%7Bn%7D%7B2%7D%5Crceil%0A%5Cend%7Bcases%7D">
+<meta property="og:image" content="https://math.now.sh/?inline=n">
+<meta property="og:image" content="https://math.now.sh/?inline=T%28%5Clceil%5Cfrac%7Bn%7D%7B2%7D%5Crceil%29">
+<meta property="og:image" content="https://math.now.sh/?inline=T%28n-1%29">
+<meta property="og:image" content="https://math.now.sh/?inline=n">
+<meta property="og:image" content="https://math.now.sh/?inline=T%28%5Clfloor%5Cfrac%7Bn%7D%7B2%7D%5Crfloor%29">
+<meta property="og:image" content="https://math.now.sh/?from=E%5BT%28n%29%5D%5Cle%20%5Cfrac%7B2%7D%7Bn%7D%5Csum_%7Bk%3D%5Clfloor%5Cfrac%7Bn%7D%7B2%7D%5Crfloor%7D%5E%7Bn-1%7DE%5BT(k)%5D%2BO(n)%0A">
+<meta property="og:image" content="https://math.now.sh/?inline=E%5BT%28n%29%5D%3DO(n)">
+<meta property="og:image" content="https://math.now.sh/?inline=c">
+<meta property="og:image" content="https://math.now.sh/?inline=E%5BT%28n%29%5D%5Cle%20cn">
+<meta property="og:image" content="https://math.now.sh/?inline=n">
+<meta property="og:image" content="https://math.now.sh/?inline=T%28n%29%3DO(1)">
+<meta property="og:image" content="https://math.now.sh/?inline=O%28n%29%5Cle%20an">
+<meta property="og:image" content="https://math.now.sh/?from=%5Cbegin%7Beqnarray%7D%0AE%5BT%28n%29%5D%20%26%20%5Cle%20%26%20%5Cfrac%7B2%7D%7Bn%7D%5Csum_%7Bk%3D%5Clfloor%5Cfrac%7Bn%7D%7B2%7D%5Crfloor%7D%5E%7Bn-1%7Dck%2Ban%20%5C%5C%0A~%26%20%3D%26%20%5Cfrac%7B2c%7D%7Bn%7D%5Cleft(%5Csum_%7Bk%3D1%7D%5E%7Bn-1%7Dk-%5Csum_%7Bk%3D1%7D%5E%7B%5Clfloor%5Cfrac%7Bn%7D%7B2%7D%5Crfloor-1%7Dk%5Cright)%2Ban%20%5C%5C%0A~%26%3D%26%20%5Cfrac%7B2c%7D%7Bn%7D%5Cleft(%5Cfrac%7B(n-1)n%7D%7B2%7D-%5Cfrac%7B%5Clfloor%5Cfrac%7Bn%7D%7B2%7D%5Crfloor(%5Clfloor%5Cfrac%7Bn%7D%7B2%7D%5Crfloor-1)%7D%7B2%7D%5Cright)%2Ban%20%5C%5C%0A~%26%20%5Cle%20%26%20%5Cfrac%7B2c%7D%7Bn%7D%5Cleft(%5Cfrac%7B(n-1)n%7D%7B2%7D-%5Cfrac%7B(%5Cfrac%7Bn%7D%7B2%7D-1)(%5Cfrac%7Bn%7D%7B2%7D-2)%7D%7B2%7D%5Cright)%2Ban%20%5C%5C%0A~%26%20%3D%20%26%20c%5Cleft(%5Cfrac%7B3n%7D%7B4%7D%2B%5Cfrac%7B1%7D%7B2%7D-%5Cfrac%7B2%7D%7Bn%7D%5Cright)%20%2Ban%5C%5C%0A~%26%20%5Cle%20%26%20%5Cfrac%7B3cn%7D%7B4%7D%2B%5Cfrac%7Bc%7D%7B2%7D%2Ban%20%5C%5C%0A~%26%20%3D%20%26%20cn-%5Cleft(%5Cfrac%7Bcn%7D%7B4%7D-%5Cfrac%7Bc%7D%7B2%7D-an%5Cright)%0A%5Cend%7Beqnarray%7D">
+<meta property="og:image" content="https://math.now.sh/?inline=n">
+<meta property="og:image" content="https://math.now.sh/?inline=cn">
+<meta property="og:image" content="https://math.now.sh/?inline=%5Cfrac%7Bcn%7D%7B4%7D-%5Cfrac%7Bc%7D%7B2%7D-an%5Cge%200">
+<meta property="og:image" content="https://math.now.sh/?inline=n%28%5Cfrac%7Bc%7D%7B4%7D-a%29%5Cge%5Cfrac%7Bc%7D%7B2%7D">
+<meta property="og:image" content="https://math.now.sh/?inline=c">
+<meta property="og:image" content="https://math.now.sh/?inline=%5Cfrac%7Bc%7D%7B4%7D-a%3E0">
+<meta property="og:image" content="https://math.now.sh/?inline=c%3E4a">
+<meta property="og:image" content="https://math.now.sh/?inline=%5Cfrac%7Bc%7D%7B4%7D-a">
+<meta property="og:image" content="https://math.now.sh/?from=n%5Cge%20%5Cfrac%7B%5Cfrac%7Bc%7D%7B2%7D%7D%7B%5Cfrac%7Bc%7D%7B4%7D-a%7D%3D%5Cfrac%7B2c%7D%7Bc-4a%7D%0A">
+<meta property="og:image" content="https://math.now.sh/?inline=n%3C%5Cfrac%7B2c%7D%7Bc-4a%7D">
+<meta property="og:image" content="https://math.now.sh/?inline=T%28n%29%3DO(1)">
+<meta property="og:image" content="https://math.now.sh/?inline=E%5BT%28n%29%5D%3DO(n)">
+<meta property="og:image" content="https://math.now.sh/?inline=%5Clfloor%5Cfrac%7Bn%7D%7B5%7D%5Crfloor">
+<meta property="og:image" content="https://math.now.sh/?inline=5">
+<meta property="og:image" content="https://math.now.sh/?inline=n%5Cmod%205">
+<meta property="og:image" content="https://math.now.sh/?inline=SELECT">
+<meta property="og:image" content="https://math.now.sh/?inline=%5Clceil%5Cfrac%7Bn%7D%7B5%7D%5Crceil">
+<meta property="og:image" content="https://math.now.sh/?inline=x">
+<meta property="og:image" content="https://math.now.sh/?inline=PARTITON">
+<meta property="og:image" content="https://math.now.sh/?inline=x">
+<meta property="og:image" content="https://math.now.sh/?inline=k">
+<meta property="og:image" content="https://math.now.sh/?inline=x">
+<meta property="og:image" content="https://math.now.sh/?inline=n-k">
+<meta property="og:image" content="https://math.now.sh/?inline=i%3Dk">
+<meta property="og:image" content="https://math.now.sh/?inline=x">
+<meta property="og:image" content="https://math.now.sh/?inline=i%3Ek">
+<meta property="og:image" content="https://math.now.sh/?inline=i-k">
+<meta property="og:image" content="https://math.now.sh/?inline=i%3Ck">
+<meta property="og:image" content="https://math.now.sh/?inline=i">
+<meta property="og:image" content="https://math.now.sh/?inline=x">
+<meta property="og:image" content="https://math.now.sh/?inline=x">
+<meta property="og:image" content="https://math.now.sh/?inline=n">
+<meta property="og:image" content="https://math.now.sh/?inline=5">
+<meta property="og:image" content="https://math.now.sh/?inline=x">
+<meta property="og:image" content="https://math.now.sh/?inline=3">
+<meta property="og:image" content="https://math.now.sh/?inline=x">
+<meta property="og:image" content="https://math.now.sh/?inline=x">
+<meta property="og:image" content="https://math.now.sh/?from=3%5Cleft%28%5Cleft%5Clceil%5Cfrac%7B1%7D%7B2%7D%5Clceil%5Cfrac%7Bn%7D%7B5%7D%5Crceil%5Cright%5Crceil-2%5Cright%29%5Cge%5Cfrac%7B3n%7D%7B10%7D-6%0A">
+<meta property="og:image" content="https://math.now.sh/?inline=%5Cfrac%7B3n%7D%7B10%7D-6">
+<meta property="og:image" content="https://math.now.sh/?inline=x">
+<meta property="og:image" content="https://math.now.sh/?inline=SELECT">
+<meta property="og:image" content="https://math.now.sh/?inline=n-%20%28%5Cfrac%7B3n%7D%7B10%7D-6%29%3D%5Cfrac%7B7n%7D%7B10%7D%2B6">
+<meta property="og:image" content="https://math.now.sh/?inline=1%2C2%2C4">
+<meta property="og:image" content="https://math.now.sh/?inline=O%28n%29">
+<meta property="og:image" content="https://math.now.sh/?inline=T%28%5Clceil%5Cfrac%7Bn%7D%7B5%7D%5Crceil%29">
+<meta property="og:image" content="https://math.now.sh/?inline=T%28%5Cfrac%7B7n%7D%7B10%7D%2B6%29">
+<meta property="og:image" content="https://math.now.sh/?inline=T%28n%29">
+<meta property="og:image" content="https://math.now.sh/?inline=n%3D140">
+<meta property="og:image" content="https://math.now.sh/?inline=O%281%29">
+<meta property="og:image" content="https://math.now.sh/?from=T%28n%29%5Cle%5Cbegin%7Bcases%7D%0AO(1)%20%26%20n%3C140%20%5C%5C%0AT(%5Clceil%5Cfrac%7Bn%7D%7B5%7D%5Crceil)%20%2B%20T(%5Cfrac%7B7n%7D%7B10%7D%2B6)%20%2BO(n)%20%26%20n%5Cge%20140%0A%5Cend%7Bcases%7D">
+<meta property="og:image" content="https://math.now.sh/?inline=c">
+<meta property="og:image" content="https://math.now.sh/?inline=n%3E0">
+<meta property="og:image" content="https://math.now.sh/?inline=T%28n%29%5Cle%20cn">
+<meta property="og:image" content="https://math.now.sh/?inline=n%3C140">
+<meta property="og:image" content="https://math.now.sh/?inline=n%3E140">
+<meta property="og:image" content="https://math.now.sh/?inline=a">
+<meta property="og:image" content="https://math.now.sh/?inline=O%28n%29">
+<meta property="og:image" content="https://math.now.sh/?inline=an">
+<meta property="og:image" content="https://math.now.sh/?from=%5Cbegin%7Beqnarray%7D%0AT%28n%29%20%26%5Cle%26%20c%5Clceil%5Cfrac%7Bn%7D%7B5%7D%5Crceil%2Bc%5Cleft(%5Cfrac%7B7n%7D%7B10%7D%2B6%5Cright)%2Ban%5C%5C%0A~%20%26%5Cle%26%5Cfrac%7Bcn%7D%7B5%7D%2Bc%2B%5Cfrac%7B7cn%7D%7B10%7D%2B6c%2Ban%20%5C%5C%0A~%20%26%3D%26%20%5Cfrac%7B9cn%7D%7B10%7D%2B7c%2Ban%20%5C%5C%0A~%20%26%3D%26%20cn%20%2B%20%5Cleft(-%5Cfrac%7Bcn%7D%7B10%7D%2B7c%2Ban%5Cright)%0A%5Cend%7Beqnarray%7D">
+<meta property="og:image" content="https://math.now.sh/?inline=cn">
+<meta property="og:image" content="https://math.now.sh/?from=-%5Cfrac%7Bcn%7D%7B10%7D%2B7c%2Ban%5Cle%200%0A">
+<meta property="og:image" content="https://math.now.sh/?inline=n%3E70">
+<meta property="og:image" content="https://math.now.sh/?inline=c%5Cge%20%5Cfrac%7B10an%7D%7Bn-70%7D">
+<meta property="og:image" content="https://math.now.sh/?inline=n%5Cge%20140">
+<meta property="og:image" content="https://math.now.sh/?inline=c%5Cge%2020a">
+<meta property="og:image" content="https://math.now.sh/?inline=T%28n%29%5Cle%20cn">
+<meta property="og:image" content="https://math.now.sh/?inline=70">
+<meta property="og:image" content="https://math.now.sh/?inline=140">
+<meta property="og:image" content="https://math.now.sh/?inline=c">
+<meta property="og:image" content="https://math.now.sh/?inline=SELECT">
+<meta property="og:image" content="https://math.now.sh/?inline=O%28n%29">
+<meta property="og:image" content="https://math.now.sh/?inline=%5COmega%28n%5Clg%20n%29">
+<meta property="article:published_time" content="2026-02-06T15:01:30.356Z">
+<meta property="article:modified_time" content="2026-02-06T15:01:30.356Z">
+<meta property="article:author" content="libfsx">
+<meta property="article:tag" content="算法导论">
+<meta property="article:tag" content="C++">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://math.now.sh/?inline=A">
+
+
+<link rel="canonical" href="https://shuxiangfan.github.io/2026/02/06/%E7%AC%AC%E4%BA%8C%E9%83%A8%E5%88%86%EF%BC%9A%E6%8E%92%E5%BA%8F%E5%92%8C%E9%A1%BA%E5%BA%8F%E7%BB%9F%E8%AE%A1%E9%87%8F/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://shuxiangfan.github.io/2026/02/06/%E7%AC%AC%E4%BA%8C%E9%83%A8%E5%88%86%EF%BC%9A%E6%8E%92%E5%BA%8F%E5%92%8C%E9%A1%BA%E5%BA%8F%E7%BB%9F%E8%AE%A1%E9%87%8F/","path":"2026/02/06/第二部分：排序和顺序统计量/","title":"算法导论 第二部分：排序和顺序统计量"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>算法导论 第二部分：排序和顺序统计量 | libfsx's Blog</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script>
+
+  
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"default","dark":"dark"},"js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mermaid/11.10.1/mermaid.min.js","integrity":"sha256-BmQmdWDS8X2OTbrwELWK366LV6escyWhHHe0XCTU/Hk="}}</script>
+  <script src="/js/third-party/tags/mermaid.js" defer></script>
+
+
+
+
+
+  
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">libfsx's Blog</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-number">1.</span> <span class="nav-text">堆排序</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A0%86"><span class="nav-number">1.1.</span> <span class="nav-text">堆</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BB%B4%E6%8A%A4%E5%A0%86%E7%9A%84%E6%80%A7%E8%B4%A8"><span class="nav-number">1.2.</span> <span class="nav-text">维护堆的性质</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BB%BA%E5%A0%86"><span class="nav-number">1.3.</span> <span class="nav-text">建堆</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A0%86%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95"><span class="nav-number">1.4.</span> <span class="nav-text">堆排序算法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BC%98%E5%85%88%E9%98%9F%E5%88%97"><span class="nav-number">1.5.</span> <span class="nav-text">优先队列</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-number">2.</span> <span class="nav-text">快速排序</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BF%AB%E9%80%9F%E6%8E%92%E5%BA%8F%E7%9A%84%E6%8F%8F%E8%BF%B0"><span class="nav-number">2.1.</span> <span class="nav-text">快速排序的描述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BF%AB%E9%80%9F%E6%8E%92%E5%BA%8F%E7%9A%84%E6%80%A7%E8%83%BD"><span class="nav-number">2.2.</span> <span class="nav-text">快速排序的性能</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9C%80%E5%9D%8F%E6%83%85%E5%86%B5%E5%88%92%E5%88%86"><span class="nav-number">2.2.1.</span> <span class="nav-text">最坏情况划分</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9C%80%E5%A5%BD%E6%83%85%E5%86%B5%E5%88%92%E5%88%86"><span class="nav-number">2.2.2.</span> <span class="nav-text">最好情况划分</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AF%B9%E4%BA%8E%E5%B9%B3%E5%9D%87%E6%83%85%E5%86%B5%E7%9A%84%E7%9B%B4%E8%A7%82%E8%A7%82%E5%AF%9F"><span class="nav-number">2.2.3.</span> <span class="nav-text">对于平均情况的直观观察</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BF%AB%E9%80%9F%E6%8E%92%E5%BA%8F%E7%9A%84%E9%9A%8F%E6%9C%BA%E5%8C%96%E7%89%88%E6%9C%AC"><span class="nav-number">2.3.</span> <span class="nav-text">快速排序的随机化版本</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BF%AB%E9%80%9F%E6%8E%92%E5%BA%8F%E5%88%86%E6%9E%90"><span class="nav-number">2.4.</span> <span class="nav-text">快速排序分析</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9C%80%E5%9D%8F%E6%83%85%E5%86%B5%E5%88%86%E6%9E%90"><span class="nav-number">2.4.1.</span> <span class="nav-text">最坏情况分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9C%9F%E6%9C%9B%E8%BF%90%E8%A1%8C%E6%97%B6%E9%97%B4"><span class="nav-number">2.4.2.</span> <span class="nav-text">期望运行时间</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-number">3.</span> <span class="nav-text">线性时间排序</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95%E7%9A%84%E4%B8%8B%E7%95%8C"><span class="nav-number">3.1.</span> <span class="nav-text">排序算法的下界</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%86%B3%E7%AD%96%E6%A0%91%E6%A8%A1%E5%9E%8B"><span class="nav-number">3.1.1.</span> <span class="nav-text">决策树模型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9C%80%E5%9D%8F%E6%83%85%E5%86%B5%E7%9A%84%E4%B8%8B%E7%95%8C"><span class="nav-number">3.1.2.</span> <span class="nav-text">最坏情况的下界</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AE%A1%E6%95%B0%E6%8E%92%E5%BA%8F"><span class="nav-number">3.2.</span> <span class="nav-text">计数排序</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9F%BA%E6%95%B0%E6%8E%92%E5%BA%8F"><span class="nav-number">3.3.</span> <span class="nav-text">基数排序</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A1%B6%E6%8E%92%E5%BA%8F"><span class="nav-number">3.4.</span> <span class="nav-text">桶排序</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-number">4.</span> <span class="nav-text">中位数和顺序统计量</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9C%80%E5%A4%A7%E5%80%BC%E5%92%8C%E6%9C%80%E5%B0%8F%E5%80%BC"><span class="nav-number">4.1.</span> <span class="nav-text">最大值和最小值</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9C%9F%E6%9C%9B%E4%B8%BA%E7%BA%BF%E6%80%A7%E6%97%B6%E9%97%B4%E7%9A%84%E9%80%89%E6%8B%A9%E7%AE%97%E6%B3%95"><span class="nav-number">4.2.</span> <span class="nav-text">期望为线性时间的选择算法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9C%80%E5%9D%8F%E6%83%85%E5%86%B5%E4%B8%BA%E7%BA%BF%E6%80%A7%E6%97%B6%E9%97%B4%E7%9A%84%E9%80%89%E6%8B%A9%E7%AE%97%E6%B3%95"><span class="nav-number">4.3.</span> <span class="nav-text">最坏情况为线性时间的选择算法</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">libfsx</p>
+  <div class="site-description" itemprop="description">诶～泥是怎么找到窝的qwq</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">9</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">标签</span>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/shuxiangfan" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;shuxiangfan" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:mail@libfsx.org" title="E-Mail → mailto:mail@libfsx.org" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i></a>
+      </span>
+  </div>
+  <div class="cc-license animated" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="https://cdnjs.cloudflare.com/ajax/libs/creativecommons-vocabulary/2020.11.3/assets/license_badges/small/by_sa.svg" alt="Creative Commons"></a>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://shuxiangfan.github.io/2026/02/06/%E7%AC%AC%E4%BA%8C%E9%83%A8%E5%88%86%EF%BC%9A%E6%8E%92%E5%BA%8F%E5%92%8C%E9%A1%BA%E5%BA%8F%E7%BB%9F%E8%AE%A1%E9%87%8F/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="libfsx">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="libfsx's Blog">
+      <meta itemprop="description" content="诶～泥是怎么找到窝的qwq">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="算法导论 第二部分：排序和顺序统计量 | libfsx's Blog">
+      <meta itemprop="description" content="这是《算法导论》的第二部分">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          算法导论 第二部分：排序和顺序统计量
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2026-02-06 23:01:30" itemprop="dateCreated datePublished" datetime="2026-02-06T23:01:30+08:00">2026-02-06</time>
+    </span>
+
+  
+</div>
+
+            <div class="post-description">这是《算法导论》的第二部分</div>
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1>堆排序</h1>
+<h2 id="堆">堆</h2>
+<p><strong>（二叉）堆</strong>是一个数组，它可以被看成一个近似的完全二叉树。</p>
+<table>
+<thead>
+<tr>
+<th>1</th>
+<th>2</th>
+<th>3</th>
+<th>4</th>
+<th>5</th>
+<th>6</th>
+<th>7</th>
+<th>8</th>
+<th>9</th>
+<th>10</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>16</td>
+<td>14</td>
+<td>10</td>
+<td>8</td>
+<td>7</td>
+<td>9</td>
+<td>3</td>
+<td>2</td>
+<td>4</td>
+<td>1</td>
+</tr>
+</tbody>
+</table>
+<pre><code class="highlight mermaid">graph TD
+    1((16)) --&gt; 2((14))
+    1 --&gt; 3((10))
+    2 --&gt; 4((8))
+    2 --&gt; 5((7))
+    3 --&gt; 6((9))
+    3 --&gt; 7((3))
+    4 --&gt; 8((2))
+    4 --&gt; 9((4))
+    5 --&gt; 10((1))</code></pre>
+<p>对于一个数组 <img src="https://math.now.sh?inline=A" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> ，<img src="https://math.now.sh?inline=A.length" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 是数组的元素个数，<img src="https://math.now.sh?inline=A%5B0...heap%5Ctext%7B-%7Dsize%5D" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 中存放的是堆的有效元素，这里 <img src="https://math.now.sh?inline=0%5Cle%20A.heap%5Ctext%7B-%7Dsize%20%5Cle%20A.length" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> ，我们很容易得到对于结点 <img src="https://math.now.sh?inline=i" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 的父结点、左孩子和右孩子的下标。<br>
+<em>注：与书上不同，我们使用从 <img src="https://math.now.sh?inline=0" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 开始的堆（0-based）</em></p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">inline</span> <span class="type">static</span> <span class="type">int</span> <span class="title">PARENT</span><span class="params">(<span class="type">int</span> i)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> (i - <span class="number">1</span>) / <span class="number">2</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">inline</span> <span class="type">static</span> <span class="type">int</span> <span class="title">LEFT</span><span class="params">(<span class="type">int</span> i)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">2</span> * i + <span class="number">1</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">inline</span> <span class="type">static</span> <span class="type">int</span> <span class="title">RIGHT</span><span class="params">(<span class="type">int</span> i)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">2</span> * i + <span class="number">2</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">i=2时，父结点应该是0</span></span><br><span class="line"><span class="comment">i=0时，左结点应该是1，右结点应该是2</span></span><br><span class="line"><span class="comment">**/</span></span><br></pre></td></tr></table></figure>
+<p>二叉堆可以分为两种：最大堆和最小堆。在这两种堆中结点都要满足<em>堆的性质</em>。<br>
+在<strong>最大堆</strong>中，<strong>最大堆的性质</strong>是指除了根结点以外的所有结点 <img src="https://math.now.sh?inline=i" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 都要满足</p>
+<p style="filter: opacity(90%);transform:scale(1.00);text-align:center;"><img src="https://math.now.sh?from=A%5BPARENT%28i%29%5D%5Cge%20A%5Bi%5D%0A" /></p><p>与此相反，<strong>最小堆性质</strong>是指除了根结点以外的所有结点 <img src="https://math.now.sh?inline=i" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 都要满足</p>
+<p style="filter: opacity(90%);transform:scale(1.00);text-align:center;"><img src="https://math.now.sh?from=A%5BPARENT%28i%29%5D%5Cle%20A%5Bi%5D%0A" /></p><p>如果把堆看成一棵树，那么我们定义一个堆中结点的<strong>高度</strong>是该结点到叶结点最长简单路径上边的数目。堆的高度就是根结点的高度。</p>
+<h2 id="维护堆的性质">维护堆的性质</h2>
+<p>根据最大堆性质，我们需要确保当前结点 <img src="https://math.now.sh?inline=i" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 的值是 <img src="https://math.now.sh?inline=A%5Bi%5D" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 、<img src="https://math.now.sh?inline=A%5BLEFT%28i%29%5D" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 和 <img src="https://math.now.sh?inline=A%5BRIGHT%28i%29%5D" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 的最大者。同时，对于发生了交换的情况，我们还需要递归检查交换的子结点下是否还满足堆的性质。<br>
+我们给出代码</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt; <span class="type">void</span> <span class="title">MAX_HEAPIFY</span><span class="params">(vector &lt;T&gt;&amp;a, <span class="type">int</span> i, <span class="type">int</span> heap_size)</span> </span>&#123;</span><br><span class="line">    <span class="type">int</span> l = <span class="built_in">LEFT</span>(i);</span><br><span class="line">    <span class="type">int</span> r = <span class="built_in">RIGHT</span>(i);</span><br><span class="line">    <span class="type">int</span> max = i;</span><br><span class="line">    <span class="keyword">if</span> (l &lt; heap_size &amp;&amp; a[l] &gt; a[i]) &#123;</span><br><span class="line">        max = l;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (r &lt; heap_size &amp;&amp; a[r] &gt; a[max]) &#123;</span><br><span class="line">        max = r;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (max != i) &#123;</span><br><span class="line">        <span class="built_in">swap</span>(a[max], a[i]);</span><br><span class="line">        <span class="built_in">MAX_HEAPIFY</span>(a, max, heap_size);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>有递归式</p>
+<p style="filter: opacity(90%);transform:scale(1.00);text-align:center;"><img src="https://math.now.sh?from=T%28n%29%5Cle%20T(%5Cfrac%7B2n%7D%7B3%7D)%2BO(1)%0A" /></p><p>根据主定理，有</p>
+<p style="filter: opacity(90%);transform:scale(1.00);text-align:center;"><img src="https://math.now.sh?from=T%28n%29%3DO(%5Clg%20n)%0A" /></p><p>即对于高度为 <img src="https://math.now.sh?inline=h" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 的结点来说，它的时间复杂度是 <img src="https://math.now.sh?inline=O%28h%29" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/></p>
+<h2 id="建堆">建堆</h2>
+<p>只需要从叶结点的父结点开始从下往上维护最大堆即可</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt; <span class="type">void</span> <span class="title">BUILD_MAX_HEAP</span><span class="params">(vector &lt;T&gt;&amp;a)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = a.<span class="built_in">size</span>() / <span class="number">2</span>; i &gt;= <span class="number">0</span>; i--) &#123;</span><br><span class="line">        <span class="built_in">MAX_HEAPIFY</span>(a, i, a.<span class="built_in">size</span>());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">/** 来自ChatGPT：</span></span><br><span class="line"><span class="comment">0-based 最后一个非叶子是 `heap_size/2 - 1`，你用了 `heap_size/2`，会多 heapify 一次（不致命但没必要）</span></span><br><span class="line"><span class="comment">**/</span></span><br></pre></td></tr></table></figure>
+<h2 id="堆排序算法">堆排序算法</h2>
+<p>首先把数组建成一个最大堆，由于最大的元素始终放在 <img src="https://math.now.sh?inline=A%5B0%5D" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> ，因此只需从 <img src="https://math.now.sh?inline=A%5BA.length%5D" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 开始往前遍历交换元素，并逐渐缩小堆的大小就可以实现排序。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt; <span class="type">void</span> <span class="title">HEAP_SORT</span><span class="params">(vector &lt;T&gt;&amp;a)</span> </span>&#123;</span><br><span class="line">    <span class="built_in">BUILD_MAX_HEAP</span>(a);</span><br><span class="line">    <span class="type">int</span> heap_size = a.<span class="built_in">size</span>();</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = heap_size - <span class="number">1</span>; i &gt; <span class="number">0</span>; i--) &#123;</span><br><span class="line">        <span class="built_in">swap</span>(a[i], a[<span class="number">0</span>]);</span><br><span class="line">        heap_size -= <span class="number">1</span>;</span><br><span class="line">        <span class="built_in">MAX_HEAPIFY</span>(a, <span class="number">0</span>, heap_size);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="优先队列">优先队列</h2>
+<p><strong>优先队列（priority queue）</strong> 是一种用来维护由一组元素构成的集合 <img src="https://math.now.sh?inline=S" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 的数据结构，其中每一个元素都会有一个相关的值，被称为 <strong>关键字（key）</strong>。一个 <strong>最大优先队列</strong> 支持以下操作：</p>
+<ul>
+<li><img src="https://math.now.sh?inline=INSERT%28S%2Cx%29" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 把元素 <img src="https://math.now.sh?inline=x" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 插入到 <img src="https://math.now.sh?inline=S" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 中</li>
+<li><img src="https://math.now.sh?inline=MAXIMUM%28S%29" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 返回 <img src="https://math.now.sh?inline=S" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 中具有最大关键字的元素</li>
+<li><img src="https://math.now.sh?inline=EXTRACT%5Ctext%7B-%7DMAX%28S%29" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 去掉并返回 <img src="https://math.now.sh?inline=S" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 中具有最大关键字的元素</li>
+<li><img src="https://math.now.sh?inline=INCREASE%5Ctext%7B-%7DKEY%28S%2Cx%2Ck%29" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 将元素 <img src="https://math.now.sh?inline=x" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 的关键字增加到 <img src="https://math.now.sh?inline=k" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> ，这里 <img src="https://math.now.sh?inline=k" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 不小于 <img src="https://math.now.sh?inline=x" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 的原关键字值<br>
+最大优先队列的用途有很多，比如调度器要选择优先级最大的任务来执行。<br>
+相应地，<strong>最小优先队列</strong>支持的操作包括 <img src="https://math.now.sh?inline=INSERT" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 、<img src="https://math.now.sh?inline=MINIMUM" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/>、<img src="https://math.now.sh?inline=EXTRACT%5Ctext%7B-%7DMIN" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/>和<br>
+<img src="https://math.now.sh?inline=DECREASE%5Ctext%7B-%7DKEY" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 。最小优先队列可以被用于基于事件驱动的模拟器。队列中保存要模拟的事件，每个事件都有一个发生时间作为<strong>关键字</strong>，事件必须按照发生的时间顺序进行模拟。<br>
+显然优先队列可以用堆来实现，实现时，我们需要在堆中的每个元素中存储对应对象的<strong>句柄（handle）</strong>，通常是数组的下标，但具体依赖于应用场景。<br>
+在 <img src="https://math.now.sh?inline=%5CTheta%281%29" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 时间内实现 <img src="https://math.now.sh?inline=MAXIMUM" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 操作</li>
+</ul>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt; T <span class="title">HEAP_MAXMIUM</span> <span class="params">(vector &lt;T&gt;&amp;a)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> a[<span class="number">0</span>];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在 <img src="https://math.now.sh?inline=O%28%5Clg%20n%29" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/>  时间内实现 <img src="https://math.now.sh?inline=EXTRACT%5Ctext%7B-%7DMAX" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 操作</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt; T <span class="title">HEAP_EXTRACT_MAX</span><span class="params">(vector &lt;T&gt;&amp;a)</span> </span>&#123;</span><br><span class="line">    <span class="type">int</span> heap_size = a.<span class="built_in">size</span>();</span><br><span class="line">    <span class="keyword">if</span> (heap_size &lt; <span class="number">1</span>) &#123; <span class="keyword">throw</span> <span class="built_in">runtime_error</span>(<span class="string">&quot;heap underflow&quot;</span>); &#125;</span><br><span class="line">    T max = a[<span class="number">0</span>];</span><br><span class="line">    a[<span class="number">0</span>] = a[heap_size - <span class="number">1</span>];</span><br><span class="line">    heap_size -= <span class="number">1</span>;</span><br><span class="line">    a.<span class="built_in">pop_back</span>();</span><br><span class="line">    <span class="built_in">MAX_HEAPIFY</span>(a, <span class="number">0</span>, heap_size);</span><br><span class="line">    <span class="keyword">return</span> max;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在 <img src="https://math.now.sh?inline=O%28%5Clg%20n%29" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 时间内实现 <img src="https://math.now.sh?inline=INCREASE%5Ctext%7B-%7DKEY" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 操作。在更改元素的关键字后，可能会破坏最大堆性质，所以我们像插入排序那样，将 <img src="https://math.now.sh?inline=A%5Bi%5D" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 与 <img src="https://math.now.sh?inline=A%5BPARENT%28i%29%5D" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 层层比较，找到新的合适的位置。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt; <span class="type">void</span> <span class="title">HEAP_INCREASE_KEY</span><span class="params">(vector &lt;T&gt;&amp;a, <span class="type">int</span> i, T key)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (key &lt; a[i]) &#123; <span class="keyword">throw</span> <span class="built_in">runtime_error</span>(<span class="string">&quot;New key is smaller than the old key&quot;</span>); &#125;</span><br><span class="line">    a[i] = key;</span><br><span class="line">    <span class="keyword">while</span> (i &gt; <span class="number">0</span> &amp;&amp; a[i] &gt; a[<span class="built_in">PARENT</span>(i)]) &#123;</span><br><span class="line">        <span class="built_in">swap</span>(a[i], a[<span class="built_in">PARENT</span>(i)]);</span><br><span class="line">        i = <span class="built_in">PARENT</span>(i);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在 <img src="https://math.now.sh?inline=O%28%5Clg%20n%29" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 时间内实现 <img src="https://math.now.sh?inline=INSERT" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 操作</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt; <span class="type">void</span> <span class="title">MAX_HEAP_INSERT</span><span class="params">(vector &lt;T&gt;&amp;a, T key, <span class="type">int</span>&amp; heap_size)</span> </span>&#123;</span><br><span class="line">    heap_size += <span class="number">1</span>;</span><br><span class="line">    a.<span class="built_in">push_back</span>(key);</span><br><span class="line">    <span class="type">int</span> i = heap_size - <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">while</span> (i &gt; <span class="number">0</span> &amp;&amp; a[i] &gt; a[<span class="built_in">PARENT</span>(i)]) &#123;</span><br><span class="line">        <span class="built_in">swap</span>(a[i], a[<span class="built_in">PARENT</span>(i)]);</span><br><span class="line">        i = <span class="built_in">PARENT</span>(i);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>总之，在一个包含 <img src="https://math.now.sh?inline=n" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 个元素的堆中，所有优先队列的操作都可以在 <img src="https://math.now.sh?inline=O%28%5Clg%20n%29" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 的时间内完成。</p>
+<h1>快速排序</h1>
+<h2 id="快速排序的描述">快速排序的描述</h2>
+<p>快速排序也是一个分治算法，相较于归并排序，快速排序拥有更小的常数。<br>
+<strong>分解：</strong> 将数组分为 <img src="https://math.now.sh?inline=A%5Bp...q-1%5D" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 和 <img src="https://math.now.sh?inline=A%5Bq%2B1...r%5D" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 两部分，使得前面的数组中的每一个元素都小于等于 <img src="https://math.now.sh?inline=A%5Bq%5D" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> ，而 <img src="https://math.now.sh?inline=A%5Bq%5D" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 也小于等于 <img src="https://math.now.sh?inline=A%5Bq%2B1...r%5D" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 中的每一个元素。计算下标 <img src="https://math.now.sh?inline=q" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 是分解的一部分。<br>
+<strong>解决：</strong> 递归调用快速排序，对子数组 <img src="https://math.now.sh?inline=A%5Bp...q-1%5D" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 和 <img src="https://math.now.sh?inline=A%5Bq%2B1...r%5D" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 进行排序。<br>
+<strong>合并：</strong> 因为子数组都是原址排序的，不需要合并操作。<br>
+下面是实现：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt; <span class="function"><span class="type">void</span> <span class="title">QUICKSORT</span><span class="params">(vector &lt;T&gt;&amp;a, <span class="type">int</span> p, <span class="type">int</span> r)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (p &lt; r) &#123;</span><br><span class="line">        <span class="type">int</span> q = <span class="built_in">PARTITION</span>(a, p, r);</span><br><span class="line">        <span class="built_in">QUICKSORT</span>(a, p, q<span class="number">-1</span>);</span><br><span class="line">        <span class="built_in">QUICKSORT</span>(a, q<span class="number">+1</span>, r);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>数组划分</strong></p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt; <span class="function"><span class="type">int</span> <span class="title">PARTITION</span><span class="params">(vector &lt;T&gt;&amp;a, <span class="type">int</span> p, <span class="type">int</span> r)</span> </span>&#123;</span><br><span class="line">    T x = a[r];</span><br><span class="line">    <span class="type">int</span> i = p - <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> j = p; j &lt;= r<span class="number">-1</span>; j++) &#123;</span><br><span class="line">        <span class="keyword">if</span> (a[j] &lt;= x) &#123;</span><br><span class="line">            i += <span class="number">1</span>;</span><br><span class="line">            <span class="built_in">swap</span>(a[i], a[j]);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">swap</span>(a[i<span class="number">+1</span>], a[r]);</span><br><span class="line">    <span class="keyword">return</span> i + <span class="number">1</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>划分函数 <img src="https://math.now.sh?inline=PARTITION" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 先是选择了一个 <strong>主元（pivot）</strong> <img src="https://math.now.sh?inline=x%3DA%5Br%5D" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> ，并围绕它来划分数组 <img src="https://math.now.sh?inline=A%5Bp...r%5D" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/>。 <img src="https://math.now.sh?inline=A%5Bj%5D%5Cle%20x" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 的时候，将 <img src="https://math.now.sh?inline=i" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 递增 <img src="https://math.now.sh?inline=1" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 并将 <img src="https://math.now.sh?inline=A%5Bi%5D" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 和 <img src="https://math.now.sh?inline=A%5Bj%5D" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 交换，保证 <img src="https://math.now.sh?inline=A%5Bp...i%5D" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 中的元素总是不大于 <img src="https://math.now.sh?inline=x" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> （相当于把新的元素并入了<img src="https://math.now.sh?inline=A%5Bp...i%5D" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/>），而且 <img src="https://math.now.sh?inline=A%5Bi%2B1...j-1%5D" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/>的元素总是大于 <img src="https://math.now.sh?inline=x" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 。<img src="https://math.now.sh?inline=A%5Bj%5D" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 将从 <img src="https://math.now.sh?inline=p" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 到 <img src="https://math.now.sh?inline=r-1" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 遍历，最后得到的 <img src="https://math.now.sh?inline=A%5Bp...i%5D" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 和 <img src="https://math.now.sh?inline=A%5Bi%2B1...j-1%5D" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 数组就是分解所要求的。最后交换 <img src="https://math.now.sh?inline=A%5Bi%2B1%5D" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 与 <img src="https://math.now.sh?inline=A%5Br%5D" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 使得主元 <img src="https://math.now.sh?inline=x" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 位于中间。</p>
+<table>
+<thead>
+<tr>
+<th>p</th>
+<th>…</th>
+<th>i</th>
+<th>…</th>
+<th>j</th>
+<th>…</th>
+<th>r</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>x（主元）</td>
+</tr>
+<tr>
+<td></td>
+<td><img src="https://math.now.sh?inline=%5Cle%20x" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/></td>
+<td></td>
+<td><img src="https://math.now.sh?inline=%3Ex" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/></td>
+<td></td>
+<td>无限制</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p>作为循环不变量，循环每一轮都满足对于任意数组下标 <img src="https://math.now.sh?inline=k" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> ，有：</p>
+<ol>
+<li>若 <img src="https://math.now.sh?inline=p%5Cle%20k%5Cle%20i" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> ，则 <img src="https://math.now.sh?inline=A%5Bk%5D%5Cle%20x" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/></li>
+<li>若 <img src="https://math.now.sh?inline=i%2B1%5Cle%20k%20%5Cle%20j-1" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> ，则 <img src="https://math.now.sh?inline=A%5Bk%5D%5Cge%20x" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/></li>
+<li>若 <img src="https://math.now.sh?inline=k%3Dr" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> ，则 <img src="https://math.now.sh?inline=A%5Bk%5D%3Dx" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/></li>
+</ol>
+<p>我们拿循环不变式来证明一下：<br>
+<strong>初始化：</strong> 在循环第一次开始前，<img src="https://math.now.sh?inline=i%3Dp-1%5Ctext%7B%20%E5%92%8C%20%7D%20j%3Dp" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> ，<img src="https://math.now.sh?inline=p%5Ctext%7B%20%E5%92%8C%20%7Di%5Ctext%7B%20%E4%B9%8B%E9%97%B4%E3%80%81%7Di%2B1%5Ctext%7B%20%E5%92%8C%20%7Dj-1" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 之间没有元素，明显满足循环不变量。<br>
+<strong>保持：</strong> 考虑两种情况：当 <img src="https://math.now.sh?inline=A%5Bj%5D%20%3E%20x" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 时，我们只对 <img src="https://math.now.sh?inline=j%2B1" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> ，之后条件2仍然成立，其他条件不变。当 <img src="https://math.now.sh?inline=A%5Bj%5D%5Cle%20x" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 时，将 <img src="https://math.now.sh?inline=i%2B1" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 并交换了 <img src="https://math.now.sh?inline=A%5Bj%5D" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 和 <img src="https://math.now.sh?inline=A%5Bi%5D" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/>，并且 <img src="https://math.now.sh?inline=j%2B1" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/>，很明显三个条件仍然满足。<br>
+<strong>终止：</strong> 终止时，<img src="https://math.now.sh?inline=j%3Dr" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/>，并将 <img src="https://math.now.sh?inline=A%5Bi%2B1%5D%5Ctext%7B%20%E5%92%8C%20%7DA%5Br%5D" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 交换，并返回主元的下标。<br>
+实际上，<img src="https://math.now.sh?inline=A%5Bq%5D" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 严格小于 <img src="https://math.now.sh?inline=A%5Bq%2B1...r%5D" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 的每一个元素。</p>
+<h2 id="快速排序的性能">快速排序的性能</h2>
+<h3 id="最坏情况划分">最坏情况划分</h3>
+<p>当 <img src="https://math.now.sh?inline=PARTITION" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 将数组分为了 <img src="https://math.now.sh?inline=n-1" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 和 <img src="https://math.now.sh?inline=0" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 个元素时，是快速排序的最坏情况。假设每次划分都出现这种划分，划分的时间复杂度为 <img src="https://math.now.sh?inline=%5CTheta%28n%29" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/>，递归式可以表示为 <img src="https://math.now.sh?inline=T%28n%29%3DT(n-1)%2B%5CTheta(n)" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/>，解得 <img src="https://math.now.sh?inline=T%28n%29%3D%5CTheta(n%5E2)" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/></p>
+<h3 id="最好情况划分">最好情况划分</h3>
+<p>假设划分的比例为 <img src="https://math.now.sh?inline=k%3A1" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/>，则递归式为</p>
+<p style="filter: opacity(90%);transform:scale(1.00);text-align:center;"><img src="https://math.now.sh?from=T%28n%29%3DT(%5Cfrac%7Bk%7D%7Bk%2B1%7Dn)%2BT(%5Cfrac%7B1%7D%7Bk%2B1%7Dn)%2Bcn%0A" /></p><p>写出递归树可以看出，递归在 <img src="https://math.now.sh?inline=%5Clog_%7B%5Cfrac%7Bk%2B1%7D%7Bk%7D%7Dn%3D%5CTheta%28%5Clg%20n%29" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 处停止，每层代价为 <img src="https://math.now.sh?inline=cn%20%3D%20%5CTheta%28n%29" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/>，因此总代价为 <img src="https://math.now.sh?inline=O%28n%5Clg%20n%29" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/>。<br>
+只要划分是常数比例的，算法运行时间总是 <img src="https://math.now.sh?inline=O%28n%5Clg%20n%29" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/></p>
+<h3 id="对于平均情况的直观观察">对于平均情况的直观观察</h3>
+<p>当出现一次差的划分 <img src="https://math.now.sh?inline=0%E3%80%81n-1" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 和一次好的划分 <img src="https://math.now.sh?inline=%5Cfrac%7Bn-1%7D%7B2%7D%E3%80%81%5Cfrac%7Bn-1%7D%7B2%7D" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 时，<img src="https://math.now.sh?inline=%5CTheta%28n%29%2B%5CTheta(n-1)%3D%5CTheta(n)" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/>，差的划分的代价可以吸收到好的划分的代价，仍然是 <img src="https://math.now.sh?inline=O%28n%29" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/>。可以做出猜测平均情况也是 <img src="https://math.now.sh?inline=O%28n%5Clg%20n%29" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/></p>
+<h2 id="快速排序的随机化版本">快速排序的随机化版本</h2>
+<p>随机选取一个元素与<img src="https://math.now.sh?inline=A%5Br%5D" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/>交换</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt; <span class="type">int</span> <span class="title">RAND_PARTITION</span><span class="params">(vector&lt;T&gt;&amp;a, <span class="type">int</span> p, <span class="type">int</span> r)</span> </span>&#123;</span><br><span class="line">    std::random_device rd;</span><br><span class="line">    <span class="function">std::mt19937 <span class="title">gen</span><span class="params">(rd())</span></span>;</span><br><span class="line">    std::uniform_int_distribution&lt;&gt; <span class="built_in">distrib</span>(p, r);</span><br><span class="line">    <span class="built_in">swap</span>(a[<span class="built_in">distrib</span>(gen)], a[r]);</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">PARTITION</span>(a, p, r);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>同时修改原算法</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt; <span class="function"><span class="type">void</span> <span class="title">RAND_QUICKSORT</span><span class="params">(vector &lt;T&gt;&amp;a, <span class="type">int</span> p, <span class="type">int</span> r)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (p &lt; r) &#123;</span><br><span class="line">        <span class="type">int</span> q = <span class="built_in">RAND_PARTITION</span>(a, p, r);</span><br><span class="line">        <span class="built_in">RAND_QUICKSORT</span>(a, p, q<span class="number">-1</span>);</span><br><span class="line">        <span class="built_in">RAND_QUICKSORT</span>(a, q<span class="number">+1</span>, r);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="快速排序分析">快速排序分析</h2>
+<h3 id="最坏情况分析">最坏情况分析</h3>
+<p>设最坏的情况为<img src="https://math.now.sh?inline=T%28n%29" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/>，有递归式</p>
+<p style="filter: opacity(90%);transform:scale(1.00);text-align:center;"><img src="https://math.now.sh?from=T%28n%29%3D%5Cmax_%7B0%5Cle%20q%20%5Cle%20n-1%7D%5Cleft(T(q)%2BT(n-q-1)%5Cright)%2B%5CTheta(n)%20%0A" /></p><p>子问题规模加和为 <img src="https://math.now.sh?inline=n-1" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/>，则 <img src="https://math.now.sh?inline=q" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 是从 <img src="https://math.now.sh?inline=0" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 变化到 <img src="https://math.now.sh?inline=n-1" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/>，不妨猜测 <img src="https://math.now.sh?inline=T%28n%29%5Cle%20cn%5E2" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 成立，则</p>
+<p style="filter: opacity(90%);transform:scale(1.00);text-align:center;"><img src="https://math.now.sh?from=T%28n%29%5Cle%20%5Cmax_%7B0%5Cle%20q%20%5Cle%20n-1%7D%5Cleft(cq%5E2%2Bc(n-q-1)%5E2%20%5Cright)%2B%5CTheta(n)%3Dc%5Cmax_%7B0%5Cle%20q%20%5Cle%20n-1%7D%5Cleft(q%5E2%2B(n-q-1)%5E2%20%5Cright)%2B%5CTheta(n)%0A" /></p><p>式子 <img src="https://math.now.sh?inline=q%5E2%2B%28n-q-1%29%5E2" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 在端点取到最大值，且这个式子二阶导数是正的，表达式的上界为 <img src="https://math.now.sh?inline=%28n-1%29%5E2" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 代入 <img src="https://math.now.sh?inline=T%28n%29" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 中，我们有</p>
+<p style="filter: opacity(90%);transform:scale(1.00);text-align:center;"><img src="https://math.now.sh?from=T%28n%29%5Cle%20cn%5E2-c(2n-1)%2B%5CTheta(n)%5Cle%20cn%5E2%0A" /></p><p>故<img src="https://math.now.sh?inline=T%28n%29%3DO(n%5E2)" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/><br>
+还可以证明<img src="https://math.now.sh?inline=T%28n%29%3D%5COmega(n%5E2)" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/>，所以运行时间是<img src="https://math.now.sh?inline=%5CTheta%28n%5E2%29" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/></p>
+<h3 id="期望运行时间">期望运行时间</h3>
+<p>快速排序运行期间，最多会调用 <img src="https://math.now.sh?inline=n" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 次 <img src="https://math.now.sh?inline=PARTITION" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 函数，每次运行该函数就需要执行若干次for循环，该函数运行时间取决于判断 <code>a[j] &lt;= x</code> 被执行的次数。那么很明显有下面的引理。<br>
+<strong>引理7.1：</strong> 快速排序在包含 <img src="https://math.now.sh?inline=n" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 个元素数组上运行时，设在 <img src="https://math.now.sh?inline=PARTITION" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 函数循环中判断被执行的次数为 <img src="https://math.now.sh?inline=X" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/>，则整个算法运行时间为 <img src="https://math.now.sh?inline=O%28n%20%2B%20X%29" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/><br>
+我们令 <img src="https://math.now.sh?inline=A" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 中第 <img src="https://math.now.sh?inline=i" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 小的元素为 <img src="https://math.now.sh?inline=z_i" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> ，并记 <img src="https://math.now.sh?inline=Z_%7Bij%7D" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 为包含<img src="https://math.now.sh?inline=z_i%E3%80%81z_j" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 和他们之间的元素组成的集合。<br>
+我们使用指示器随机变量</p>
+<p style="filter: opacity(90%);transform:scale(1.00);text-align:center;"><img src="https://math.now.sh?from=X_%7Bij%7D%3D%5Cbegin%7Bcases%7D%0A1%20%26%20%5Ctext%7B%24z_i%24%20%E4%B8%8E%20%24z_j%24%20%E5%8F%91%E7%94%9F%E6%AF%94%E8%BE%83%7D%20%5C%5C%0A0%20%26%20%5Ctext%7B%24z_i%24%20%E4%B8%8E%20%24z_j%24%20%E6%B2%A1%E6%9C%89%E5%8F%91%E7%94%9F%E6%AF%94%E8%BE%83%7D%0A%5Cend%7Bcases%7D" /></p><p>注意到对于每个 <img src="https://math.now.sh?inline=z_i" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> ，算法至多比较一次。总比较次数为</p>
+<p style="filter: opacity(90%);transform:scale(1.00);text-align:center;"><img src="https://math.now.sh?from=X%3D%5Csum_%7Bi%3D1%7D%5E%7Bn-1%7D%5Csum_%7Bj%3Di%2B1%7D%5E%7Bn%7DX_%7Bij%7D%0A" /></p><p>两边取期望</p>
+<p style="filter: opacity(90%);transform:scale(1.00);text-align:center;"><img src="https://math.now.sh?from=E%28X%29%3DE%5Cleft%5B%5Csum_%7Bi%3D1%7D%5E%7Bn-1%7D%5Csum_%7Bj%3Di%2B1%7D%5E%7Bn%7DX_%7Bij%7D%5Cright%5D%3D%5Csum_%7Bi%3D1%7D%5E%7Bn-1%7D%5Csum_%7Bj%3Di%2B1%7D%5E%7Bn%7DE(X_%7Bij%7D)%3D%5Csum_%7Bi%3D1%7D%5E%7Bn-1%7D%5Csum_%7Bj%3Di%2B1%7D%5E%7Bn%7DPr(%5Ctext%7B%24z_i%24%20%E4%B8%8E%20%24z_j%24%20%E8%BF%9B%E8%A1%8C%E6%AF%94%E8%BE%83%7D)%0A" /></p><p>对于概率那一项，我们先来看什么时候不会发生比较。我们假设元素的值都是互异的，则当 <img src="https://math.now.sh?inline=z_i%3Cx%3Cz_j" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 的主元被选中后，<img src="https://math.now.sh?inline=z_i" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 和 <img src="https://math.now.sh?inline=z_j" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 以后不会再发生比较。当主元 <img src="https://math.now.sh?inline=z_i" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 被选为主元，则它将与除了它自己的其他所有元素比较，对于 <img src="https://math.now.sh?inline=z_j" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 也是。因此，当且仅当 <img src="https://math.now.sh?inline=Z_%7Bij%7D" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 中将被选中主元的元素是 <img src="https://math.now.sh?inline=z_i" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 或 <img src="https://math.now.sh?inline=z_j" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 时 <img src="https://math.now.sh?inline=z_i" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 和 <img src="https://math.now.sh?inline=z_j" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 会发生比较。<br>
+让我们来计算概率，因为主元是随机选择的，在 <img src="https://math.now.sh?inline=Z_%7Bij%7D" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 中没有被选中主元时，每个元素都等可能且独立地被选中，概率为 <img src="https://math.now.sh?inline=%5Cfrac%7B1%7D%7Bj-i%2B1%7D" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> ，于是</p>
+<p style="filter: opacity(90%);transform:scale(1.00);text-align:center;"><img src="https://math.now.sh?from=%5Cbegin%7Beqnarray%7D%0APr%28%5Ctext%7B%24z_i%24%20%E4%B8%8E%20%24z_j%24%20%E8%BF%9B%E8%A1%8C%E6%AF%94%E8%BE%83%7D%29%20%26%3D%26%20Pr(z_i%5Ctext%7B%20%E6%88%96%20%7Dz_j%20%5Ctext%7B%20%E6%98%AF%E9%9B%86%E5%90%88%20%7DZ_%7Bij%7D%5Ctext%7B%20%E4%B8%AD%E9%80%89%E5%87%BA%E7%9A%84%E7%AC%AC%E4%B8%80%E4%B8%AA%E4%B8%BB%E5%85%83%7D)%20%5Cnonumber%20%5C%5C%0A~%26%3D%26%20Pr(z_i%5Ctext%7B%20%E6%98%AF%E9%9B%86%E5%90%88%20%7DZ_%7Bij%7D%5Ctext%7B%20%E4%B8%AD%E9%80%89%E5%87%BA%E7%9A%84%E7%AC%AC%E4%B8%80%E4%B8%AA%E4%B8%BB%E5%85%83%7D)%20%5Cnonumber%20%5C%5C%0A%20%20%20%20%20%26%5C%3B%26%20%2BPr(z_j%20%5Ctext%7B%20%E6%98%AF%E9%9B%86%E5%90%88%20%7DZ_%7Bij%7D%5Ctext%7B%20%E4%B8%AD%E9%80%89%E5%87%BA%E7%9A%84%E7%AC%AC%E4%B8%80%E4%B8%AA%E4%B8%BB%E5%85%83%7D)%20%5Cnonumber%20%5C%5C%0A~%26%3D%26%20%5Cfrac%7B1%7D%7Bj-i%2B1%7D%2B%5Cfrac%7B1%7D%7Bj-i%2B1%7D%20%5Cnonumber%20%5C%5C%0A~%26%3D%26%20%5Cfrac%7B2%7D%7Bj-i%2B1%7D%20%5Cnonumber%20%0A%5Cend%7Beqnarray%7D" /></p><p>代回，有</p>
+<p style="filter: opacity(90%);transform:scale(1.00);text-align:center;"><img src="https://math.now.sh?from=E%28X%29%3D%5Csum_%7Bi%3D1%7D%5E%7Bn-1%7D%5Csum_%7Bj%3Di%2B1%7D%5E%7Bn%7D%5Cfrac%7B2%7D%7Bj-i%2B1%7D%0A" /></p><p>令 <img src="https://math.now.sh?inline=k%3Dj-i" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/>，</p>
+<p style="filter: opacity(90%);transform:scale(1.00);text-align:center;"><img src="https://math.now.sh?from=E%28X%29%3D%5Csum_%7Bi%3D1%7D%5E%7Bn-1%7D%5Csum_%7Bj%3Di%2B1%7D%5E%7Bn%7D%5Cfrac%7B2%7D%7Bj-i%2B1%7D%3D%5Csum_%7Bi%3D1%7D%5E%7Bn-1%7D%5Csum_%7Bk%3D1%7D%5E%7Bn-i%7D%5Cfrac%7B2%7D%7Bk%2B1%7D%3C%5Csum_%7Bi%3D1%7D%5E%7Bn-1%7D%5Csum_%7Bk%3D1%7D%5E%7Bn%7D%5Cfrac%7B2%7D%7Bk%7D%3D%5Csum_%7Bi%3D1%7D%5E%7Bn-1%7DO(%5Clg%20n)%3DO(n%5Clg%20n)%0A" /></p><p>因此在输入元素互异时，快速排序的平均运行时间为 <img src="https://math.now.sh?inline=O%28n%5Clg%20n%29" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/></p>
+<h1>线性时间排序</h1>
+<h2 id="排序算法的下界">排序算法的下界</h2>
+<p>上面介绍的算法都是<strong>比较排序</strong>，即在排序的最终结果中，各元素的次序依赖于它们之间的比较。在这种算法中，我们只能使用元素之间的相互比较来获得次序信息。我们假设这里的比较操作全是 <img src="https://math.now.sh?inline=a_i%5Cle%20a_j" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 且输入元素全是互异的。</p>
+<h3 id="决策树模型">决策树模型</h3>
+<p>比较排序可以抽象为一颗决策树，其中每个内部结点以 <img src="https://math.now.sh?inline=i%3Aj" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 标记，其中 <img src="https://math.now.sh?inline=1%5Cle%20i%2Cj%5Cle%20n" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> ，<img src="https://math.now.sh?inline=n" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 是输入元素个数。每个结点表示比较 <img src="https://math.now.sh?inline=a_i" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 与 <img src="https://math.now.sh?inline=a_j" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 。以 <img src="https://math.now.sh?inline=a_i%5Cle%20a_j" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 为例，左子树表示确定了 <img src="https://math.now.sh?inline=a_i%5Cle%20a_j" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 之后的比较，右子树表示确定了 <img src="https://math.now.sh?inline=a_i%20%3E%20a_j" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 之后的比较，算法沿着决策树运行，每到达一个叶结点，就代表确定了一个顺序 <img src="https://math.now.sh?inline=a_%7B%5Cpi%281%29%7D%5Cle%20a_%7B%5Cpi(2)%7D%5Cle%5Ccdots%5Cle%20a_%7B%5Cpi(n)%7D" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 。对于正确的比较排序算法，<img src="https://math.now.sh?inline=n" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 个元素的 <img src="https://math.now.sh?inline=n!" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 种排列都是可达的。</p>
+<h3 id="最坏情况的下界">最坏情况的下界</h3>
+<p>比较排序算法中最坏情况比较次数就等于其决策树的高度。当决策树中每种排列都以可达叶节点的形式出现，该决策树高度的下界就是算法运行时间的下界。<br>
+<strong>定理8.1：</strong> 在最坏的情况下，任何比较排序算法都需要做 <img src="https://math.now.sh?inline=%5COmega%28n%5Clg%20n%29" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 次比较。<br>
+<strong>证明：</strong> 考虑一棵高度为 <img src="https://math.now.sh?inline=h" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 有 <img src="https://math.now.sh?inline=l" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 个可达叶结点的决策树，它对应一个由 <img src="https://math.now.sh?inline=n" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 个元素所做的比较排序，总共有 <img src="https://math.now.sh?inline=n!" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 种排序，因此</p>
+<p style="filter: opacity(90%);transform:scale(1.00);text-align:center;"><img src="https://math.now.sh?from=n!%5Cle%20l%20%5Cle%202%5Eh%0A" /></p><p>两边取对数，（<em>公式3.19</em>）</p>
+<p style="filter: opacity(90%);transform:scale(1.00);text-align:center;"><img src="https://math.now.sh?from=h%5Cge%20%5Clg%28n!%29%3D%5COmega(n%5Clg%20n)%0A" /></p><p>因此，堆排序和归并排序都是渐进最优的比较排序算法。</p>
+<h2 id="计数排序">计数排序</h2>
+<p>注意这种排序算法只适用于排序 <img src="https://math.now.sh?inline=0" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 到 <img src="https://math.now.sh?inline=max%5Ctext%7B-%7Delement%28A%29" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 的整数数组。要排序负数，还需要加上一个偏移。<br>
+给出代码（注意结果数组应能够放下排序后的数组）</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt; <span class="type">void</span> <span class="title">COUNTING_SORT</span><span class="params">(<span class="type">const</span> vector&lt;T&gt;&amp;a, vector&lt;T&gt;&amp;res)</span> </span>&#123;</span><br><span class="line">    <span class="built_in">static_assert</span>(std::is_integral_v&lt;T&gt;, <span class="string">&quot;Must be int... to sort&quot;</span>);</span><br><span class="line">    <span class="keyword">if</span> (a.<span class="built_in">empty</span>()) &#123; <span class="keyword">throw</span> std::<span class="built_in">runtime_error</span>(<span class="string">&quot;Cannot sort an empty array&quot;</span>); &#125;</span><br><span class="line">    res.<span class="built_in">resize</span>(a.<span class="built_in">size</span>());</span><br><span class="line">    T max = *std::<span class="built_in">max_element</span>(a.<span class="built_in">begin</span>(),a.<span class="built_in">end</span>());</span><br><span class="line">    <span class="type">const</span> <span class="type">size_t</span> k = max &gt;= <span class="number">0</span> ? max : <span class="keyword">throw</span> std::<span class="built_in">runtime_error</span>(<span class="string">&quot;cannot sort max &lt; 0&quot;</span>) ;</span><br><span class="line">    <span class="function">vector&lt;<span class="type">size_t</span>&gt; <span class="title">Temp</span><span class="params">(k<span class="number">+1</span>,<span class="number">0</span>)</span></span>;</span><br><span class="line">  </span><br><span class="line">    <span class="keyword">for</span> (T elem : a) &#123;</span><br><span class="line">        elem &gt;= <span class="number">0</span> ? Temp[elem] = Temp[elem] + <span class="number">1</span> : <span class="keyword">throw</span> std::<span class="built_in">runtime_error</span>(<span class="string">&quot;cannot sort elem &lt; 0&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">size_t</span> i = <span class="number">1</span>; i &lt;= k; i++) &#123;</span><br><span class="line">        Temp[i] = Temp[i<span class="number">-1</span>] + Temp[i];</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">size_t</span> i = a.<span class="built_in">size</span>(); i-- &gt; <span class="number">0</span>;) &#123;</span><br><span class="line">        res[Temp[a[i]] - <span class="number">1</span>] = a[i];</span><br><span class="line">        Temp[a[i]] = Temp[a[i]] - <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>我们首先确定输入数据的最大值，遍历输入数组并以元素的值为下标，统计每个元素的个数。然后再遍历计数数组，计算出不大于 <img src="https://math.now.sh?inline=i" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 的数字的个数，然后以计数数组的值为下标，向结果数组写回。与书上不同的是，我们这里使用 <img src="https://math.now.sh?inline=res%5BTemp%5Ba%5Bi%5D%5D%20-%201%5D" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 来把下标转化为 <img src="https://math.now.sh?inline=0%5Ctext%7B-%7Dbased" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 的数组。<br>
+计数排序总运行时间是 <img src="https://math.now.sh?inline=%5CTheta%28k%2Bn%29" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> ，其中 <img src="https://math.now.sh?inline=k%3Dmax%28A%29" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> ，当 <img src="https://math.now.sh?inline=k%3DO%28n%29" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 时一般采用这种排序，运行时间是 <img src="https://math.now.sh?inline=%5CTheta%28n%29" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/>。与其它排序不同，计数排序是<strong>稳定的</strong>。</p>
+<h2 id="基数排序">基数排序</h2>
+<p>按照<strong>最低有效位</strong>挨个比较每位的大小，用用时稳定的计数排序比较每位大小。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt; <span class="type">void</span> <span class="title">COUNT_SORT_EXP</span><span class="params">(std::vector&lt;T&gt;&amp;a, <span class="type">const</span> <span class="type">size_t</span>&amp; exp, std::vector&lt;T&gt;&amp;out)</span> </span>&#123;</span><br><span class="line">    <span class="type">const</span> <span class="type">int</span> base = <span class="number">10</span>;</span><br><span class="line">    out.<span class="built_in">resize</span>(a.<span class="built_in">size</span>());</span><br><span class="line">    std::vector&lt;<span class="type">size_t</span>&gt;<span class="built_in">cnt</span>(base,<span class="number">0</span>);</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">size_t</span> item : a) &#123;</span><br><span class="line">        <span class="type">int</span> digit = (item / exp) % base;</span><br><span class="line">        cnt[digit]++;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">size_t</span> i = <span class="number">1</span>; i &lt; base; i++) &#123;</span><br><span class="line">        cnt[i] = cnt[i<span class="number">-1</span>] + cnt[i];</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">size_t</span> i = a.<span class="built_in">size</span>(); i-- &gt; <span class="number">0</span>;) &#123;</span><br><span class="line">        <span class="type">size_t</span> x = a[i];</span><br><span class="line">        <span class="type">int</span> digit = (x / exp) % base;</span><br><span class="line">        <span class="type">size_t</span> pos = cnt[digit] - <span class="number">1</span>;</span><br><span class="line">        cnt[digit] -= <span class="number">1</span>;</span><br><span class="line">        out[pos] = x;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt; <span class="type">void</span> <span class="title">RADIX_SORT</span><span class="params">(std::vector&lt;T&gt;&amp;a, <span class="type">const</span> <span class="type">size_t</span>&amp; d)</span> </span>&#123;</span><br><span class="line">    std::vector&lt;T&gt;<span class="built_in">temp</span>(a.<span class="built_in">size</span>(),<span class="number">0</span>);</span><br><span class="line">    <span class="type">size_t</span> exp = <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">1</span>; i &lt;= d; i++) &#123;</span><br><span class="line">        <span class="built_in">COUNT_SORT_EXP</span>(a, exp, temp);</span><br><span class="line">        a.<span class="built_in">swap</span>(temp);</span><br><span class="line">        exp = exp * <span class="number">10</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>对于 <img src="https://math.now.sh?inline=n" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 个 <img src="https://math.now.sh?inline=d" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 位数，每一位数有 <img src="https://math.now.sh?inline=k" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 个取值，使用的稳定的排序算法耗时为 <img src="https://math.now.sh?inline=%5CTheta%28n%2Bk%29" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> ，则总耗时为 <img src="https://math.now.sh?inline=%5CTheta%28d(n%2Bk%29)" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/>。<br>
+<strong>引理8.4：</strong> 给定 <img src="https://math.now.sh?inline=n" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 个 <img src="https://math.now.sh?inline=b" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 位数和任何正整数 <img src="https://math.now.sh?inline=r%5Cle%20b" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> ，如果稳定的排序算法耗时为 <img src="https://math.now.sh?inline=%5CTheta%28n%2Bk%29" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/>，那么总耗时为 <img src="https://math.now.sh?inline=%5CTheta%5Cleft%28%5Cfrac%7Bb%7D%7Br%7D(n%2B2%5Er%29%5Cright)" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/>。<br>
+就是将 <img src="https://math.now.sh?inline=b" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 位数分为 <img src="https://math.now.sh?inline=d%3D%5Cleft%5Clceil%5Cfrac%7Bb%7D%7Br%7D%5Cright%5Crceil" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 个数，其中每个不超过 <img src="https://math.now.sh?inline=k%3D2%5Er-1" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/>。</p>
+<h2 id="桶排序">桶排序</h2>
+<p>桶排序仅限于对输入数据在 <img src="https://math.now.sh?inline=%5B0%2C1%29" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 范围内。桶排序将 <img src="https://math.now.sh?inline=A%5Bi%5D" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 放在<img src="https://math.now.sh?inline=B%5Cleft%5B%5Clfloor%20na%5Bi%5D%5Crfloor%5Cright%5D" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 的列表中，并用插入排序对每个 <img src="https://math.now.sh?inline=B%5Bi%5D" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 进行排序，最后重新拼成排好序的数组。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt; <span class="type">void</span> <span class="title">BUCKET_SORT</span><span class="params">(std::vector&lt;T&gt;&amp;a)</span> </span>&#123;</span><br><span class="line">    <span class="built_in">static_assert</span>(std::is_floating_point_v&lt;T&gt;);</span><br><span class="line">    <span class="type">size_t</span> n = a.<span class="built_in">size</span>();</span><br><span class="line">    std::vector&lt;std::vector&lt;T&gt;&gt;<span class="built_in">b</span>(n, std::vector&lt;T&gt;&#123;&#125;);</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">size_t</span> i = <span class="number">0</span>; i &lt; n; i++) &#123;</span><br><span class="line">        <span class="type">__int128_t</span> index = n*a[i] &gt;= n ? n<span class="number">-1</span> : n*a[i];</span><br><span class="line">        b[index].<span class="built_in">push_back</span>(a[i]);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">size_t</span> i = <span class="number">0</span>; i &lt; n; i++) &#123;</span><br><span class="line">        <span class="built_in">InsertionSort</span>(b[i]);</span><br><span class="line">    &#125;</span><br><span class="line">    a.<span class="built_in">clear</span>();</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">size_t</span> i = <span class="number">0</span>; i &lt; n; i++) &#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">size_t</span> j = <span class="number">0</span>; j &lt; b[i].<span class="built_in">size</span>(); j++) &#123;</span><br><span class="line">            a.<span class="built_in">push_back</span>(b[i][j]);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>桶排序的时间代价为</p>
+<p style="filter: opacity(90%);transform:scale(1.00);text-align:center;"><img src="https://math.now.sh?from=T%28n%29%3D%5CTheta(n)%2B%5Csum_%7Bi%3D0%7D%5E%7Bn-1%7DO(n_%7Bi%7D%5E%7B2%7D)%0A" /></p><p>先算平均时间，对两边取期望，有</p>
+<p style="filter: opacity(90%);transform:scale(1.00);text-align:center;"><img src="https://math.now.sh?from=%5Cbegin%7Beqnarray%7D%0AE%5BT%28n%29%5D%26%3D%26E%5Cleft%5B%5CTheta(n)%2B%5Csum_%7Bi%3D0%7D%5E%7Bn-1%7DO(n_%7Bi%7D%5E%7B2%7D)%5Cright%5D%20%5C%5C%0A~%26%3D%26%5CTheta(n)%2B%5Csum_%7Bi%3D0%7D%5E%7Bn-1%7DE%5Cleft%5BO(n_%7Bi%7D%5E2)%5Cright%5D%20%5C%5C%0A~%26%3D%26%5CTheta(n)%2B%5Csum_%7Bi%3D0%7D%5E%7Bn-1%7DO%5Cleft(E%5Bn_%7Bi%7D%5E2%5D%5Cright)%0A%5Cend%7Beqnarray%7D" /></p><p>断言</p>
+<p style="filter: opacity(90%);transform:scale(1.00);text-align:center;"><img src="https://math.now.sh?from=E%5Bn_%7Bi%7D%5E2%5D%3D2-%5Cfrac%7B1%7D%7Bn%7D%0A" /></p><p>我们定义对于所有的 <img src="https://math.now.sh?inline=i%3D0%2C1%2C%5Ccdots%2Cn-1%5Ctext%7B%20%E5%92%8C%7D%5C%3B%20j%3D1%2C2%2C%5Ccdots%2Cn" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> ，有</p>
+<p style="filter: opacity(90%);transform:scale(1.00);text-align:center;"><img src="https://math.now.sh?from=X_%7Bij%7D%3D%5Cbegin%7Bcases%7D%0A1%20%26%20A%5Bj%5D%20%5Ctext%7B%20%E8%90%BD%E5%85%A5%E6%A1%B6%20%7Di%20%5C%5C%0A0%20%26%20A%5Bj%5D%20%5Ctext%7B%20%E6%B2%A1%E8%90%BD%E5%85%A5%E6%A1%B6%20%7Di%0A%5Cend%7Bcases%7D%0A" /></p><p>因此</p>
+<p style="filter: opacity(90%);transform:scale(1.00);text-align:center;"><img src="https://math.now.sh?from=n_i%3D%5Csum_%7Bj%3D1%7D%5E%7Bn%7DX_%7Bij%7D%0A" /></p><p>展开，有</p>
+<p style="filter: opacity(90%);transform:scale(1.00);text-align:center;"><img src="https://math.now.sh?from=%5Cbegin%7Beqnarray%7D%0AE%5Bn_%7Bi%7D%5E2%5D%26%3D%26E%5Cleft%5B%5Cleft%28%5Csum_%7Bj%3D1%7D%5E%7Bn%7DX_%7Bij%7D%5Cright%29%5E2%5Cright%5D%3DE%5Cleft%5B%5Csum_%7Bj%3D1%7D%5E%7Bn%7D%5Csum_%7Bk%3D1%7D%5E%7Bn%7DX_%7Bij%7DX_%7Bik%7D%5Cright%5D%3DE%5Cleft%5B%5Csum_%7Bj%3D1%7D%5E%7Bn%7DX_%7Bij%7D%5E%7B2%7D%2B%5Csum_%7B1%5Cle%20j%5Cle%20n%7D%5Csum_%7B%5Csubstack%7B1%5Cle%20k%5Cle%20n%20%5C%5C%20k%5Cne%20j%7D%7DX_%7Bij%7DX_%7Bik%7D%5Cright%5D%20%5C%5C%0A~%26%3D%26%5Csum_%7Bj%3D1%7D%5E%7Bn%7DE%5Cleft%5BX_%7Bij%7D%5E2%5Cright%5D%2B%5Csum_%7B1%5Cle%20j%5Cle%20n%7D%5Csum_%7B%5Csubstack%7B1%5Cle%20k%5Cle%20n%20%5C%5C%20k%5Cne%20j%7D%7DE%5Cleft%5BX_%7Bij%7DX_%7Bik%7D%5Cright%5D%0A%5Cend%7Beqnarray%7D" /></p><p>其中</p>
+<p style="filter: opacity(90%);transform:scale(1.00);text-align:center;"><img src="https://math.now.sh?from=Pr%28X_%7Bij%7D%3D1%29%3D%5Cfrac%7B1%7D%7Bn%7D%0A" /></p><p>于是</p>
+<p style="filter: opacity(90%);transform:scale(1.00);text-align:center;"><img src="https://math.now.sh?from=E%5Cleft%5BX_%7Bij%7D%5E2%5Cright%5D%3D%5Cfrac%7B1%7D%7Bn%7D%0A" /></p><p>当 <img src="https://math.now.sh?inline=k%5Cne%20j" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 时，<img src="https://math.now.sh?inline=X_%7Bij%7D%5Ctext%7B%20%E5%92%8C%20%7DX_%7Bik%7D" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 是独立的，于是</p>
+<p style="filter: opacity(90%);transform:scale(1.00);text-align:center;"><img src="https://math.now.sh?from=E%5Cleft%5BX_%7Bij%7DX_%7Bik%7D%5Cright%5D%3D%5Cfrac%7B1%7D%7Bn%5E2%7D%0A" /></p><p>代回公式，得</p>
+<p style="filter: opacity(90%);transform:scale(1.00);text-align:center;"><img src="https://math.now.sh?from=E%5Cleft%5Bn_%7Bi%7D%5E2%5Cright%5D%3D%5Csum_%7Bj%3D1%7D%5E%7Bn%7D%5Cfrac%7B1%7D%7Bn%7D%2B%5Csum_%7B1%5Cle%20j%20%5Cle%20n%7D%5Csum_%7B%5Csubstack%7B1%5Cle%20k%5Cle%20n%20%5C%5C%20k%5Cne%20j%7D%7D%5Cfrac%7B1%7D%7Bn%5E2%7D%3Dn%5Ccdot%5Cfrac%7B1%7D%7Bn%7D%2Bn%28n-1%29%5Cfrac%7B1%7D%7Bn%5E2%7D%3D2-%5Cfrac%7B1%7D%7Bn%7D%0A" /></p><p>所以桶排序的期望运行时间为</p>
+<p style="filter: opacity(90%);transform:scale(1.00);text-align:center;"><img src="https://math.now.sh?from=%5CTheta%28n%29%2B%5Csum_%7Bi%3D0%7D%5E%7Bn-1%7DO(2-%5Cfrac%7B1%7D%7Bn%7D)%3D%5CTheta(n)%2BnO(2-%5Cfrac%7B1%7D%7Bn%7D)%3D%5CTheta(n)%0A" /></p><h1>中位数和顺序统计量</h1>
+<p>在由 <img src="https://math.now.sh?inline=n" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 个元素组成的集合中，第 <img src="https://math.now.sh?inline=i" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 个<strong>顺序统计量（order statistic）</strong> 是该集合中第 <img src="https://math.now.sh?inline=i" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 小的元素。当 <img src="https://math.now.sh?inline=n" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 为奇数的时候，中位数在 <img src="https://math.now.sh?inline=i%3D%5Cfrac%7Bn%2B1%7D%7B2%7D" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 处，当 <img src="https://math.now.sh?inline=n" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 是偶数时，中位数在 <img src="https://math.now.sh?inline=i%3D%5Cfrac%7Bn%7D%7B2%7D" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 和 <img src="https://math.now.sh?inline=i%3D%5Cfrac%7Bn%7D%7B2%7D%2B1" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 处。不考虑 <img src="https://math.now.sh?inline=n" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 的奇偶性时，中位数是 <img src="https://math.now.sh?inline=i%3D%5Clfloor%5Cfrac%7Bn%2B1%7D%7B2%7D%5Crfloor" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> （<strong>下中位数</strong>）和 <img src="https://math.now.sh?inline=i%3D%5Clceil%5Cfrac%7Bn%2B2%7D%7B2%7D%5Crceil" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> （<strong>上中位数</strong>）。我们讨论的中位数全是下中位数。<br>
+<strong>选择问题：</strong></p>
+<ul>
+<li><strong>输入：</strong> 一个包含 <img src="https://math.now.sh?inline=n" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 个互异的数的集合 <img src="https://math.now.sh?inline=A" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 和一个整数 <img src="https://math.now.sh?inline=i%2C%5C%3B1%5Cle%20i%5Cle%20n" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 。</li>
+<li><strong>输出：</strong> 元素 <img src="https://math.now.sh?inline=x%5Cin%20A" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> ，且 <img src="https://math.now.sh?inline=A" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 中恰好有 <img src="https://math.now.sh?inline=i-1" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 个其他元素小于它。</li>
+</ul>
+<h2 id="最大值和最小值">最大值和最小值</h2>
+<p>最优的算法要进行 <img src="https://math.now.sh?inline=n-1" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 次比较找到最小值</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt; T <span class="title">MINIMUM</span><span class="params">(<span class="type">const</span> std::vector&lt;T&gt;&amp;a)</span> </span>&#123;</span><br><span class="line">    T min = a[<span class="number">0</span>];</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">size_t</span> i = <span class="number">2</span>; i &lt; a.<span class="built_in">size</span>(); i++) &#123;</span><br><span class="line">        <span class="keyword">if</span> (min &gt; a[i]) &#123;</span><br><span class="line">            min = a[i];</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> min;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>为了同时找到最大值，我们只需要比较 <img src="https://math.now.sh?inline=3%5Cleft%5Clfloor%5Cfrac%7Bn%7D%7B2%7D%5Cright%5Crfloor" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 次即可，方法是每次从数组读入两个，相互比较再和已知的最大值和最小值比较。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt; std::vector&lt;T&gt; <span class="title">MAX_AND_MINIMUM</span><span class="params">(<span class="type">const</span> std::vector&lt;T&gt;&amp;a)</span> </span>&#123;</span><br><span class="line">    T min = a[<span class="number">0</span>];</span><br><span class="line">    T max = a[<span class="number">1</span>];</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">size_t</span> i = <span class="number">1</span>; i &lt; a.<span class="built_in">size</span>(); i += <span class="number">2</span>) &#123;</span><br><span class="line">        <span class="keyword">if</span> (a[i] &gt; a[i<span class="number">-1</span>]) &#123;</span><br><span class="line">            <span class="keyword">if</span> (a[i] &gt; max) &#123;</span><br><span class="line">                max = a[i];</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">if</span> (a[i<span class="number">-1</span>] &lt; min) &#123;</span><br><span class="line">                min = a[i<span class="number">-1</span>];</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="keyword">if</span> (a[i] &lt; min) &#123;</span><br><span class="line">                min = a[i];</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">if</span> (a[i<span class="number">-1</span>] &gt; max) &#123;</span><br><span class="line">                max = a[i<span class="number">-1</span>];</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    std::vector&lt;T&gt;res;</span><br><span class="line">    res.<span class="built_in">push_back</span>(min);</span><br><span class="line">    res.<span class="built_in">push_back</span>(max);</span><br><span class="line">    <span class="keyword">return</span> res;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="期望为线性时间的选择算法">期望为线性时间的选择算法</h2>
+<p>我们借用一下快速排序里的 <img src="https://math.now.sh?inline=RAND%5Ctext%7B-%7DPARTITION" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 函数，还记得快速排序的划分函数吗，我们随机选择一个主元，然后将数组划分为小于等于主元和大于主元的两个子数组。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt; T <span class="title">RAND_SELECT</span><span class="params">(std::vector&lt;T&gt;&amp;a, <span class="type">int</span> p, <span class="type">int</span> r, <span class="type">int</span> i)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (p == r) <span class="keyword">return</span> a[p];</span><br><span class="line">    <span class="type">size_t</span> q = <span class="built_in">RAND_PARTITION</span>(a, p, r);</span><br><span class="line">    <span class="type">size_t</span> k = q - p + <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">if</span> (i == k) &#123;</span><br><span class="line">        <span class="keyword">return</span> a[q];</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span> (i &lt; k) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">RAND_SELECT</span>(a, p, q<span class="number">-1</span>, i);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">return</span> <span class="built_in">RAND_SELECT</span> (a, q<span class="number">+1</span>, r, i-k);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这个算法的期望运行时间是 <img src="https://math.now.sh?inline=O%28n%29" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/>。<br>
+因为是随机选择主元，所以对于每一个 <img src="https://math.now.sh?inline=k" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/>，子数组 <img src="https://math.now.sh?inline=A%5Bp...q%5D" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 有 <img src="https://math.now.sh?inline=k" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 个元素的概率是 <img src="https://math.now.sh?inline=%5Cfrac%7B1%7D%7Bn%7D" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 。我们定义指示器随机变量为</p>
+<p style="filter: opacity(90%);transform:scale(1.00);text-align:center;"><img src="https://math.now.sh?from=X_k%3D%5Cbegin%7Bcases%7D%0A1%20%26%20%5Ctext%7B%E5%AD%90%E6%95%B0%E7%BB%84%20%7DA%5Bp...q%5D%5Ctext%7B%20%E6%AD%A3%E5%A5%BD%E5%8C%85%E5%90%AB%20%7Dk%5Ctext%7B%20%E4%B8%AA%E5%85%83%E7%B4%A0%7D%5C%5C%0A0%20%26%20%5Ctext%7B%E5%AD%90%E6%95%B0%E7%BB%84%20%7DA%5Bp...q%5D%5Ctext%7B%20%E4%B8%8D%E6%AD%A3%E5%A5%BD%E5%8C%85%E5%90%AB%20%7Dk%5Ctext%7B%20%E4%B8%AA%E5%85%83%E7%B4%A0%7D%0A%5Cend%7Bcases%7D" /></p><p>因为元素互异，所以</p>
+<p style="filter: opacity(90%);transform:scale(1.00);text-align:center;"><img src="https://math.now.sh?from=E%5BX_i%5D%3D%5Cfrac%7B1%7D%7Bn%7D%0A" /></p><p>因为调用这个函数时，并不知道主元 <img src="https://math.now.sh?inline=A%5Bq%5D" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 是不是正确答案，算法要在 <img src="https://math.now.sh?inline=A%5Bp...q-1%5D" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 或 <img src="https://math.now.sh?inline=A%5Bq%2B1...r%5D" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 上递归，取决于第 <img src="https://math.now.sh?inline=i" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 小的元素相对与 <img src="https://math.now.sh?inline=A%5Bq%5D" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 的位置。为了得到上界，我们总是假设该元素落在 <img src="https://math.now.sh?inline=A%5Bq%5D" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 的右边。当 <img src="https://math.now.sh?inline=X_k%3D1" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 时，我们处理的两个子数组的规模为 <img src="https://math.now.sh?inline=k-1" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 和 <img src="https://math.now.sh?inline=n-k" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/>，有递归式</p>
+<p style="filter: opacity(90%);transform:scale(1.00);text-align:center;"><img src="https://math.now.sh?from=%5Cbegin%7Beqnarray%7D%0AT%28n%29%20%26%5Cle%20%26%20%5Csum_%7Bk%3D1%7D%5E%7Bn%7DX_k%5Ccdot%20%5Cleft(T(%5Cmax(k-1%2Cn-k))%2BO(n)%5Cright)%20%5C%5C%0A~%20%26%20%3D%20%26%20%5Csum_%7Bk%3D1%7D%5E%7Bn%7DX_%7Bk%7D%5Ccdot%20T(%5Cmax(k-1%2Cn-k))%2BO(n)%0A%5Cend%7Beqnarray%7D" /></p><p>两边取期望</p>
+<p style="filter: opacity(90%);transform:scale(1.00);text-align:center;"><img src="https://math.now.sh?from=%5Cbegin%7Beqnarray%7D%0AE%5BT%28n%29%5D%20%26%5Cle%26%20E%5Cleft%5B%5Csum_%7Bk%3D1%7D%5E%7Bn%7DX_%7Bk%7D%5Ccdot%20T(%5Cmax(k-1%2Cn-k))%2BO(n)%5Cright%5D%20%5C%5C%0A~%20%26%20%3D%20%26%20%5Csum_%7Bk%3D1%7D%5E%7Bn%7DE%5Cleft%5BX_%7Bk%7D%5Ccdot%20T(%5Cmax(k-1%2Cn-k))%5Cright%5D%2BO(n)%20%5C%5C%0A~%20%26%20%3D%20%26%20%5Csum_%7Bk%3D1%7D%5E%7Bn%7DE%5Cleft%5BX_%7Bk%7D%5Cright%5D%5Ccdot%20E%5Cleft%5BT(%5Cmax(k-1%2Cn-k))%5Cright%5D%2BO(n)%20%20%5Cquad%20%5Ctext%7B%E5%85%AC%E5%BC%8F%20%24C.24%24%7D%5C%5C%0A~%20%26%20%3D%20%26%20%5Csum_%7Bk%3D1%7D%5E%7Bn%7D%5Cfrac%7B1%7D%7Bn%7D%5Ccdot%20E%5Cleft%5BT(%5Cmax(k-1%2Cn-k))%5Cright%5D%2BO(n)%0A%5Cend%7Beqnarray%7D" /></p><p>下面来考虑 <img src="https://math.now.sh?inline=%5Cmax%28k-1%2Cn-k%29" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/>，我们有</p>
+<p style="filter: opacity(90%);transform:scale(1.00);text-align:center;"><img src="https://math.now.sh?from=%5Cmax%28k-1%2Cn-k%29%3D%5Cbegin%7Bcases%7D%0Ak-1%20%26%20k%3E%5Clceil%5Cfrac%7Bn%7D%7B2%7D%5Crceil%20%5C%5C%0An-k%20%26%20k%5Cle%20%5Clceil%5Cfrac%7Bn%7D%7B2%7D%5Crceil%0A%5Cend%7Bcases%7D" /></p><p>若 <img src="https://math.now.sh?inline=n" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 是偶数，那么从 <img src="https://math.now.sh?inline=T%28%5Clceil%5Cfrac%7Bn%7D%7B2%7D%5Crceil%29" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 到 <img src="https://math.now.sh?inline=T%28n-1%29" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 的每一项都会在总和中出现两次，若 <img src="https://math.now.sh?inline=n" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 是奇数，那么除了 <img src="https://math.now.sh?inline=T%28%5Clfloor%5Cfrac%7Bn%7D%7B2%7D%5Crfloor%29" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 只出现一次外，其他的项也会出现两次，有</p>
+<p style="filter: opacity(90%);transform:scale(1.00);text-align:center;"><img src="https://math.now.sh?from=E%5BT%28n%29%5D%5Cle%20%5Cfrac%7B2%7D%7Bn%7D%5Csum_%7Bk%3D%5Clfloor%5Cfrac%7Bn%7D%7B2%7D%5Crfloor%7D%5E%7Bn-1%7DE%5BT(k)%5D%2BO(n)%0A" /></p><p>我们将使用替代法来求得 <img src="https://math.now.sh?inline=E%5BT%28n%29%5D%3DO(n)" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/>。设满足这个递归式初始条件的某个常数 <img src="https://math.now.sh?inline=c" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/>，有 <img src="https://math.now.sh?inline=E%5BT%28n%29%5D%5Cle%20cn" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/>。假设对小于某个常数的 <img src="https://math.now.sh?inline=n" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/>，有 <img src="https://math.now.sh?inline=T%28n%29%3DO(1)" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/>。还要选出最后一项 <img src="https://math.now.sh?inline=O%28n%29%5Cle%20an" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/>。这个归纳假设可以得到</p>
+<p style="filter: opacity(90%);transform:scale(1.00);text-align:center;"><img src="https://math.now.sh?from=%5Cbegin%7Beqnarray%7D%0AE%5BT%28n%29%5D%20%26%20%5Cle%20%26%20%5Cfrac%7B2%7D%7Bn%7D%5Csum_%7Bk%3D%5Clfloor%5Cfrac%7Bn%7D%7B2%7D%5Crfloor%7D%5E%7Bn-1%7Dck%2Ban%20%5C%5C%0A~%26%20%3D%26%20%5Cfrac%7B2c%7D%7Bn%7D%5Cleft(%5Csum_%7Bk%3D1%7D%5E%7Bn-1%7Dk-%5Csum_%7Bk%3D1%7D%5E%7B%5Clfloor%5Cfrac%7Bn%7D%7B2%7D%5Crfloor-1%7Dk%5Cright)%2Ban%20%5C%5C%0A~%26%3D%26%20%5Cfrac%7B2c%7D%7Bn%7D%5Cleft(%5Cfrac%7B(n-1)n%7D%7B2%7D-%5Cfrac%7B%5Clfloor%5Cfrac%7Bn%7D%7B2%7D%5Crfloor(%5Clfloor%5Cfrac%7Bn%7D%7B2%7D%5Crfloor-1)%7D%7B2%7D%5Cright)%2Ban%20%5C%5C%0A~%26%20%5Cle%20%26%20%5Cfrac%7B2c%7D%7Bn%7D%5Cleft(%5Cfrac%7B(n-1)n%7D%7B2%7D-%5Cfrac%7B(%5Cfrac%7Bn%7D%7B2%7D-1)(%5Cfrac%7Bn%7D%7B2%7D-2)%7D%7B2%7D%5Cright)%2Ban%20%5C%5C%0A~%26%20%3D%20%26%20c%5Cleft(%5Cfrac%7B3n%7D%7B4%7D%2B%5Cfrac%7B1%7D%7B2%7D-%5Cfrac%7B2%7D%7Bn%7D%5Cright)%20%2Ban%5C%5C%0A~%26%20%5Cle%20%26%20%5Cfrac%7B3cn%7D%7B4%7D%2B%5Cfrac%7Bc%7D%7B2%7D%2Ban%20%5C%5C%0A~%26%20%3D%20%26%20cn-%5Cleft(%5Cfrac%7Bcn%7D%7B4%7D-%5Cfrac%7Bc%7D%7B2%7D-an%5Cright)%0A%5Cend%7Beqnarray%7D" /></p><p>为了完成证明，我们还需要证明对于足够大的 <img src="https://math.now.sh?inline=n" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/>，这个式子最多是 <img src="https://math.now.sh?inline=cn" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/>，即 <img src="https://math.now.sh?inline=%5Cfrac%7Bcn%7D%7B4%7D-%5Cfrac%7Bc%7D%7B2%7D-an%5Cge%200" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/>，化简得 <img src="https://math.now.sh?inline=n%28%5Cfrac%7Bc%7D%7B4%7D-a%29%5Cge%5Cfrac%7Bc%7D%7B2%7D" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/>。只要我们的常数 <img src="https://math.now.sh?inline=c" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 满足 <img src="https://math.now.sh?inline=%5Cfrac%7Bc%7D%7B4%7D-a%3E0" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/>，即 <img src="https://math.now.sh?inline=c%3E4a" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/>，就能两边同除 <img src="https://math.now.sh?inline=%5Cfrac%7Bc%7D%7B4%7D-a" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/>，得</p>
+<p style="filter: opacity(90%);transform:scale(1.00);text-align:center;"><img src="https://math.now.sh?from=n%5Cge%20%5Cfrac%7B%5Cfrac%7Bc%7D%7B2%7D%7D%7B%5Cfrac%7Bc%7D%7B4%7D-a%7D%3D%5Cfrac%7B2c%7D%7Bc-4a%7D%0A" /></p><p>因此若假设对所有 <img src="https://math.now.sh?inline=n%3C%5Cfrac%7B2c%7D%7Bc-4a%7D" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/>，都有 <img src="https://math.now.sh?inline=T%28n%29%3DO(1)" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/>，那么就有 <img src="https://math.now.sh?inline=E%5BT%28n%29%5D%3DO(n)" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/>。</p>
+<h2 id="最坏情况为线性时间的选择算法">最坏情况为线性时间的选择算法</h2>
+<p>描述：</p>
+<ol>
+<li>将输入的数组分为 <img src="https://math.now.sh?inline=%5Clfloor%5Cfrac%7Bn%7D%7B5%7D%5Crfloor" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/>组，每组<img src="https://math.now.sh?inline=5" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/>个元素，最后一组有 <img src="https://math.now.sh?inline=n%5Cmod%205" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 个元素</li>
+<li>然后，用插入排序寻找它们的中位数</li>
+<li>再递归调用 <img src="https://math.now.sh?inline=SELECT" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 找出这 <img src="https://math.now.sh?inline=%5Clceil%5Cfrac%7Bn%7D%7B5%7D%5Crceil" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 个中位数的中位数 <img src="https://math.now.sh?inline=x" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> ，这里我们寻找的是下中位数。</li>
+<li>用快速排序的 <img src="https://math.now.sh?inline=PARTITON" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 函数的修改版，以 <img src="https://math.now.sh?inline=x" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 为主元，划分输入数组，设划分后有 <img src="https://math.now.sh?inline=k" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 个数不大于 <img src="https://math.now.sh?inline=x" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/>，有 <img src="https://math.now.sh?inline=n-k" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 个数在高区。</li>
+<li>如果 <img src="https://math.now.sh?inline=i%3Dk" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/>，那么 <img src="https://math.now.sh?inline=x" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 就是结果，如果 <img src="https://math.now.sh?inline=i%3Ek" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/>，那么在高区递归查找第 <img src="https://math.now.sh?inline=i-k" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 小的元素，如果 <img src="https://math.now.sh?inline=i%3Ck" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/>，那么在低区递归查找第 <img src="https://math.now.sh?inline=i" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 小的元素。<br>
+给出代码：</li>
+</ol>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt;<span class="function"><span class="type">void</span> <span class="title">insertion_sort</span><span class="params">(std::vector&lt;T&gt;&amp;arr, <span class="type">size_t</span> l, <span class="type">size_t</span> r)</span> </span>&#123;</span><br><span class="line">    <span class="type">size_t</span> len = r - l + <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">if</span> (len &lt;= <span class="number">1</span>) <span class="keyword">return</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">size_t</span> j = l + <span class="number">1</span>; j &lt; r + <span class="number">1</span>; j++) &#123;</span><br><span class="line">        T key = arr[j];</span><br><span class="line">        <span class="type">size_t</span> i = j - <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">while</span>(i &gt;= l &amp;&amp; arr[i] &gt; key ) &#123;</span><br><span class="line">            arr[i<span class="number">+1</span>] = arr[i]; i--;</span><br><span class="line">        &#125;</span><br><span class="line">        arr[i<span class="number">+1</span>] = key;</span><br><span class="line">    &#125;</span><br><span class="line">&#125; </span><br><span class="line"><span class="comment">// 三路划分：&lt; pivot, == pivot, &gt; pivot</span></span><br><span class="line"><span class="comment">// 返回等于 pivot 的区间 [eqL, eqR]（闭区间）</span></span><br><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt; <span class="function">std::pair&lt;<span class="type">size_t</span>, <span class="type">size_t</span>&gt; <span class="title">partition3</span><span class="params">(std::vector&lt;T&gt;&amp; a, <span class="type">size_t</span> l, <span class="type">size_t</span> r, <span class="type">const</span> T&amp; pivot)</span> </span>&#123;</span><br><span class="line">    <span class="type">size_t</span> lt = l;      <span class="comment">// a[l..lt-1] &lt; pivot</span></span><br><span class="line">    <span class="type">size_t</span> i  = l;      <span class="comment">// current</span></span><br><span class="line">    <span class="type">size_t</span> gt = r;      <span class="comment">// a[gt+1..r] &gt; pivot</span></span><br><span class="line">  </span><br><span class="line">    <span class="keyword">while</span> (i &lt;= gt) &#123;</span><br><span class="line">        <span class="keyword">if</span> (a[i] &lt; pivot) &#123;</span><br><span class="line">            std::<span class="built_in">swap</span>(a[lt], a[i]);</span><br><span class="line">            lt++;</span><br><span class="line">            i++;</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (a[i] &gt; pivot) &#123;</span><br><span class="line">            std::<span class="built_in">swap</span>(a[i], a[gt]);</span><br><span class="line">            gt--;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            ++i;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// [l, lt-1] &lt; pivot, [lt, gt] == pivot, [gt+1, r] &gt; pivot</span></span><br><span class="line">    <span class="keyword">return</span> &#123;lt, gt&#125;;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// BFPRT: 在 a[l..r] 中找第 k 小</span></span><br><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt; <span class="function">T <span class="title">bfprt_select</span><span class="params">(std::vector&lt;T&gt;&amp; a, <span class="type">size_t</span> l, <span class="type">size_t</span> r, <span class="type">size_t</span> k)</span> </span>&#123;</span><br><span class="line">    <span class="type">size_t</span> n = r - l + <span class="number">1</span>;</span><br><span class="line">    <span class="comment">// 小规模直接排序返回</span></span><br><span class="line">    <span class="keyword">if</span> (n &lt;= <span class="number">5</span>) &#123;</span><br><span class="line">        <span class="built_in">insertion_sort</span>(a, l, r);</span><br><span class="line">        <span class="keyword">return</span> a[l + k];</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 1) 分组5个：排序每组，把每组中位数搬到前面</span></span><br><span class="line">    <span class="type">size_t</span> m = <span class="number">0</span>; <span class="comment">// medians count</span></span><br><span class="line">    <span class="keyword">for</span> (<span class="type">size_t</span> start = l; start &lt;= r; start += <span class="number">5</span>) &#123;</span><br><span class="line">        <span class="type">size_t</span> end = std::<span class="built_in">min</span>(start + <span class="number">4</span>, r);</span><br><span class="line">        <span class="built_in">insertion_sort</span>(a, start, end);</span><br><span class="line">        <span class="comment">// 每组中位数索引（下中位数）</span></span><br><span class="line">        <span class="type">size_t</span> len = end - start + <span class="number">1</span>;</span><br><span class="line">        <span class="type">size_t</span> med_idx = start + (len - <span class="number">1</span>) / <span class="number">2</span>;</span><br><span class="line">        <span class="comment">// 把中位数放到 a[l + m]</span></span><br><span class="line">        std::<span class="built_in">swap</span>(a[l + m], a[med_idx]);</span><br><span class="line">        ++m;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 2) 递归选“中位数的中位数”作为 pivot（m 个中位数里找第 m/2 小）</span></span><br><span class="line">    T pivot = <span class="built_in">bfprt_select</span>(a, l, l + m - <span class="number">1</span>, m / <span class="number">2</span>);</span><br><span class="line">    <span class="comment">// 3) 围绕 pivot 三路划分</span></span><br><span class="line">    <span class="keyword">auto</span> [eqL, eqR] = <span class="built_in">partition3</span>(a, l, r, pivot);</span><br><span class="line">    <span class="comment">// 4) 决定往哪边递归（只递归一边）</span></span><br><span class="line">    <span class="type">size_t</span> leftSize = (eqL &gt; l) ? (eqL - l) : <span class="number">0</span>;</span><br><span class="line">    <span class="type">size_t</span> midSize  = eqR - eqL + <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">if</span> (k &lt; leftSize) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">bfprt_select</span>(a, l, eqL - <span class="number">1</span>, k);</span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (k &lt; leftSize + midSize) &#123;</span><br><span class="line">        <span class="keyword">return</span> pivot; <span class="comment">// 在 ==pivot 区间内</span></span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">bfprt_select</span>(a, eqR + <span class="number">1</span>, r, k - leftSize - midSize);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt; <span class="function">T <span class="title">SELECT</span><span class="params">(std::vector&lt;T&gt;&amp; a, <span class="type">size_t</span> k)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">bfprt_select</span>(a, <span class="number">0</span>, a.<span class="built_in">size</span>() - <span class="number">1</span>, k - <span class="number">1</span>); <span class="comment">// 把第k小转换成1-based，这里要减1</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>先确定大于主元划分 <img src="https://math.now.sh?inline=x" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 的元素个数的下界，在第二步找出的中位数中，至少有一半大于等于 <img src="https://math.now.sh?inline=x" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/>，因此除了 <img src="https://math.now.sh?inline=n" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 不能被<img src="https://math.now.sh?inline=5" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/>整除的时候的最后一组和包含 <img src="https://math.now.sh?inline=x" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 的那一组外，至少有一半的组中，有 <img src="https://math.now.sh?inline=3" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 个元素大于 <img src="https://math.now.sh?inline=x" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 。不算这两个组，大于 <img src="https://math.now.sh?inline=x" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 的元素的个数为</p>
+<p style="filter: opacity(90%);transform:scale(1.00);text-align:center;"><img src="https://math.now.sh?from=3%5Cleft%28%5Cleft%5Clceil%5Cfrac%7B1%7D%7B2%7D%5Clceil%5Cfrac%7Bn%7D%7B5%7D%5Crceil%5Cright%5Crceil-2%5Cright%29%5Cge%5Cfrac%7B3n%7D%7B10%7D-6%0A" /></p><p>同理，至少有 <img src="https://math.now.sh?inline=%5Cfrac%7B3n%7D%7B10%7D-6" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 个元素小于 <img src="https://math.now.sh?inline=x" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/>，因此在第五步， <img src="https://math.now.sh?inline=SELECT" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 最多作用 <img src="https://math.now.sh?inline=n-%20%28%5Cfrac%7B3n%7D%7B10%7D-6%29%3D%5Cfrac%7B7n%7D%7B10%7D%2B6" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 个元素。<br>
+很明显步骤 <img src="https://math.now.sh?inline=1%2C2%2C4" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 需要 <img src="https://math.now.sh?inline=O%28n%29" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 的时间，步骤三需要 <img src="https://math.now.sh?inline=T%28%5Clceil%5Cfrac%7Bn%7D%7B5%7D%5Crceil%29" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 的时间，步骤五至多需要 <img src="https://math.now.sh?inline=T%28%5Cfrac%7B7n%7D%7B10%7D%2B6%29" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 的时间。我们假设 <img src="https://math.now.sh?inline=T%28n%29" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 是单调递增的，而且假设对于任何少于 <img src="https://math.now.sh?inline=n%3D140" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 的规模需要 <img src="https://math.now.sh?inline=O%281%29" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 的时间。可以得到下面的递归式：</p>
+<p style="filter: opacity(90%);transform:scale(1.00);text-align:center;"><img src="https://math.now.sh?from=T%28n%29%5Cle%5Cbegin%7Bcases%7D%0AO(1)%20%26%20n%3C140%20%5C%5C%0AT(%5Clceil%5Cfrac%7Bn%7D%7B5%7D%5Crceil)%20%2B%20T(%5Cfrac%7B7n%7D%7B10%7D%2B6)%20%2BO(n)%20%26%20n%5Cge%20140%0A%5Cend%7Bcases%7D" /></p><p>我们再次使用替换法，要选择某个常数 <img src="https://math.now.sh?inline=c" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 和所有的 <img src="https://math.now.sh?inline=n%3E0" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> ，有 <img src="https://math.now.sh?inline=T%28n%29%5Cle%20cn" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 。<br>
+首先对于 <img src="https://math.now.sh?inline=n%3C140" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> ，这个假设显然成立。<br>
+而对于 <img src="https://math.now.sh?inline=n%3E140" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 的情况，我们还要选择常数 <img src="https://math.now.sh?inline=a" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 使得 <img src="https://math.now.sh?inline=O%28n%29" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 的上界是 <img src="https://math.now.sh?inline=an" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 。代入递归式，得</p>
+<p style="filter: opacity(90%);transform:scale(1.00);text-align:center;"><img src="https://math.now.sh?from=%5Cbegin%7Beqnarray%7D%0AT%28n%29%20%26%5Cle%26%20c%5Clceil%5Cfrac%7Bn%7D%7B5%7D%5Crceil%2Bc%5Cleft(%5Cfrac%7B7n%7D%7B10%7D%2B6%5Cright)%2Ban%5C%5C%0A~%20%26%5Cle%26%5Cfrac%7Bcn%7D%7B5%7D%2Bc%2B%5Cfrac%7B7cn%7D%7B10%7D%2B6c%2Ban%20%5C%5C%0A~%20%26%3D%26%20%5Cfrac%7B9cn%7D%7B10%7D%2B7c%2Ban%20%5C%5C%0A~%20%26%3D%26%20cn%20%2B%20%5Cleft(-%5Cfrac%7Bcn%7D%7B10%7D%2B7c%2Ban%5Cright)%0A%5Cend%7Beqnarray%7D" /></p><p>上式最多是 <img src="https://math.now.sh?inline=cn" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/>，下式成立：</p>
+<p style="filter: opacity(90%);transform:scale(1.00);text-align:center;"><img src="https://math.now.sh?from=-%5Cfrac%7Bcn%7D%7B10%7D%2B7c%2Ban%5Cle%200%0A" /></p><p>当 <img src="https://math.now.sh?inline=n%3E70" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 时，等价于 <img src="https://math.now.sh?inline=c%5Cge%20%5Cfrac%7B10an%7D%7Bn-70%7D" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/>，我们假设了 <img src="https://math.now.sh?inline=n%5Cge%20140" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/>，所以任何满足 <img src="https://math.now.sh?inline=c%5Cge%2020a" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 就能够满足 <img src="https://math.now.sh?inline=T%28n%29%5Cle%20cn" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/>。注意，我们可以任意的选择大于<img src="https://math.now.sh?inline=70" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/>的数字，<img src="https://math.now.sh?inline=140" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/>并没有特殊之处，只需要根据假设选择合适的<img src="https://math.now.sh?inline=c" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/>就可以。<br>
+由此可见，<img src="https://math.now.sh?inline=SELECT" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 最坏情况下的运行时间是<img src="https://math.now.sh?inline=O%28n%29" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/>。<br>
+本章讲的两个选择算法，也是通过比较元素来获得它们之间的相对次序的，然而我们并没有对它们进行排序，所以它们不受 <img src="https://math.now.sh?inline=%5COmega%28n%5Clg%20n%29" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 的制约。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>libfsx
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="https://shuxiangfan.github.io/2026/02/06/%E7%AC%AC%E4%BA%8C%E9%83%A8%E5%88%86%EF%BC%9A%E6%8E%92%E5%BA%8F%E5%92%8C%E9%A1%BA%E5%BA%8F%E7%BB%9F%E8%AE%A1%E9%87%8F/" title="算法导论 第二部分：排序和顺序统计量">https://shuxiangfan.github.io/2026/02/06/第二部分：排序和顺序统计量/</a>
+  </li>
+  <li class="post-copyright-license">
+      <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA/" rel="tag"># 算法导论</a>
+              <a href="/tags/C/" rel="tag"># C++</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2025/10/28/%E6%9C%80%E5%A4%A7%E5%85%AC%E7%BA%A6%E6%95%B0%E4%B8%8E%E6%9C%80%E5%B0%8F%E5%85%AC%E5%80%8D%E6%95%B0/" rel="prev" title="最大公约数与最小公倍数">
+                  <i class="fa fa-angle-left"></i> 最大公约数与最小公倍数
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2026/02/06/%E7%AC%AC%E4%B8%80%E9%83%A8%E5%88%86%EF%BC%9A%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/" rel="next" title="算法导论 第一部分：基础知识">
+                  算法导论 第一部分：基础知识 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 2021 – 
+    <span itemprop="copyrightYear">2026</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">除转载外，网站内容均为 CC-BY-SA 4.0 协议</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+</body>
+</html>

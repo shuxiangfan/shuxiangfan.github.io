@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-96x96.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon.ico">
+  <link rel="mask-icon" href="/images/favicon-96x96.png" color="#222">
+  <link rel="manifest" href="/images/site.webmanifest">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css" integrity="sha256-VHqXKFhhMxcpubYf9xiWdCiojEbY9NexQ4jh8AxbvcM=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"shuxiangfan.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.27.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":true,"style":"flat"},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="一些汇编和计算机常识">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Programming from the Ground Up notes">
+<meta property="og:url" content="https://shuxiangfan.github.io/2025/08/18/Assembly-notes/index.html">
+<meta property="og:site_name" content="libfsx&#39;s Blog">
+<meta property="og:description" content="一些汇编和计算机常识">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://shuxiangfan.github.io/2025/08/themes/fluid/source/img/half_reg_demo.png">
+<meta property="article:published_time" content="2025-08-18T14:09:25.000Z">
+<meta property="article:modified_time" content="2026-02-06T15:01:30.355Z">
+<meta property="article:author" content="libfsx">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://shuxiangfan.github.io/2025/08/themes/fluid/source/img/half_reg_demo.png">
+
+
+<link rel="canonical" href="https://shuxiangfan.github.io/2025/08/18/Assembly-notes/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://shuxiangfan.github.io/2025/08/18/Assembly-notes/","path":"2025/08/18/Assembly-notes/","title":"Programming from the Ground Up notes"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Programming from the Ground Up notes | libfsx's Blog</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script>
+
+  
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"default","dark":"dark"},"js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mermaid/11.10.1/mermaid.min.js","integrity":"sha256-BmQmdWDS8X2OTbrwELWK366LV6escyWhHHe0XCTU/Hk="}}</script>
+  <script src="/js/third-party/tags/mermaid.js" defer></script>
+
+
+
+
+
+  
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">libfsx's Blog</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-number">1.</span> <span class="nav-text">Chapter 1 介绍</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B7%A5%E5%85%B7"><span class="nav-number">1.1.</span> <span class="nav-text">工具</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-number">2.</span> <span class="nav-text">Chapter 2 计算机架构</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%86%85%E5%AD%98%E7%9A%84%E7%BB%93%E6%9E%84"><span class="nav-number">2.1.</span> <span class="nav-text">计算机内存的结构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%AD%E5%A4%AE%E5%A4%84%E7%90%86%E5%99%A8%EF%BC%88CPU%EF%BC%89"><span class="nav-number">2.2.</span> <span class="nav-text">中央处理器（CPU）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E4%BA%9B%E6%9C%AF%E8%AF%AD"><span class="nav-number">2.3.</span> <span class="nav-text">一些术语</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A7%A3%E8%AF%BB%E5%86%85%E5%AD%98"><span class="nav-number">2.4.</span> <span class="nav-text">解读内存</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E8%AE%BF%E9%97%AE%E6%96%B9%E6%B3%95"><span class="nav-number">2.5.</span> <span class="nav-text">数据访问方法</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-number">3.</span> <span class="nav-text">Chapter 3 你的第一个程序</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BE%93%E5%85%A5%E4%B8%80%E4%B8%AA%E7%A8%8B%E5%BA%8F"><span class="nav-number">3.1.</span> <span class="nav-text">输入一个程序</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80%E5%B0%8F%E7%9F%A5%E8%AF%86"><span class="nav-number">3.2.</span> <span class="nav-text">汇编语言小知识</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%89%BE%E5%88%B0%E6%9C%80%E5%A4%A7%E5%80%BC"><span class="nav-number">3.3.</span> <span class="nav-text">找到最大值</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AF%BB%E5%9D%80%E6%A8%A1%E5%BC%8F"><span class="nav-number">3.4.</span> <span class="nav-text">寻址模式</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%9B%B4%E6%8E%A5%E5%AF%BB%E5%9D%80%E6%A8%A1%E5%BC%8F"><span class="nav-number">3.4.1.</span> <span class="nav-text">直接寻址模式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%B4%A2%E5%BC%95%E5%AF%BB%E5%9D%80%E6%A8%A1%E5%BC%8F"><span class="nav-number">3.4.2.</span> <span class="nav-text">索引寻址模式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%97%B4%E6%8E%A5%E5%AF%BB%E5%9D%80%E6%A8%A1%E5%BC%8F"><span class="nav-number">3.4.3.</span> <span class="nav-text">间接寻址模式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9F%BA%E6%8C%87%E9%92%88%E5%AF%BB%E5%9D%80%E6%A8%A1%E5%BC%8F"><span class="nav-number">3.4.4.</span> <span class="nav-text">基指针寻址模式</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-number">4.</span> <span class="nav-text">Chapter 4 函数</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%87%BD%E6%95%B0%E6%98%AF%E5%A6%82%E4%BD%95%E5%B7%A5%E4%BD%9C%E7%9A%84"><span class="nav-number">4.1.</span> <span class="nav-text">函数是如何工作的</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8C%E8%B0%83%E7%94%A8%E7%BA%A6%E5%AE%9A%E7%9A%84%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80%E5%87%BD%E6%95%B0"><span class="nav-number">4.2.</span> <span class="nav-text">使用C调用约定的汇编语言函数</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A0%88"><span class="nav-number">4.2.1.</span> <span class="nav-text">栈</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#C%E8%AF%AD%E8%A8%80%E5%87%BD%E6%95%B0%E8%B0%83%E7%94%A8%E7%BA%A6%E5%AE%9A"><span class="nav-number">4.2.2.</span> <span class="nav-text">C语言函数调用约定</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%80%E4%B8%AA%E4%BD%BF%E7%94%A8%E5%87%BD%E6%95%B0%E7%9A%84%E4%BE%8B%E5%AD%90"><span class="nav-number">4.2.3.</span> <span class="nav-text">一个使用函数的例子</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%80%92%E5%BD%92%E5%87%BD%E6%95%B0"><span class="nav-number">4.2.4.</span> <span class="nav-text">递归函数</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-number">5.</span> <span class="nav-text">Chapter Final(?)</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">libfsx</p>
+  <div class="site-description" itemprop="description">诶～泥是怎么找到窝的qwq</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">9</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">标签</span>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/shuxiangfan" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;shuxiangfan" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:mail@libfsx.org" title="E-Mail → mailto:mail@libfsx.org" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i></a>
+      </span>
+  </div>
+  <div class="cc-license animated" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="https://cdnjs.cloudflare.com/ajax/libs/creativecommons-vocabulary/2020.11.3/assets/license_badges/small/by_sa.svg" alt="Creative Commons"></a>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://shuxiangfan.github.io/2025/08/18/Assembly-notes/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="libfsx">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="libfsx's Blog">
+      <meta itemprop="description" content="诶～泥是怎么找到窝的qwq">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Programming from the Ground Up notes | libfsx's Blog">
+      <meta itemprop="description" content="一些汇编和计算机常识">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Programming from the Ground Up notes
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2025-08-18 22:09:25" itemprop="dateCreated datePublished" datetime="2025-08-18T22:09:25+08:00">2025-08-18</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2026-02-06 23:01:30" itemprop="dateModified" datetime="2026-02-06T23:01:30+08:00">2026-02-06</time>
+    </span>
+
+  
+</div>
+
+            <div class="post-description">一些汇编和计算机常识</div>
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>本文是 Jonathan Bartlett 撰写的 <em>Programming from the Ground Up</em> 书的笔记</p>
+<h1>Chapter 1 介绍</h1>
+<h2 id="工具">工具</h2>
+<p>本书讨论的是x86的汇编语言和 GNU/Linux 操作系统，所以我们会使用标准的 GCC 工具集。<br>
+Tips：本书使用<strong>AT&amp;T</strong>语体</p>
+<h1>Chapter 2 计算机架构</h1>
+<p>现代计算机架构基于冯诺依曼架构，包括两个部分——<strong>CPU</strong>和<strong>内存</strong>。</p>
+<h2 id="计算机内存的结构">计算机内存的结构</h2>
+<p>存储在计算机的内存里面的不止是数据，还有控制计算机操作的程序。除了它们被使用的方式不同，它们都以相同的方式储存在内存中并以相同的方式访问。</p>
+<h2 id="中央处理器（CPU）">中央处理器（CPU）</h2>
+<p>CPU从内存中读取指令并执行它们。这被称为 <code>fetch-excute cycle</code><br>
+为了实现这个，CPU包含：</p>
+<ul>
+<li>程序计数器（Program Counter）</li>
+<li>指令解码器（Instruction Decoder）</li>
+<li>数据总线（Data bus）</li>
+<li>通用寄存器（General-purpose registers）</li>
+<li>算术和逻辑单元（Arithmetic and logic unit）</li>
+</ul>
+<p>程序计数器告诉计算机该从哪里获取下一条指令。程序计数器保存着下一个该被执行的指令的内存地址。CPU通过程序计数器中储存的内存地址，将对应地址的指令传递给指令解码器。指令解码器将解码指令并指明该条指令有关的内存地址。计算机指令一般由实际的指令和一些内存地址组成。<br>
+然后计算机用数据总线来获取待处理的内存位置。数据总线用来连接CPU和内存的物理连线，就像主板上的线那样。<br>
+除了处理器外面的内存，处理器自己还有一些特殊的高速的内存位置，称作<strong>寄存器（registers）</strong>。有两种寄存器——<strong>通用寄存器（General-purpose registers）</strong> 和 <strong>专用寄存器（Special-purpose registers）</strong>。<br>
+现在CPU已经获取到了它需要的所有数据，它将数据和已解码的指令传递给算术和逻辑单元来进行进一步处理。指令实际上就是在这里被执行的。在计算完成之后，结果被放在数据总线上并被储存到合适的内存位置或寄存器中。<br>
+这是一个极度简化了的过程，事实上，现代计算机已经进步了很多， 以上的过程并未考虑缓存层次结构、超标量处理器、流水线、分支预测、乱序执行、微码转换、协处理器和其他优化。</p>
+<h2 id="一些术语">一些术语</h2>
+<p>计算机的内存是固定大小的有序的存储空间。每个存储位置对应的编号叫做它的 <strong>地址（address）</strong> 单个存储位置的大小叫做 <strong>字节（byte）</strong> 。在x86处理器上，一字节就是一个0到255的数。<br>
+计算机可以使用ASCII来处理文字。<br>
+如果我们需要表示比255大的数字怎么办？我们可以吧多个字节整合在一起，比如两个字节最大表示65535，四个字节最大可以表示4294967295。幸运的是，我们不必手动把字节捏在一起，事实上，计算机会帮我们处理细节。<strong>我们默认处理四字节长的数据</strong><br>
+你可以把寄存器想象为你的桌子，上面保存着你要处理的数据。<br>
+在计算机上，一个典型的寄存器的大小叫做一个电脑的<strong>字长（word size）</strong>。x86处理器的字长为四字节。这意味着四字节是在x86上处理的最自然的。地址也是四字节长的，所以它能塞进一个寄存器内，<br>
+储存在内存中的地址也叫做<strong>指针（pointers）</strong>。它们指向一个不同的内存位置。<br>
+正如我们前面提到的，计算机指令和数据以一致的方式储存着。区别他俩的唯一方式就是通过一个专用寄存器叫做指令指针，它指向内存中的指令。如果指令指针指向一个内存字，那么它就会被解释为指令。</p>
+<h2 id="解读内存">解读内存</h2>
+<p>计算机十分精确，所以你对你在操作什么东西必须十分明白。</p>
+<h2 id="数据访问方法">数据访问方法</h2>
+<p>处理器有很多访问数据的方法，称作<strong>寻址模式（addressing modes）</strong>  。<br>
+最简单的寻址模式是<strong>立即模式（immediate mode）</strong>，数据直接内嵌在处理器中，比如我们要载入数字0，那么就可以指定立即模式直接写入0。<br>
+<strong>寄存器寻址模式（register addressing mode）</strong>，指令包含一个要访问的寄存器，而不是一个内存地址。剩余的模式会处理内存地址。<br>
+<strong>直接寻址模式（direct addressing mode）</strong>  ，指令包含着要访问的内存地址。计算机会直接从指定的内存地址获取数据。<br>
+<strong>索引寻址模式（indexed addressing mode）</strong>，指令包含内存地址，并且还指定了一个 <strong>索引寄存器（index register）</strong> 来对那个地址进行 <strong>偏移（offset）</strong> 。比方说你指定了地址114510，偏移寄存器储存为4，那么你实际访问的地址就是114514。在x86处理器上，你还可以给索引寄存器指定一个 <strong>倍数（multiplier）</strong> 以便一次访问若干个字节的内存。<br>
+<strong>间接寻址模式（indirect addressing mode）</strong> ，指令包含一个寄存器，里面储存着一个指针指向我们要访问的地方。比如<code>%eax</code>寄存器中储存着值4，那么在间接寻址模式下，我们就去内存地址为4的位置加载数据，而在直接寻址模式，我们直接载入4。<br>
+最后，是 <strong>基指针寻址模式（base pointer addressing mode）</strong> 。和间接寻址模式相似，但是你还要加入偏移来向寄存器加上偏移值再访问数据。<br>
+还有其他的寻址模式，在这里我们只介绍重要的几个。</p>
+<h1>Chapter 3 你的第一个程序</h1>
+<h2 id="输入一个程序">输入一个程序</h2>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">#exit.s: 一个简单的程序，退出并向内核返回一个状态码。</span><br><span class="line">.section .data</span><br><span class="line">.section .text #这一部分是指令</span><br><span class="line">.global _start #表明_start符号（symbol）</span><br><span class="line">                #符号通常用来标记程序或数据的位置，你可以用符号的名字而不是地址来引用它</span><br><span class="line">                # .global表明汇编器不应该丢弃这个符号，因为链接器会需要</span><br><span class="line">                #_start 应永远与.global 使用，否则电脑不知道从哪里开始执行你的程序</span><br><span class="line">_start: #定义了_start标签（lable）的值</span><br><span class="line">        #标签就是一个符号后面跟一个冒号</span><br><span class="line">        #标签定义了符号的值</span><br><span class="line">movl $1, %eax #系统调用编号，将数字1传入%eax寄存器</span><br><span class="line">              #数字1前加$符号表示我们使用立即模式</span><br><span class="line">movl $0, %ebx #返回的状态码，将数字0传入%ebx寄存器</span><br><span class="line">int $0x80 #内核中断，int代表中断（interrupt）</span><br></pre></td></tr></table></figure>
+<p>使用 <code>as exit.s -o exit.o</code> 和 <code>ld exit.o -o exit</code> 来汇编并链接。</p>
+<h2 id="汇编语言小知识">汇编语言小知识</h2>
+<p>中断就是中断正常的指令流，把控制权交给内核来完成 <strong>系统调用（system call）</strong> ，系统调用完成后再将控制权交回程序。<br>
+<strong>系统调用快速回顾：</strong> 简而言之，系统的功能可以通过系统调用来访问。通过特别地设置寄存器并执行<code>int 0x80</code>指令，Linux 内核通过 <code>%eax</code> 寄存器的值知道我们要访问哪个系统调用，在上面的例子中，系统调用序号1就是<code>exit</code>调用，需要把状态码放在 <code>%ebx</code> 寄存器中。</p>
+<p>在x86处理器上，有几个通用寄存器（都可以使用 <code>movl</code> 指令），包括：</p>
+<ul>
+<li><code>%eax</code></li>
+<li><code>%ebx</code></li>
+<li><code>%ecx</code></li>
+<li><code>%edx</code></li>
+<li><code>%edi</code></li>
+<li><code>%esi</code></li>
+</ul>
+<p>还有专用寄存器，包括：</p>
+<ul>
+<li><code>%ebp</code></li>
+<li><code>%esp</code></li>
+<li><code>%eip</code></li>
+<li><code>%eflags</code></li>
+</ul>
+<p>像 <code>%eip</code> 和 <code>%eflags</code> 这种只能通过特殊的指令访问。其他的寄存器可以像通用寄存器那样用普通的指令访问，但是他们有特殊的意义和用途。</p>
+<h2 id="找到最大值">找到最大值</h2>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"># maximum.s: 找出一组数据的最大值</span><br><span class="line"># %edi储存着正在处理的数据的索引</span><br><span class="line"># %ebx储存着目前找到的最大的数据</span><br><span class="line"># %eax储存着目前的数据</span><br><span class="line">.section .data</span><br><span class="line"></span><br><span class="line">data_items: # 没有_global标志，我们只在程序内部使用它</span><br><span class="line"> .long 3,67,34,222,45,75,54,34,44,33,22,11,66,0</span><br><span class="line"></span><br><span class="line">.section .text</span><br><span class="line"></span><br><span class="line">.global _start</span><br><span class="line"></span><br><span class="line">_start:</span><br><span class="line"> movl $0, %edi</span><br><span class="line"> movl data_items(,%edi,4),  %eax</span><br><span class="line"> movl %eax, %ebx</span><br><span class="line"></span><br><span class="line">start_loop:</span><br><span class="line"> cmpl $0, %eax</span><br><span class="line"> je loop_exit</span><br><span class="line"> incl %edi</span><br><span class="line"> movl data_items(,%edi,4), %eax</span><br><span class="line"> cmpl %ebx, %eax</span><br><span class="line"> jle start_loop</span><br><span class="line"> movl %eax, %ebx</span><br><span class="line"> jmp start_loop</span><br><span class="line"></span><br><span class="line">loop_exit:</span><br><span class="line"> movl $1, %eax</span><br><span class="line"> int 0x80</span><br></pre></td></tr></table></figure>
+<p>通过 <code>echo $?</code> 来获得运行结果<br>
+第八行的 <code>.long</code> 表示保留的内存位置的类型，有：</p>
+<ul>
+<li><code>.byte</code>:占据一个存储位置，0-255</li>
+<li><code>.int</code>：占据两个存储位置，0-65535</li>
+<li><code>.long</code>：占据四个存储位置，0-4294967295</li>
+<li><code>.ascii</code>：在内存中储存字符串，如 <code>.ascii &quot;Hello there\0&quot;</code> 就会以ascii码的形式在内存中储存12个字节，其中 <code>\0</code> 表示字符串的终止，不会显示在屏幕上。</li>
+</ul>
+<p>第十六行的 <code>movl data_items(,%edi,4)</code> 表示从data_items开始，以 <code>%edi</code> 为索引，一次获取四个字节的数据并将其储存在 <code>%eax</code> 寄存器中。索引寻址模式更一般的形式是：<br>
+<code>movl 开始的地址(,%索引寄存器,字长)</code><br>
+下一个 <code>cmpl</code> 指令是比较两个值，影响到 <code>%eflags</code> 寄存器，也称作状态寄存器。紧接着的是流控制指令 <code>je</code> ，它使用状态寄存器来获取上一次比较的结果，还有很多跳转指令：</p>
+<ul>
+<li><code>je</code> 如果相等就跳转</li>
+<li><code>jg</code> 如果第二个比较的值比第一个大就跳转</li>
+<li><code>jge</code> 如果第二个比较的值大于等于第一个就跳转</li>
+<li><code>jl</code> 如果第二个比较的值小于第一个就跳转</li>
+<li><code>jle</code> 如果第二个比较的值小于等于第一个就跳</li>
+<li><code>jmp</code> 无论情况如何，直接跳转</li>
+</ul>
+<p><code>incl %edi</code> 表示将 <code>%edi</code> 加1</p>
+<h2 id="寻址模式">寻址模式</h2>
+<p>通用的内存地址引用是：<br>
+<code>地址或偏移(%基准或偏移,%索引,倍数)</code><br>
+<code>最终地址 = 地址或偏移 + %基准或偏移 + 倍数 * %索引</code></p>
+<h3 id="直接寻址模式">直接寻址模式</h3>
+<p>只使用地址或偏移部分，例如 <code>movl ADDRESS, %eax</code> 将在ADDRESS内存地址的值载入 <code>%eax</code> 寄存器</p>
+<h3 id="索引寻址模式">索引寻址模式</h3>
+<p>例如 <code>movl string_start(,%ecx,1), %eax</code> 从 <code>string_start</code> 开始，再加上 <code>1*%ecx</code> ，将最终的值载入<code>%eax</code></p>
+<h3 id="间接寻址模式">间接寻址模式</h3>
+<p>间接寻址模式将一个寄存器中保存的内存地址对应的值载入，例如 <code>movl (%eax), %ebx</code> 将 <code>%eax</code> 储存的内存地址的值载入<code>%ebx</code></p>
+<h3 id="基指针寻址模式">基指针寻址模式</h3>
+<p>基指针寻址与间接寻址模式相似，除了它向寄存器中储存的内存地址加上一个常量。例如<code>movl 4(%eax), %ebx</code></p>
+<p>除此之外，我们还能操作不同大小的数据，例如<code>movb</code>可以一次移动一个字节的数据，而且我们可以使用部分寄存器。<br>
+拿 <code>%eax</code> 举个例子，如果你想一次使用两个字节，那么 <code>%ax</code> 就是 <code>%eax</code> 的后半部分， <code>%ax</code> 还能再分为两个一字节大小的寄存器，前半部分叫 <code>%ah</code> ，后半部分叫 <code>%al</code>。<br>
+<img src="../../themes/fluid/source/img/half_reg_demo.png" alt="%eax寄存器的布局"><br>
+使用部分的寄存器会损坏之前的数据，请小心。</p>
+<h1>Chapter 4 函数</h1>
+<h2 id="函数是如何工作的">函数是如何工作的</h2>
+<p>函数由以下几部分组成：</p>
+<ul>
+<li>函数名（function name）</li>
+<li>函数参数（function parameters）</li>
+<li>局部变量（local variables）</li>
+<li>静态变量（static variables）</li>
+<li>全局变量（global variables）</li>
+<li>返回地址（return address）</li>
+<li>返回值（return value）</li>
+</ul>
+<p>不同的语言的变量储存、参数传递和返回地址传递的方式不同。这种区别就是不同的 <strong>调用约定（calling convention）</strong>。<br>
+汇编语言允许你使用任何语言的调用约定，你甚至可以自己实现一个调用约定，但为了与其他语言兼容，最好采用对应的方式。<br>
+这里我们介绍C语言的调用约定。</p>
+<h2 id="使用C调用约定的汇编语言函数">使用C调用约定的汇编语言函数</h2>
+<h3 id="栈">栈</h3>
+<p>我们先要了解栈（stack）是什么。你的电脑有栈，它在内存地址的顶部。你可以用 <code>pushl</code> 向栈的顶部压入东西，也可以用 <code>popl</code> 弹出东西。虽然我们说“栈的顶部”，但是栈在内存地址的顶部，所以栈是向下增长的，新数据在栈内存地址的下面。我们可以一直往栈里压入东西，栈顶部会移动来容纳我们的数据，直到栈往下增长碰到我们的代码或其他数据。<br>
+所以我们怎么知道栈的顶部在哪？<code>%esp</code> （栈寄存器）寄存器保存着指向栈顶部的指针。每次我们用 <code>pushl</code> 压入栈， <code>%esp</code> 就会减4来指向栈顶部，用 <code>popl</code> 弹出栈，它就会加4。<br>
+可以使用各种寻址模式来访问栈中各种位置的数据。</p>
+<h3 id="C语言函数调用约定">C语言函数调用约定</h3>
+<p>C语言首先将参数反向地压入栈中，然后执行 <code>call + 函数名</code> 指令调用函数， <code>call</code> 会将返回地址压入栈顶，并修改 <code>%eip</code> 寄存器（指令指针）使其指向函数开始的指令的地址。函数刚调用时栈看起来像这样：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">参数N  </span><br><span class="line">...  </span><br><span class="line">参数2  </span><br><span class="line">参数1  </span><br><span class="line">返回地址 &lt;---- (%esp)</span><br></pre></td></tr></table></figure>
+<p>调用函数后，第一件事就是将原来的基指针寄存器（ <code>%ebp</code> ）压住栈中保存，并将 <code>%ebp</code> 移动到 <code>%esp</code>的位置（ <code>movl %esp, %ebp</code> ），这样无论怎么压入弹出栈，你总能通过位于函数开始位置的 <code>%ebp</code> 轻松地访问栈中各个位置。<br>
+这样， <code>%esp</code> 就能自由移动，将其减去相应的字节数来创建更多的栈的空间供函数使用（比如储存局部变量）。<br>
+当函数干完活了，它按下面的流程滚蛋：<br>
+1.在 <code>%eax</code> 中储存返回值。<br>
+2.将栈指针恢复到调用前的样子。<br>
+3.使用 <code>ret</code> 指令，从栈顶获得返回地址并将 <code>%eip</code> 设定到那里。将控制权交回原程序。<br>
+执行下面的指令：</p>
+ <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">movl %ebp, %esp</span><br><span class="line">popl %ebp</span><br><span class="line">ret</span><br></pre></td></tr></table></figure>
+<p>所有的局部变量都已销毁，现在可以在 <code>%eax</code> 找到返回值，若不需要调用参数，还需要把 <code>%esp</code> 加4*参数数量（ <code>addl</code> ）。<br>
+注意：调用函数的时候除了 <code>%ebp</code> 会保留原来的内容，你应该假设其它寄存器都被清空了。<br>
+这是一个简化了的版本，具体细节可以在<a target="_blank" rel="noopener" href="http://www.linuxbase.org/spec/refspecs/">这里</a>查询 <em>System V Application Binary Interface- Intel386 Architecture<br>
+Processor Supplement</em></p>
+<h3 id="一个使用函数的例子">一个使用函数的例子</h3>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line"># 演示计算2^3+5^2</span><br><span class="line">.section .data</span><br><span class="line">.section .text</span><br><span class="line">.global _start</span><br><span class="line"></span><br><span class="line">_start:</span><br><span class="line"> pushl $3</span><br><span class="line"> pushl $2</span><br><span class="line"> call power</span><br><span class="line"> addl $8, %esp</span><br><span class="line"></span><br><span class="line"> pushl %eax</span><br><span class="line"></span><br><span class="line"> pushl $2</span><br><span class="line"> pushl $5</span><br><span class="line"> call power</span><br><span class="line"> addl $8, %esp</span><br><span class="line"></span><br><span class="line"> popl %ebx</span><br><span class="line"> addl %eax, %ebx</span><br><span class="line"></span><br><span class="line"> movl $1, %eax</span><br><span class="line"> int 0x80</span><br><span class="line"></span><br><span class="line">.type power, @function # 告知链接器 power 应被视为一个函数</span><br><span class="line">power:</span><br><span class="line"> pushl %ebp</span><br><span class="line"> movl %esp, %ebp</span><br><span class="line"> subl $4, %esp</span><br><span class="line"> </span><br><span class="line"> movl 8(%ebp), %ebx</span><br><span class="line"> movl 12(%ebp), %ecx</span><br><span class="line"></span><br><span class="line"> movl %ebx, -4(%ebp)</span><br><span class="line"></span><br><span class="line">power_loop_start:</span><br><span class="line"> cmpl $1, %ecx</span><br><span class="line"> je end_power</span><br><span class="line"> movl -4(%ebp), %eax</span><br><span class="line"> imull %ebx, %eax</span><br><span class="line"> movl %eax, -4(%ebp)</span><br><span class="line"> decl %ecx</span><br><span class="line"> jmp power_loop_start</span><br><span class="line"></span><br><span class="line">end_power:</span><br><span class="line"> movl -4(%ebp), %eax</span><br><span class="line"> movl %ebp, %esp</span><br><span class="line"> popl %ebp</span><br><span class="line"> ret</span><br></pre></td></tr></table></figure>
+<h3 id="递归函数">递归函数</h3>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"># 此程序计算4的阶乘</span><br><span class="line">.section .data</span><br><span class="line">.section .text</span><br><span class="line">.global _start</span><br><span class="line">.global factorial</span><br><span class="line">_start:</span><br><span class="line"> pushl $4</span><br><span class="line"> call factorial</span><br><span class="line"> addl $4, %esp</span><br><span class="line"> movl %eax, %ebx</span><br><span class="line"> movl $1, %eax</span><br><span class="line"> int 0x80</span><br><span class="line">factorial:</span><br><span class="line"> pushl %ebp</span><br><span class="line"> movl %esp, %ebp</span><br><span class="line"> movl 8(%ebp), %eax</span><br><span class="line"> cmpl $1, %eax</span><br><span class="line"> je end_factorial</span><br><span class="line"> decl %eax</span><br><span class="line"> pushl %eax</span><br><span class="line"> call factorial</span><br><span class="line"> movl 8(%ebp), %ebx</span><br><span class="line"> imull %ebx, %eax</span><br><span class="line">end_factorial:</span><br><span class="line"> movl %ebp, %esp</span><br><span class="line"> popl %ebp</span><br><span class="line"> ret</span><br></pre></td></tr></table></figure>
+<h1>Chapter Final(?)</h1>
+<p>如你所见，这篇笔记到末尾了。这里面肯定还有错误，希望广大读者能指出，鄙人不才，献丑了。<br>
+汇编是一种看起来简单但使用起来极其复杂的底层语言，在高级语言流行的时代，我们不能粗暴的忽视汇编，相反，接触一些汇编知识会让我们对计算机架构和高级语言的指针有更深刻的理解，也为逆向和信息安全领域打下一些基础。<br>
+<em>Programming from the Ground Up</em> 这本书还有内容，由于笔者精力和个人安排，笔记就记录到这，后面可能会更新一点第五章的内容。<br>
+E.O.F.</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>libfsx
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="https://shuxiangfan.github.io/2025/08/18/Assembly-notes/" title="Programming from the Ground Up notes">https://shuxiangfan.github.io/2025/08/18/Assembly-notes/</a>
+  </li>
+  <li class="post-copyright-license">
+      <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2024/08/25/Android-%E8%B0%83%E8%AF%95%E5%B0%8F%E8%AF%BE%E5%A0%82/" rel="prev" title="Android 调试小课堂">
+                  <i class="fa fa-angle-left"></i> Android 调试小课堂
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2025/10/28/%E6%9C%80%E5%A4%A7%E5%85%AC%E7%BA%A6%E6%95%B0%E4%B8%8E%E6%9C%80%E5%B0%8F%E5%85%AC%E5%80%8D%E6%95%B0/" rel="next" title="最大公约数与最小公倍数">
+                  最大公约数与最小公倍数 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 2021 – 
+    <span itemprop="copyrightYear">2026</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">除转载外，网站内容均为 CC-BY-SA 4.0 协议</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+</body>
+</html>

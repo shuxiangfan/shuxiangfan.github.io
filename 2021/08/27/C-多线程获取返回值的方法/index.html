@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-96x96.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon.ico">
+  <link rel="mask-icon" href="/images/favicon-96x96.png" color="#222">
+  <link rel="manifest" href="/images/site.webmanifest">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css" integrity="sha256-VHqXKFhhMxcpubYf9xiWdCiojEbY9NexQ4jh8AxbvcM=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"shuxiangfan.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.27.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":true,"style":"flat"},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="C++多线程探险第一弹">
+<meta property="og:type" content="article">
+<meta property="og:title" content="C++多线程获取返回值的方法">
+<meta property="og:url" content="https://shuxiangfan.github.io/2021/08/27/C-%E5%A4%9A%E7%BA%BF%E7%A8%8B%E8%8E%B7%E5%8F%96%E8%BF%94%E5%9B%9E%E5%80%BC%E7%9A%84%E6%96%B9%E6%B3%95/index.html">
+<meta property="og:site_name" content="libfsx&#39;s Blog">
+<meta property="og:description" content="C++多线程探险第一弹">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2021-08-27T11:53:54.000Z">
+<meta property="article:modified_time" content="2026-02-06T15:01:30.356Z">
+<meta property="article:author" content="libfsx">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://shuxiangfan.github.io/2021/08/27/C-%E5%A4%9A%E7%BA%BF%E7%A8%8B%E8%8E%B7%E5%8F%96%E8%BF%94%E5%9B%9E%E5%80%BC%E7%9A%84%E6%96%B9%E6%B3%95/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://shuxiangfan.github.io/2021/08/27/C-%E5%A4%9A%E7%BA%BF%E7%A8%8B%E8%8E%B7%E5%8F%96%E8%BF%94%E5%9B%9E%E5%80%BC%E7%9A%84%E6%96%B9%E6%B3%95/","path":"2021/08/27/C-多线程获取返回值的方法/","title":"C++多线程获取返回值的方法"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>C++多线程获取返回值的方法 | libfsx's Blog</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script>
+
+  
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"default","dark":"dark"},"js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mermaid/11.10.1/mermaid.min.js","integrity":"sha256-BmQmdWDS8X2OTbrwELWK366LV6escyWhHHe0XCTU/Hk="}}</script>
+  <script src="/js/third-party/tags/mermaid.js" defer></script>
+
+
+
+
+
+  
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">libfsx's Blog</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-number">1.</span> <span class="nav-text">1. 传统的方法：在线程间共享指针</span></a></li><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-number">2.</span> <span class="nav-text">2. C++11的方法：使用std::future和std::promise</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">libfsx</p>
+  <div class="site-description" itemprop="description">诶～泥是怎么找到窝的qwq</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">9</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">标签</span>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/shuxiangfan" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;shuxiangfan" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:mail@libfsx.org" title="E-Mail → mailto:mail@libfsx.org" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i></a>
+      </span>
+  </div>
+  <div class="cc-license animated" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="https://cdnjs.cloudflare.com/ajax/libs/creativecommons-vocabulary/2020.11.3/assets/license_badges/small/by_sa.svg" alt="Creative Commons"></a>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://shuxiangfan.github.io/2021/08/27/C-%E5%A4%9A%E7%BA%BF%E7%A8%8B%E8%8E%B7%E5%8F%96%E8%BF%94%E5%9B%9E%E5%80%BC%E7%9A%84%E6%96%B9%E6%B3%95/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="libfsx">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="libfsx's Blog">
+      <meta itemprop="description" content="诶～泥是怎么找到窝的qwq">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="C++多线程获取返回值的方法 | libfsx's Blog">
+      <meta itemprop="description" content="C++多线程探险第一弹">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          C++多线程获取返回值的方法
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2021-08-27 19:53:54" itemprop="dateCreated datePublished" datetime="2021-08-27T19:53:54+08:00">2021-08-27</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2026-02-06 23:01:30" itemprop="dateModified" datetime="2026-02-06T23:01:30+08:00">2026-02-06</time>
+    </span>
+
+  
+</div>
+
+            <div class="post-description">C++多线程探险第一弹</div>
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>在许多时候，我们会有这样的需求——即我们想要得到线程返回的值。但是在C++11 多线程中我们注意到，std::thread对象会忽略顶层函数的返回值。</p>
+<p>那问题来了，我们要怎么获得线程的返回值呢？</p>
+<p>我们通过一个例子来说明如何实现这个需求。用多个线程计算（a+b）/ (x+y) 的值</p>
+<p>有两种方法，分别是</p>
+<h1><strong>1. 传统的方法：在线程间共享指针</strong></h1>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">#include#include#include#includeusing namespace std;</span><br><span class="line"> </span><br><span class="line">void func2(int x, int y,int* ans) &#123;</span><br><span class="line">  *ans= x + y;</span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line">int main()</span><br><span class="line">&#123;</span><br><span class="line">  //计算（a+b）/(x+y)</span><br><span class="line">  //用三个线程，一个线程计算a+b，另一个线程计算x+y</span><br><span class="line">  int a, b, x, y;</span><br><span class="line">  a = 10, b = 8, x = 2, y = 4;</span><br><span class="line"> </span><br><span class="line">  int* sum1 = new int(0);</span><br><span class="line">  int* sum2 = new int(0);</span><br><span class="line">  thread t1(func2, a, b, sum1);</span><br><span class="line">  t1.join();</span><br><span class="line">  thread t2(func2, x, y, sum2);</span><br><span class="line">  t2.join();</span><br><span class="line">   </span><br><span class="line">  cout &lt;&lt; (*sum1) / (*sum2) &lt;&lt; endl;</span><br><span class="line"> </span><br><span class="line">  delete sum1;</span><br><span class="line">  delete sum2;</span><br><span class="line">   </span><br><span class="line">  system(&quot;pause&quot;);</span><br><span class="line">  return 0;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1><strong>2. C++11的方法：使用std::future和std::promise</strong></h1>
+<p>std::future和std::promise是封装好的两个类模板，这两个类需要配合使用，他们的头文件是#include</p>
+<p>std::future，它表示存储着一个未来会被初始化的变量。这个变量可以通过std::future提供的成员函数std::future::get()来得到。如果在这个变量被赋值之前就有别的线程试图通过std::future::get()获取这个变量，那么这个线程将会被阻塞到这个变量可以获取为止。</p>
+<p>std::promise同样也是一个类模板，这个对象承诺在未来一定会初始化一个变量(这个变量也就是std::future中的变量)。</p>
+<p>每一个std::promise对象都有一个与之关联的std::future对象。当std::promise设置值的时候，这个值就会赋给std::future中的对象了。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line">#include#include#include#include#include//std::future std::promise</span><br><span class="line">#include//std::ref模板传参的时候使用</span><br><span class="line"> </span><br><span class="line">void func2(int x, int y,std::promise&amp;promiseObj) &#123;</span><br><span class="line">  promiseObj.set_value(x+y);</span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line">int main()</span><br><span class="line">&#123;</span><br><span class="line">  //计算（a+b）/(x+y)</span><br><span class="line">  //用三个线程，一个线程计算a+b，另一个线程计算x+y</span><br><span class="line">  int a, b, x, y;</span><br><span class="line">  a = 10, b = 8, x = 2, y = 4;</span><br><span class="line"> </span><br><span class="line">  int sum1, sum2;</span><br><span class="line">  //声明一个类</span><br><span class="line">  std::promisepromiseObj;</span><br><span class="line">  //将future和promise关联</span><br><span class="line">  std::futurefutureObj = promiseObj.get_future();</span><br><span class="line">  //模板传参的时候使用ref，否则传参失败</span><br><span class="line">  std::thread t1(func2, a, b, ref(promiseObj));</span><br><span class="line">  t1.join();</span><br><span class="line">  //获取值</span><br><span class="line">  sum1 = futureObj.get();</span><br><span class="line">  std::cout &lt;&lt; &quot;sum1=&quot; &lt;&lt; sum1 &lt;&lt; std::endl;</span><br><span class="line"> </span><br><span class="line">  //不能直接复用上面的future和promise</span><br><span class="line">  std::promisepromiseObj2;</span><br><span class="line">  std::futurefutureObj2 = promiseObj2.get_future();</span><br><span class="line"> </span><br><span class="line">  std::thread t2(func2, x, y, ref(promiseObj2));</span><br><span class="line">  t2.join();</span><br><span class="line">  sum2 = futureObj2.get();</span><br><span class="line">  std::cout &lt;&lt; &quot;sum2=&quot; &lt;&lt; sum2 &lt;&lt; std::endl;</span><br><span class="line"> </span><br><span class="line">  std::cout &lt;&lt; &quot;sum1/sum2=&quot; &lt;&lt; sum1 / sum2 &lt;&lt; std::endl;</span><br><span class="line">   </span><br><span class="line">  std::system(&quot;pause&quot;);</span><br><span class="line">  return 0;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>-EOF-</p>
+<hr>
+<p>转载自：<a target="_blank" rel="noopener" href="http://blog.itpub.net/69955379/viewspace-2702825/">ITPUB</a></p>
+<p>作者：<a target="_blank" rel="noopener" href="http://blog.itpub.net/69955379/">大雄45</a></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>libfsx
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="https://shuxiangfan.github.io/2021/08/27/C-%E5%A4%9A%E7%BA%BF%E7%A8%8B%E8%8E%B7%E5%8F%96%E8%BF%94%E5%9B%9E%E5%80%BC%E7%9A%84%E6%96%B9%E6%B3%95/" title="C++多线程获取返回值的方法">https://shuxiangfan.github.io/2021/08/27/C-多线程获取返回值的方法/</a>
+  </li>
+  <li class="post-copyright-license">
+      <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2021/08/27/C-11-%E5%A4%9A%E7%BA%BF%E7%A8%8B-%E7%BA%BF%E7%A8%8B%E7%AE%A1%E7%90%86/" rel="prev" title="C++ 11 多线程--线程管理">
+                  <i class="fa fa-angle-left"></i> C++ 11 多线程--线程管理
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2024/08/12/UART-Ports-For-Google-Pixel-Phones/" rel="next" title="UART Ports For Google Pixel Phones">
+                  UART Ports For Google Pixel Phones <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 2021 – 
+    <span itemprop="copyrightYear">2026</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">除转载外，网站内容均为 CC-BY-SA 4.0 协议</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+</body>
+</html>
