@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-96x96.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon.ico">
+  <link rel="mask-icon" href="/images/favicon-96x96.png" color="#222">
+  <link rel="manifest" href="/images/site.webmanifest">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css" integrity="sha256-VHqXKFhhMxcpubYf9xiWdCiojEbY9NexQ4jh8AxbvcM=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"shuxiangfan.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.27.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":true,"style":"flat"},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="这是《算法导论》的第三部分（正在施工）">
+<meta property="og:type" content="article">
+<meta property="og:title" content="算法导论 第三部分：数据结构">
+<meta property="og:url" content="https://shuxiangfan.github.io/2026/04/15/%E7%AC%AC%E4%B8%89%E9%83%A8%E5%88%86%EF%BC%9A%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/index.html">
+<meta property="og:site_name" content="libfsx&#39;s Blog">
+<meta property="og:description" content="这是《算法导论》的第三部分（正在施工）">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://math.now.sh/?inline=SEARCH%28S%2Ck%29">
+<meta property="og:image" content="https://math.now.sh/?inline=S">
+<meta property="og:image" content="https://math.now.sh/?inline=x">
+<meta property="og:image" content="https://math.now.sh/?inline=x.key%3Dk">
+<meta property="og:image" content="https://math.now.sh/?inline=NIL">
+<meta property="og:image" content="https://math.now.sh/?inline=INSERT%28S%2Cx%29">
+<meta property="og:image" content="https://math.now.sh/?inline=DELETE%28S%2Cx%29">
+<meta property="og:image" content="https://math.now.sh/?inline=MINIMUM%28S%29">
+<meta property="og:image" content="https://math.now.sh/?inline=S">
+<meta property="og:image" content="https://math.now.sh/?inline=MAXMIUM%28S%29">
+<meta property="og:image" content="https://math.now.sh/?inline=S">
+<meta property="og:image" content="https://math.now.sh/?inline=SUCCESSOR%28S%2Cx%29">
+<meta property="og:image" content="https://math.now.sh/?inline=S">
+<meta property="og:image" content="https://math.now.sh/?inline=k">
+<meta property="og:image" content="https://math.now.sh/?inline=x">
+<meta property="og:image" content="https://math.now.sh/?inline=NIL">
+<meta property="og:image" content="https://math.now.sh/?inline=PREDECESSOR%28S%2Cx%29">
+<meta property="og:image" content="https://math.now.sh/?inline=S">
+<meta property="og:image" content="https://math.now.sh/?inline=k">
+<meta property="og:image" content="https://math.now.sh/?inline=x">
+<meta property="og:image" content="https://math.now.sh/?inline=NIL">
+<meta property="og:image" content="https://math.now.sh/?inline=Q.head">
+<meta property="og:image" content="https://math.now.sh/?inline=Q.tail">
+<meta property="og:image" content="https://math.now.sh/?inline=x">
+<meta property="og:image" content="https://math.now.sh/?inline=x">
+<meta property="og:image" content="https://math.now.sh/?inline=x">
+<meta property="og:image" content="https://math.now.sh/?inline=x">
+<meta property="og:image" content="https://math.now.sh/?inline=O%281%29">
+<meta property="og:image" content="https://math.now.sh/?inline=x">
+<meta property="og:image" content="https://math.now.sh/?inline=x">
+<meta property="og:image" content="https://math.now.sh/?inline=x">
+<meta property="og:image" content="https://math.now.sh/?inline=O%281%29">
+<meta property="og:image" content="https://math.now.sh/?inline=p%2Cleft%2Cright">
+<meta property="og:image" content="https://math.now.sh/?inline=x.p%3DNIL">
+<meta property="og:image" content="https://math.now.sh/?inline=x.left">
+<meta property="og:image" content="https://math.now.sh/?inline=x.right">
+<meta property="og:image" content="https://math.now.sh/?inline=NIL">
+<meta property="og:image" content="https://math.now.sh/?inline=x.left%5Ctext%7B-%7Dchild">
+<meta property="og:image" content="https://math.now.sh/?inline=x">
+<meta property="og:image" content="https://math.now.sh/?inline=x.right%5Ctext%7B-%7Dsibling">
+<meta property="og:image" content="https://math.now.sh/?inline=x">
+<meta property="article:published_time" content="2026-04-15T09:14:44.154Z">
+<meta property="article:modified_time" content="2026-04-15T09:14:44.154Z">
+<meta property="article:author" content="libfsx">
+<meta property="article:tag" content="算法导论">
+<meta property="article:tag" content="C++">
+<meta property="article:tag" content="Java">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://math.now.sh/?inline=SEARCH%28S%2Ck%29">
+
+
+<link rel="canonical" href="https://shuxiangfan.github.io/2026/04/15/%E7%AC%AC%E4%B8%89%E9%83%A8%E5%88%86%EF%BC%9A%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://shuxiangfan.github.io/2026/04/15/%E7%AC%AC%E4%B8%89%E9%83%A8%E5%88%86%EF%BC%9A%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/","path":"2026/04/15/第三部分：数据结构/","title":"算法导论 第三部分：数据结构"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>算法导论 第三部分：数据结构 | libfsx's Blog</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script>
+
+  
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"default","dark":"dark"},"js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mermaid/11.10.1/mermaid.min.js","integrity":"sha256-BmQmdWDS8X2OTbrwELWK366LV6escyWhHHe0XCTU/Hk="}}</script>
+  <script src="/js/third-party/tags/mermaid.js" defer></script>
+
+
+
+
+
+  
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">libfsx's Blog</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9F%BA%E6%9C%AC%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84"><span class="nav-number">1.</span> <span class="nav-text">基本数据结构</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A0%88%E5%92%8C%E9%98%9F%E5%88%97"><span class="nav-number">1.1.</span> <span class="nav-text">栈和队列</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%A0%88"><span class="nav-number">1.1.1.</span> <span class="nav-text">栈</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%98%9F%E5%88%97"><span class="nav-number">1.1.2.</span> <span class="nav-text">队列</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%93%BE%E8%A1%A8"><span class="nav-number">1.2.</span> <span class="nav-text">链表</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%9C%89%E5%93%A8%E5%85%B5%E7%9A%84%E5%8F%8C%E5%90%91%E5%BE%AA%E7%8E%AF%E9%93%BE%E8%A1%A8"><span class="nav-number">1.2.1.</span> <span class="nav-text">有哨兵的双向循环链表</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%AF%B9%E8%B1%A1%E7%9A%84%E5%A4%9A%E7%BB%B4%E6%95%B0%E7%BB%84%E8%A1%A8%E7%A4%BA"><span class="nav-number">1.2.2.</span> <span class="nav-text">对象的多维数组表示</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%AF%B9%E8%B1%A1%E7%9A%84%E5%8D%95%E7%BB%B4%E6%95%B0%E7%BB%84%E8%A1%A8%E7%A4%BA"><span class="nav-number">1.2.3.</span> <span class="nav-text">对象的单维数组表示</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%AF%B9%E8%B1%A1%E7%9A%84%E5%88%86%E9%85%8D%E4%B8%8E%E9%87%8A%E6%94%BE"><span class="nav-number">1.2.4.</span> <span class="nav-text">对象的分配与释放</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#1-%E6%A0%B8%E5%BF%83%E6%A6%82%E5%BF%B5%EF%BC%9A%E8%87%AA%E7%94%B1%E9%93%BE%E8%A1%A8-Free-List"><span class="nav-number">1.2.4.1.</span> <span class="nav-text">1. 核心概念：自由链表 (Free List)</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#2-Allocate-Object-%E8%AF%A6%E8%A7%A3"><span class="nav-number">1.2.4.2.</span> <span class="nav-text">2. Allocate-Object 详解</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#2-1-%E4%BC%AA%E4%BB%A3%E7%A0%81"><span class="nav-number">1.2.4.2.1.</span> <span class="nav-text">2.1 伪代码</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#2-2-%E9%80%90%E8%A1%8C%E8%A7%A3%E6%9E%90"><span class="nav-number">1.2.4.2.2.</span> <span class="nav-text">2.2 逐行解析</span></a></li></ol></li><li class="nav-item nav-level-5"><a class="nav-link" href="#3-Free-Object-x-%E8%AF%A6%E8%A7%A3"><span class="nav-number">1.2.4.3.</span> <span class="nav-text">3. Free-Object(x) 详解</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#3-1-%E4%BC%AA%E4%BB%A3%E7%A0%81"><span class="nav-number">1.2.4.3.1.</span> <span class="nav-text">3.1 伪代码</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#3-2-%E9%80%90%E8%A1%8C%E8%A7%A3%E6%9E%90"><span class="nav-number">1.2.4.3.2.</span> <span class="nav-text">3.2 逐行解析</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9C%89%E6%A0%B9%E6%A0%91%E7%9A%84%E8%A1%A8%E7%A4%BA"><span class="nav-number">1.3.</span> <span class="nav-text">有根树的表示</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BA%8C%E5%8F%89%E6%A0%91"><span class="nav-number">1.3.1.</span> <span class="nav-text">二叉树</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%88%86%E6%94%AF%E6%97%A0%E9%99%90%E5%88%B6%E7%9A%84%E6%9C%89%E6%A0%B9%E6%A0%91"><span class="nav-number">1.3.2.</span> <span class="nav-text">分支无限制的有根树</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%A0%91%E7%9A%84%E5%85%B6%E4%BB%96%E8%A1%A8%E7%A4%BA%E6%96%B9%E6%B3%95"><span class="nav-number">1.3.3.</span> <span class="nav-text">树的其他表示方法</span></a></li></ol></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">libfsx</p>
+  <div class="site-description" itemprop="description">诶～泥是怎么找到窝的qwq</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">10</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">标签</span>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/shuxiangfan" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;shuxiangfan" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:mail@libfsx.org" title="E-Mail → mailto:mail@libfsx.org" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i></a>
+      </span>
+  </div>
+  <div class="cc-license animated" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="https://cdnjs.cloudflare.com/ajax/libs/creativecommons-vocabulary/2020.11.3/assets/license_badges/small/by_sa.svg" alt="Creative Commons"></a>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://shuxiangfan.github.io/2026/04/15/%E7%AC%AC%E4%B8%89%E9%83%A8%E5%88%86%EF%BC%9A%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="libfsx">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="libfsx's Blog">
+      <meta itemprop="description" content="诶～泥是怎么找到窝的qwq">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="算法导论 第三部分：数据结构 | libfsx's Blog">
+      <meta itemprop="description" content="这是《算法导论》的第三部分（正在施工）">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          算法导论 第三部分：数据结构
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2026-04-15 17:14:44" itemprop="dateCreated datePublished" datetime="2026-04-15T17:14:44+08:00">2026-04-15</time>
+    </span>
+
+  
+</div>
+
+            <div class="post-description">这是《算法导论》的第三部分（正在施工）</div>
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>下面是动态集合上的操作<br>
+<img src="https://math.now.sh?inline=SEARCH%28S%2Ck%29" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> ：查询操作，返回集合 <img src="https://math.now.sh?inline=S" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 中的指针 <img src="https://math.now.sh?inline=x" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 使得 <img src="https://math.now.sh?inline=x.key%3Dk" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/>，若没有则返回 <img src="https://math.now.sh?inline=NIL" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/>。<br>
+<img src="https://math.now.sh?inline=INSERT%28S%2Cx%29" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> ：插入操作。<br>
+<img src="https://math.now.sh?inline=DELETE%28S%2Cx%29" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> ：删除操作。<br>
+<img src="https://math.now.sh?inline=MINIMUM%28S%29" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> ：返回 <img src="https://math.now.sh?inline=S" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 中最小的关键字元素的指针。<br>
+<img src="https://math.now.sh?inline=MAXMIUM%28S%29" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> ：返回集合 <img src="https://math.now.sh?inline=S" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 中最大的关键字元素的指针。<br>
+<img src="https://math.now.sh?inline=SUCCESSOR%28S%2Cx%29" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> ：返回集合 <img src="https://math.now.sh?inline=S" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 中比 <img src="https://math.now.sh?inline=k" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 大的下一个元素的指针，若 <img src="https://math.now.sh?inline=x" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 是最大的元素则返回 <img src="https://math.now.sh?inline=NIL" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/>。<br>
+<img src="https://math.now.sh?inline=PREDECESSOR%28S%2Cx%29" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> ：返回集合 <img src="https://math.now.sh?inline=S" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 中比 <img src="https://math.now.sh?inline=k" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 小的下一个元素的指针，若 <img src="https://math.now.sh?inline=x" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 是最小的元素则返回 <img src="https://math.now.sh?inline=NIL" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/>。</p>
+<h2 id="基本数据结构">基本数据结构</h2>
+<h3 id="栈和队列">栈和队列</h3>
+<p>栈采用<strong>先进后出</strong>的策略<br>
+队列采用<strong>后进先出</strong>的策略</p>
+<h4 id="栈">栈</h4>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt; <span class="keyword">struct</span> <span class="title class_">Stack</span>&#123;</span><br><span class="line">	T* arr;</span><br><span class="line">	<span class="type">size_t</span> top=<span class="number">0</span>;</span><br><span class="line">	<span class="type">size_t</span> capacity=<span class="number">0</span>;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt; <span class="type">void</span> <span class="title">STACK_INIT</span><span class="params">(Stack&lt;T&gt;&amp; s, <span class="type">size_t</span> capacity)</span></span>&#123;</span><br><span class="line">	s.arr = <span class="keyword">new</span> T[capacity];</span><br><span class="line">	s.capacity=capacity;</span><br><span class="line">	s.top = <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt; <span class="type">bool</span> <span class="title">STACK_EMPTY</span><span class="params">(<span class="type">const</span> Stack&lt;T&gt;&amp; s)</span></span>&#123;</span><br><span class="line">	<span class="keyword">return</span> s.top == <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt; <span class="type">bool</span> <span class="title">PUSH</span><span class="params">(Stack&lt;T&gt;&amp; s, T data)</span> </span>&#123;</span><br><span class="line">	<span class="keyword">if</span> (s.top == s.capacity) <span class="keyword">return</span> <span class="literal">false</span>; <span class="comment">//overflow case</span></span><br><span class="line">	s.arr[s.top] = data;</span><br><span class="line">	s.top++;</span><br><span class="line">	<span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">&#125;</span><br><span class="line">  </span><br><span class="line"><span class="function"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt; <span class="type">bool</span> <span class="title">POP</span><span class="params">(Stack&lt;T&gt;&amp; s)</span> </span>&#123;</span><br><span class="line">	<span class="keyword">if</span> (s.top == <span class="number">0</span>) <span class="keyword">return</span> <span class="literal">false</span>; <span class="comment">//underflow case</span></span><br><span class="line">	s.top -= <span class="number">1</span>;</span><br><span class="line">	<span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt; <span class="type">size_t</span> <span class="title">TOP</span><span class="params">(<span class="type">const</span> Stack&lt;T&gt;&amp; s)</span> </span>&#123;</span><br><span class="line">	<span class="keyword">return</span> s.top - <span class="number">1</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="队列">队列</h4>
+<p>队列有 <strong>队头（head）</strong> 和 <strong>队尾（tail）</strong>。 <img src="https://math.now.sh?inline=Q.head" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 指向队头元素，<img src="https://math.now.sh?inline=Q.tail" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 指向下一个元素将要插入的位置。操作为 <strong>入列（ENQUEUE）</strong> 和 <strong>出列（DEQUEUE）</strong>。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Queue</span>&lt;T&gt;&#123;</span><br><span class="line">    <span class="keyword">private</span> T[] arr;</span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> <span class="variable">length</span> <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> <span class="variable">head</span> <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> <span class="variable">tail</span> <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line">    </span><br><span class="line">    <span class="meta">@SuppressWarnings(&quot;unchecked&quot;)</span></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">Queue</span><span class="params">(<span class="type">int</span> len)</span> &#123;</span><br><span class="line">        arr = (T[]) <span class="keyword">new</span> <span class="title class_">Object</span>[len];</span><br><span class="line">        length = len;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">ENQUEUE</span><span class="params">(T x)</span> <span class="keyword">throws</span> Exception &#123;</span><br><span class="line">        <span class="keyword">if</span>(<span class="built_in">this</span>.FULL()) <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">NoSuchElementException</span>();</span><br><span class="line">        </span><br><span class="line">        <span class="built_in">this</span>.arr[<span class="built_in">this</span>.tail] = x;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">if</span> (<span class="built_in">this</span>.tail == <span class="built_in">this</span>.length - <span class="number">1</span>) &#123;</span><br><span class="line">            <span class="built_in">this</span>.tail = <span class="number">0</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="built_in">this</span>.tail += <span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">public</span> T <span class="title function_">DEQUEUE</span><span class="params">()</span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(<span class="built_in">this</span>.EMPTY()) <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">NoSuchElementException</span>();</span><br><span class="line">        </span><br><span class="line">        <span class="type">T</span> <span class="variable">x</span> <span class="operator">=</span> <span class="built_in">this</span>.arr[<span class="built_in">this</span>.head];</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">if</span> (<span class="built_in">this</span>.head == <span class="built_in">this</span>.length - <span class="number">1</span>) &#123;</span><br><span class="line">            <span class="built_in">this</span>.head = <span class="number">0</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="built_in">this</span>.head += <span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> x;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">public</span> <span class="type">boolean</span> <span class="title function_">EMPTY</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">this</span>.head == <span class="built_in">this</span>.tail;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">public</span> <span class="type">boolean</span> <span class="title function_">FULL</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> (<span class="built_in">this</span>.tail + <span class="number">1</span>) % <span class="built_in">this</span>.length == <span class="built_in">this</span>.head;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="链表">链表</h3>
+<h4 id="有哨兵的双向循环链表">有哨兵的双向循环链表</h4>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt; <span class="keyword">struct</span> <span class="title class_">Node</span> &#123;</span><br><span class="line">	T key;</span><br><span class="line">	Node&lt;T&gt;* prev;</span><br><span class="line">	Node&lt;T&gt;* next;</span><br><span class="line">	  </span><br><span class="line">	<span class="built_in">Node</span>(T k = <span class="built_in">T</span>()) : <span class="built_in">key</span>(k), <span class="built_in">prev</span>(<span class="literal">nullptr</span>), <span class="built_in">next</span>(<span class="literal">nullptr</span>) &#123;&#125;</span><br><span class="line">&#125;;</span><br><span class="line">  </span><br><span class="line"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt; <span class="keyword">class</span> <span class="title class_">LinkedList</span> &#123;</span><br><span class="line">	<span class="keyword">private</span>:</span><br><span class="line">		Node&lt;T&gt;* nil; <span class="comment">//哨兵节点</span></span><br><span class="line">		  </span><br><span class="line">	<span class="keyword">public</span>:</span><br><span class="line">		<span class="built_in">LinkedList</span>() &#123;</span><br><span class="line">		nil = <span class="keyword">new</span> <span class="built_in">Node</span>&lt;T&gt;();</span><br><span class="line">		nil-&gt;next = nil;</span><br><span class="line">		nil-&gt;prev = nil;</span><br><span class="line">&#125;</span><br><span class="line">  </span><br><span class="line"><span class="function"><span class="type">bool</span> <span class="title">EMPTY</span><span class="params">()</span> </span>&#123;</span><br><span class="line">	<span class="keyword">return</span> nil-&gt;next == nil;</span><br><span class="line">&#125;</span><br><span class="line">  </span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">INSERT_FRONT</span><span class="params">(T x)</span> </span>&#123;</span><br><span class="line">	Node&lt;T&gt;* node = <span class="keyword">new</span> <span class="built_in">Node</span>&lt;T&gt;(x);</span><br><span class="line">	  </span><br><span class="line">	node-&gt;next = nil-&gt;next;</span><br><span class="line">	node-&gt;prev = nil;</span><br><span class="line">	  </span><br><span class="line">	nil-&gt;next-&gt;prev = node;</span><br><span class="line">	nil-&gt;next = node;</span><br><span class="line">&#125;</span><br><span class="line">  </span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">INSERT_BACK</span><span class="params">(T x)</span> </span>&#123;</span><br><span class="line">	Node&lt;T&gt;* node = <span class="keyword">new</span> <span class="built_in">Node</span>&lt;T&gt;(x);</span><br><span class="line">	  </span><br><span class="line">	node-&gt;prev = nil-&gt;prev;</span><br><span class="line">	node-&gt;next = nil;</span><br><span class="line">	  </span><br><span class="line">	nil-&gt;prev-&gt;next = node;</span><br><span class="line">	nil-&gt;prev = node;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function">Node&lt;T&gt;* <span class="title">SEARCH</span><span class="params">(T key)</span> </span>&#123;</span><br><span class="line">	Node&lt;T&gt;* cur = nil-&gt;next;</span><br><span class="line">	  </span><br><span class="line">	<span class="keyword">while</span> (cur != nil &amp;&amp; cur-&gt;key != key) &#123;</span><br><span class="line">		cur = cur-&gt;next;</span><br><span class="line">	&#125;</span><br><span class="line">	  </span><br><span class="line">	<span class="keyword">return</span> cur;</span><br><span class="line">&#125;</span><br><span class="line">  </span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">DELETE</span><span class="params">(Node&lt;T&gt;* x)</span> </span>&#123;</span><br><span class="line">	<span class="keyword">if</span> (x == nil) <span class="keyword">return</span>;</span><br><span class="line">	  </span><br><span class="line">	x-&gt;prev-&gt;next = x-&gt;next;</span><br><span class="line">	x-&gt;next-&gt;prev = x-&gt;prev;</span><br><span class="line">	  </span><br><span class="line">	<span class="keyword">delete</span> x;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">PRINT</span><span class="params">()</span> </span>&#123;</span><br><span class="line">	Node&lt;T&gt;* cur = nil-&gt;next;</span><br><span class="line">	  </span><br><span class="line">	<span class="keyword">while</span> (cur != nil) &#123;</span><br><span class="line">		cout &lt;&lt; cur-&gt;key &lt;&lt; <span class="string">&quot; &quot;</span>;</span><br><span class="line">		cur = cur-&gt;next;</span><br><span class="line">	&#125;</span><br><span class="line">	cout &lt;&lt; endl;</span><br><span class="line">&#125;</span><br><span class="line">  </span><br><span class="line">~<span class="built_in">LinkedList</span>() &#123;</span><br><span class="line">	Node&lt;T&gt;* cur = nil-&gt;next;</span><br><span class="line">	  </span><br><span class="line">	<span class="keyword">while</span> (cur != nil) &#123;</span><br><span class="line">		Node&lt;T&gt;* tmp = cur;</span><br><span class="line">		cur = cur-&gt;next;</span><br><span class="line">		<span class="keyword">delete</span> tmp;</span><br><span class="line">	&#125;  </span><br><span class="line">	<span class="keyword">delete</span> nil;</span><br><span class="line">&#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<h4 id="对象的多维数组表示">对象的多维数组表示</h4>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;vector&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdexcept&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">MultiArrayLinkedList</span> &#123;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    std::vector&lt;<span class="type">int</span>&gt; key;</span><br><span class="line">    std::vector&lt;<span class="type">int</span>&gt; next;</span><br><span class="line">    std::vector&lt;<span class="type">int</span>&gt; prev;</span><br><span class="line">    <span class="type">int</span> head;</span><br><span class="line">    <span class="type">int</span> free_list;</span><br><span class="line">    <span class="type">const</span> <span class="type">int</span> NIL = <span class="number">-1</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="built_in">MultiArrayLinkedList</span>(<span class="type">int</span> capacity) &#123;</span><br><span class="line">        key.<span class="built_in">resize</span>(capacity);</span><br><span class="line">        next.<span class="built_in">resize</span>(capacity);</span><br><span class="line">        prev.<span class="built_in">resize</span>(capacity);</span><br><span class="line">        </span><br><span class="line">        head = NIL;</span><br><span class="line">        free_list = <span class="number">0</span>;</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 初始化自由链表</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; capacity - <span class="number">1</span>; ++i) &#123;</span><br><span class="line">            next[i] = i + <span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        next[capacity - <span class="number">1</span>] = NIL;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// CLRS: Allocate-Object</span></span><br><span class="line">    <span class="function"><span class="type">int</span> <span class="title">allocate_object</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (free_list == NIL) &#123;</span><br><span class="line">            <span class="keyword">throw</span> std::<span class="built_in">out_of_range</span>(<span class="string">&quot;Out of memory: 自由链表已空&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="type">int</span> x = free_list;</span><br><span class="line">        free_list = next[x];</span><br><span class="line">        <span class="keyword">return</span> x;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// CLRS: Free-Object</span></span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">free_object</span><span class="params">(<span class="type">int</span> x)</span> </span>&#123;</span><br><span class="line">        next[x] = free_list;</span><br><span class="line">        free_list = x;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// CLRS: List-Insert</span></span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">insert</span><span class="params">(<span class="type">int</span> key_value)</span> </span>&#123;</span><br><span class="line">        <span class="type">int</span> x = <span class="built_in">allocate_object</span>();</span><br><span class="line">        key[x] = key_value;</span><br><span class="line">        next[x] = head;</span><br><span class="line">        prev[x] = NIL;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">if</span> (head != NIL) &#123;</span><br><span class="line">            prev[head] = x;</span><br><span class="line">        &#125;</span><br><span class="line">        head = x;</span><br><span class="line">        std::cout &lt;&lt; <span class="string">&quot;Inserted &quot;</span> &lt;&lt; key_value &lt;&lt; <span class="string">&quot; at index &quot;</span> &lt;&lt; x &lt;&lt; std::endl;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// CLRS: List-Delete</span></span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">delete_node</span><span class="params">(<span class="type">int</span> x)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (prev[x] != NIL) &#123;</span><br><span class="line">            next[prev[x]] = next[x];</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            head = next[x];</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">if</span> (next[x] != NIL) &#123;</span><br><span class="line">            prev[next[x]] = prev[x];</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="built_in">free_object</span>(x);</span><br><span class="line">        std::cout &lt;&lt; <span class="string">&quot;Deleted node at index &quot;</span> &lt;&lt; x &lt;&lt; std::endl;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">print_list</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="type">int</span> curr = head;</span><br><span class="line">        std::cout &lt;&lt; <span class="string">&quot;List: &quot;</span>;</span><br><span class="line">        <span class="keyword">while</span> (curr != NIL) &#123;</span><br><span class="line">            std::cout &lt;&lt; key[curr] &lt;&lt; (next[curr] != NIL ? <span class="string">&quot; &lt;-&gt; &quot;</span> : <span class="string">&quot;&quot;</span>);</span><br><span class="line">            curr = next[curr];</span><br><span class="line">        &#125;</span><br><span class="line">        std::cout &lt;&lt; std::endl;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<h4 id="对象的单维数组表示">对象的单维数组表示</h4>
+<pre><code>对于一维数组，我们可以把节点分为三个部分：key, next和prev，其中next和prev分别指向下一个、前一个节点的key
+</code></pre>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">|`````` | key | next | prev | ``````| //一维数组，访问时通过偏移量0，1，2来定位</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>实现</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;vector&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdexcept&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">SingleArrayLinkedList</span> &#123;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    std::vector&lt;<span class="type">int</span>&gt; A;</span><br><span class="line">    <span class="type">int</span> head;</span><br><span class="line">    <span class="type">int</span> free_list;</span><br><span class="line">    <span class="type">const</span> <span class="type">int</span> NIL = <span class="number">-1</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="built_in">SingleArrayLinkedList</span>(<span class="type">int</span> capacity) &#123;</span><br><span class="line">        <span class="comment">// 每个节点占用 3 个位置: key, next, prev</span></span><br><span class="line">        A.<span class="built_in">resize</span>(capacity * <span class="number">3</span>);</span><br><span class="line">        </span><br><span class="line">        head = NIL;</span><br><span class="line">        free_list = <span class="number">0</span>;</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 初始化自由链表，步长为 3</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; capacity - <span class="number">1</span>; ++i) &#123;</span><br><span class="line">            <span class="comment">// A[x + 1] 是 next 指针</span></span><br><span class="line">            A[i * <span class="number">3</span> + <span class="number">1</span>] = (i + <span class="number">1</span>) * <span class="number">3</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        A[(capacity - <span class="number">1</span>) * <span class="number">3</span> + <span class="number">1</span>] = NIL;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// CLRS: Allocate-Object</span></span><br><span class="line">    <span class="function"><span class="type">int</span> <span class="title">allocate_object</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (free_list == NIL) &#123;</span><br><span class="line">            <span class="keyword">throw</span> std::<span class="built_in">out_of_range</span>(<span class="string">&quot;Out of memory: 自由链表已空&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="type">int</span> x = free_list;</span><br><span class="line">        free_list = A[x + <span class="number">1</span>]; <span class="comment">// 读取 next 指针</span></span><br><span class="line">        <span class="keyword">return</span> x;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// CLRS: Free-Object</span></span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">free_object</span><span class="params">(<span class="type">int</span> x)</span> </span>&#123;</span><br><span class="line">        A[x + <span class="number">1</span>] = free_list;</span><br><span class="line">        free_list = x;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// CLRS: List-Insert</span></span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">insert</span><span class="params">(<span class="type">int</span> key_value)</span> </span>&#123;</span><br><span class="line">        <span class="type">int</span> x = <span class="built_in">allocate_object</span>();</span><br><span class="line">        </span><br><span class="line">        A[x] = key_value;      <span class="comment">// key</span></span><br><span class="line">        A[x + <span class="number">1</span>] = head;       <span class="comment">// next</span></span><br><span class="line">        A[x + <span class="number">2</span>] = NIL;        <span class="comment">// prev</span></span><br><span class="line">        </span><br><span class="line">        <span class="keyword">if</span> (head != NIL) &#123;</span><br><span class="line">            A[head + <span class="number">2</span>] = x;   <span class="comment">// 更新旧头节点的 prev</span></span><br><span class="line">        &#125;</span><br><span class="line">        head = x;</span><br><span class="line">        std::cout &lt;&lt; <span class="string">&quot;Inserted &quot;</span> &lt;&lt; key_value &lt;&lt; <span class="string">&quot; at starting index &quot;</span> &lt;&lt; x &lt;&lt; std::endl;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// CLRS: List-Delete</span></span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">delete_node</span><span class="params">(<span class="type">int</span> x)</span> </span>&#123;</span><br><span class="line">        <span class="type">int</span> prev_idx = A[x + <span class="number">2</span>];</span><br><span class="line">        <span class="type">int</span> next_idx = A[x + <span class="number">1</span>];</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">if</span> (prev_idx != NIL) &#123;</span><br><span class="line">            A[prev_idx + <span class="number">1</span>] = next_idx;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            head = next_idx;</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">if</span> (next_idx != NIL) &#123;</span><br><span class="line">            A[next_idx + <span class="number">2</span>] = prev_idx;</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="built_in">free_object</span>(x);</span><br><span class="line">        std::cout &lt;&lt; <span class="string">&quot;Deleted node starting at index &quot;</span> &lt;&lt; x &lt;&lt; std::endl;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">print_list</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="type">int</span> curr = head;</span><br><span class="line">        std::cout &lt;&lt; <span class="string">&quot;List: &quot;</span>;</span><br><span class="line">        <span class="keyword">while</span> (curr != NIL) &#123;</span><br><span class="line">            std::cout &lt;&lt; A[curr] &lt;&lt; (A[curr + <span class="number">1</span>] != NIL ? <span class="string">&quot; &lt;-&gt; &quot;</span> : <span class="string">&quot;&quot;</span>);</span><br><span class="line">            curr = A[curr + <span class="number">1</span>];</span><br><span class="line">        &#125;</span><br><span class="line">        std::cout &lt;&lt; std::endl;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<h4 id="对象的分配与释放">对象的分配与释放</h4>
+<p>在没有原生对象和指针的编程环境（或为了追求极致的内存管理效率而构建“内存池”时），我们通常使用 <strong>数组（Arrays）</strong> 来模拟链表和对象的结构。<br>
+在这种设定下，我们不仅需要管理“正在被使用的节点数据”，还需要<strong>手动管理那些尚未被使用的空闲空间</strong>。CLRS 引入了 <strong>自由链表（Free List）</strong> 以及配套的 <code>Allocate-Object</code> 和 <code>Free-Object</code> 算法来完成这项工作。</p>
+<h5 id="1-核心概念：自由链表-Free-List">1. 核心概念：自由链表 (Free List)</h5>
+<p>自由链表是一个<strong>单向链表</strong>，它将所有当前未被使用的数组元素（即空闲插槽）串联起来。</p>
+<ul>
+<li><strong>结构</strong>：即使原数据结构是双向链表，自由链表也只需要单向链接（利用现有的 <code>next</code> 数组即可）。</li>
+<li><strong>头指针</strong>：通常使用一个名为 <code>free</code> 的全局变量来保存自由链表的头节点下标。</li>
+<li><strong>分配与释放的本质</strong>：
+<ul>
+<li><strong>分配（Allocate）</strong>：就是从自由链表的头部<strong>弹出一个节点</strong>供程序使用。</li>
+<li><strong>释放（Free）</strong>：就是将废弃的节点作为新节点<strong>插入到自由链表的头部</strong>。</li>
+</ul>
+</li>
+</ul>
+<h5 id="2-Allocate-Object-详解">2. Allocate-Object 详解</h5>
+<p><code>Allocate-Object</code> 扮演着类似于 C 语言中 <code>malloc()</code> 或 Java/C++ 中 <code>new</code> 关键字的角色。它负责从自由链表中寻找一个可用的空闲空间，并返回其下标。</p>
+<h6 id="2-1-伪代码">2.1 伪代码</h6>
+<figure class="highlight delphi"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">ALLOCATE-<span class="keyword">OBJECT</span>()</span><br><span class="line"><span class="number">1</span>  <span class="keyword">if</span> free == <span class="keyword">NIL</span></span><br><span class="line"><span class="number">2</span>      error &quot;<span class="keyword">out</span> <span class="keyword">of</span> space&quot;</span><br><span class="line"><span class="number">3</span>  x = free</span><br><span class="line"><span class="number">4</span>  free = next[x]</span><br><span class="line"><span class="number">5</span>  return x</span><br></pre></td></tr></table></figure>
+<h6 id="2-2-逐行解析">2.2 逐行解析</h6>
+<ol>
+<li><strong>第 1-2 行 (溢出检查)</strong>：如果 <code>free</code> 指针等于 <code>NIL</code>（通常在编程中用 <code>-1</code> 表示），说明自由链表已经空了，此时没有多余的内存可以分配，抛出“内存耗尽”错误。</li>
+<li><strong>第 3 行 (获取节点)</strong>：将当前自由链表的头节点下标暂存到变量 <img src="https://math.now.sh?inline=x" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 中，这个 <img src="https://math.now.sh?inline=x" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 就是我们即将分配出去的可用空间。</li>
+<li><strong>第 4 行 (更新头指针)</strong>：将 <code>free</code> 指针向后移动一位，指向原来头节点的下一个节点（即 <code>next[x]</code>）。这一步等于把节点 <img src="https://math.now.sh?inline=x" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 从自由链表中“摘除”。</li>
+<li><strong>第 5 行 (返回结果)</strong>：返回被分配的节点下标 <img src="https://math.now.sh?inline=x" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/>。<br>
+<strong>时间复杂度</strong>：<img src="https://math.now.sh?inline=O%281%29" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/>，因为它只涉及简单的指针（下标）赋值。</li>
+</ol>
+<h5 id="3-Free-Object-x-详解">3. Free-Object(x) 详解</h5>
+<p><code>Free-Object</code> 扮演着类似于 C 语言中 <code>free()</code> 或 C++ 中 <code>delete</code> 关键字的角色。当我们在业务逻辑中删除了一个节点（比如 <code>List-Delete</code>），我们必须将它归还给自由链表，以便将来重复利用。</p>
+<h6 id="3-1-伪代码">3.1 伪代码</h6>
+<figure class="highlight delphi"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">FREE-<span class="keyword">OBJECT</span>(x)</span><br><span class="line"><span class="number">1</span>  next[x] = free</span><br><span class="line"><span class="number">2</span>  free = x</span><br></pre></td></tr></table></figure>
+<h6 id="3-2-逐行解析">3.2 逐行解析</h6>
+<p>这里执行的是标准的<strong>单链表头部插入操作</strong>。</p>
+<ol>
+<li><strong>第 1 行 (建立新链接)</strong>：将被释放节点 <img src="https://math.now.sh?inline=x" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 的 <code>next</code> 指针，指向当前的自由链表头节点 <code>free</code>。</li>
+<li><strong>第 2 行 (更新头指针)</strong>：将自由链表的头指针 <code>free</code> 更新为 <img src="https://math.now.sh?inline=x" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/>。这样，<img src="https://math.now.sh?inline=x" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 就成功回到了空闲池的最前面。<br>
+<strong>时间复杂度</strong>：<img src="https://math.now.sh?inline=O%281%29" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/>，仅包含两步赋值操作。</li>
+</ol>
+<h3 id="有根树的表示">有根树的表示</h3>
+<h4 id="二叉树">二叉树</h4>
+<p>对于属性为 <img src="https://math.now.sh?inline=p%2Cleft%2Cright" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 的节点，若 <img src="https://math.now.sh?inline=x.p%3DNIL" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 则为根结点，没有孩子则 <img src="https://math.now.sh?inline=x.left" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 或 <img src="https://math.now.sh?inline=x.right" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 为 <img src="https://math.now.sh?inline=NIL" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/>。</p>
+<h4 id="分支无限制的有根树">分支无限制的有根树</h4>
+<p>使用 <strong>左孩子右兄弟</strong> 的表示方法，其中 <img src="https://math.now.sh?inline=x.left%5Ctext%7B-%7Dchild" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 指向结点 <img src="https://math.now.sh?inline=x" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 的最左边的子结点，<img src="https://math.now.sh?inline=x.right%5Ctext%7B-%7Dsibling" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 指向 <img src="https://math.now.sh?inline=x" style="filter: opacity(90%);transform:scale(1.00);text-align:center;display:inline-block;margin: 0;"/> 的右侧同级的兄弟节点。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;string&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 树节点定义</span></span><br><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</span><br><span class="line"><span class="keyword">struct</span> <span class="title class_">TreeNode</span> &#123;</span><br><span class="line">    T key;</span><br><span class="line">    TreeNode* left_child;</span><br><span class="line">    TreeNode* right_sibling;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 构造函数</span></span><br><span class="line">    <span class="built_in">TreeNode</span>(T val) : <span class="built_in">key</span>(val), <span class="built_in">left_child</span>(<span class="literal">nullptr</span>), <span class="built_in">right_sibling</span>(<span class="literal">nullptr</span>) &#123;&#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 左孩子右兄弟树类</span></span><br><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</span><br><span class="line"><span class="keyword">class</span> <span class="title class_">LCRSTree</span> &#123;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    TreeNode&lt;T&gt;* root;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 递归释放内存</span></span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">destroy_tree</span><span class="params">(TreeNode&lt;T&gt;* node)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (node != <span class="literal">nullptr</span>) &#123;</span><br><span class="line">            <span class="comment">// 注意：这里使用的是后序遍历的思想来销毁</span></span><br><span class="line">            <span class="built_in">destroy_tree</span>(node-&gt;left_child);</span><br><span class="line">            <span class="built_in">destroy_tree</span>(node-&gt;right_sibling);</span><br><span class="line">            <span class="keyword">delete</span> node;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 递归打印树形结构（用于可视化测试）</span></span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">print_tree</span><span class="params">(TreeNode&lt;T&gt;* node, <span class="type">const</span> std::string&amp; prefix = <span class="string">&quot;&quot;</span>, <span class="type">bool</span> is_last = <span class="literal">true</span>)</span> <span class="type">const</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (node == <span class="literal">nullptr</span>) <span class="keyword">return</span>;</span><br><span class="line"></span><br><span class="line">        std::cout &lt;&lt; prefix;</span><br><span class="line">        std::cout &lt;&lt; (is_last ? <span class="string">&quot;└── &quot;</span> : <span class="string">&quot;├── &quot;</span>);</span><br><span class="line">        std::cout &lt;&lt; node-&gt;key &lt;&lt; std::endl;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 遍历所有子节点</span></span><br><span class="line">        <span class="comment">// 子节点构成了以 left_child 为头结点的单链表（通过 right_sibling 链接）</span></span><br><span class="line">        TreeNode&lt;T&gt;* child = node-&gt;left_child;</span><br><span class="line">        <span class="keyword">while</span> (child != <span class="literal">nullptr</span>) &#123;</span><br><span class="line">            <span class="type">bool</span> child_is_last = (child-&gt;right_sibling == <span class="literal">nullptr</span>);</span><br><span class="line">            std::string new_prefix = prefix + (is_last ? <span class="string">&quot;    &quot;</span> : <span class="string">&quot;│   &quot;</span>);</span><br><span class="line">            <span class="built_in">print_tree</span>(child, new_prefix, child_is_last);</span><br><span class="line">            child = child-&gt;right_sibling;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="built_in">LCRSTree</span>() : <span class="built_in">root</span>(<span class="literal">nullptr</span>) &#123;&#125;</span><br><span class="line">    </span><br><span class="line">    ~<span class="built_in">LCRSTree</span>() &#123;</span><br><span class="line">        <span class="built_in">destroy_tree</span>(root);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 设置根节点</span></span><br><span class="line">    <span class="function">TreeNode&lt;T&gt;* <span class="title">set_root</span><span class="params">(T val)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (root != <span class="literal">nullptr</span>) &#123;</span><br><span class="line">            <span class="built_in">destroy_tree</span>(root);</span><br><span class="line">        &#125;</span><br><span class="line">        root = <span class="keyword">new</span> <span class="built_in">TreeNode</span>&lt;T&gt;(val);</span><br><span class="line">        <span class="keyword">return</span> root;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 给指定父节点添加一个新的子节点（追加到最右侧）</span></span><br><span class="line">    <span class="function">TreeNode&lt;T&gt;* <span class="title">add_child</span><span class="params">(TreeNode&lt;T&gt;* parent, T val)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (parent == <span class="literal">nullptr</span>) <span class="keyword">return</span> <span class="literal">nullptr</span>;</span><br><span class="line"></span><br><span class="line">        TreeNode&lt;T&gt;* new_node = <span class="keyword">new</span> <span class="built_in">TreeNode</span>&lt;T&gt;(val);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 如果父节点还没有子节点，直接作为左孩子</span></span><br><span class="line">        <span class="keyword">if</span> (parent-&gt;left_child == <span class="literal">nullptr</span>) &#123;</span><br><span class="line">            parent-&gt;left_child = new_node;</span><br><span class="line">        &#125; </span><br><span class="line">        <span class="comment">// 否则，顺着左孩子的右兄弟链表找到最后一个兄弟，将其接在后面</span></span><br><span class="line">        <span class="keyword">else</span> &#123;</span><br><span class="line">            TreeNode&lt;T&gt;* current = parent-&gt;left_child;</span><br><span class="line">            <span class="keyword">while</span> (current-&gt;right_sibling != <span class="literal">nullptr</span>) &#123;</span><br><span class="line">                current = current-&gt;right_sibling;</span><br><span class="line">            &#125;</span><br><span class="line">            current-&gt;right_sibling = new_node;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> new_node;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 打印整棵树</span></span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">print</span><span class="params">()</span> <span class="type">const</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (root == <span class="literal">nullptr</span>) &#123;</span><br><span class="line">            std::cout &lt;&lt; <span class="string">&quot;Empty Tree&quot;</span> &lt;&lt; std::endl;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="built_in">print_tree</span>(root);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<h4 id="树的其他表示方法">树的其他表示方法</h4>
+<p>在之前，我们用 <strong>堆</strong> 来表示完全二叉树。在后面还有别的方式。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>libfsx
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="https://shuxiangfan.github.io/2026/04/15/%E7%AC%AC%E4%B8%89%E9%83%A8%E5%88%86%EF%BC%9A%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" title="算法导论 第三部分：数据结构">https://shuxiangfan.github.io/2026/04/15/第三部分：数据结构/</a>
+  </li>
+  <li class="post-copyright-license">
+      <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/%E7%AE%97%E6%B3%95%E5%AF%BC%E8%AE%BA/" rel="tag"># 算法导论</a>
+              <a href="/tags/C/" rel="tag"># C++</a>
+              <a href="/tags/Java/" rel="tag"># Java</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2026/04/15/%E7%AC%AC%E4%BA%8C%E9%83%A8%E5%88%86%EF%BC%9A%E6%8E%92%E5%BA%8F%E5%92%8C%E9%A1%BA%E5%BA%8F%E7%BB%9F%E8%AE%A1%E9%87%8F/" rel="prev" title="算法导论 第二部分：排序和顺序统计量">
+                  <i class="fa fa-angle-left"></i> 算法导论 第二部分：排序和顺序统计量
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2026/04/15/%E7%AC%AC%E4%B8%80%E9%83%A8%E5%88%86%EF%BC%9A%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/" rel="next" title="算法导论 第一部分：基础知识">
+                  算法导论 第一部分：基础知识 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 2021 – 
+    <span itemprop="copyrightYear">2026</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">除转载外，网站内容均为 CC-BY-SA 4.0 协议</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+</body>
+</html>
